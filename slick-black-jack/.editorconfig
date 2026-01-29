@@ -1,0 +1,8 @@
+root = true
+
+[*]
+charset = utf-8
+
+[*.cs]
+# K&R style: place open brace on the same line
+csharp_new_line_before_open_brace = none 
