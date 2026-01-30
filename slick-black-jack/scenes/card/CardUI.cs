@@ -13,6 +13,8 @@ public partial class CardUI : TextureRect {
 	public override void _Ready() {
 		Card = null;
 		Hide();
+		var atlasTexture = (AtlasTexture)Texture.Duplicate();
+		Texture = atlasTexture;
 	}
 	
 	public void SetCard(Card card, bool faceDown = false) {
@@ -23,9 +25,24 @@ public partial class CardUI : TextureRect {
 			return;
 		}
 
-		var atlasTexture = (AtlasTexture)Texture.Duplicate();
-		Texture = atlasTexture;
-
+		SetCardSide(faceDown);
+	}
+	
+	public void SetCardFaceUp() {
+		SetCardSide(false);
+	}
+	
+	public void SetCardFaceDown() {
+		SetCardFaceUp();
+	}
+	
+	private void SetCardSide(bool faceDown) {
+		if (Card == null) {
+			GD.PushError("Card is null, cannot set card side");
+			return;
+		}
+		
+		var atlasTexture = (AtlasTexture)Texture;
 		if (faceDown) {
 			atlasTexture.Region = new Rect2(FaceDownOffset.X, FaceDownOffset.Y, CardWidth, CardHeight);
 			Show();
@@ -33,8 +50,8 @@ public partial class CardUI : TextureRect {
 		}
 
 		// Calculate atlas region based on rank and suit
-		var rankIndex = (int)card.Rank - 1;
-		var suitIndex = (int)card.Suit - 1;
+		var rankIndex = (int)Card.Rank - 1;
+		var suitIndex = (int)Card.Suit - 1;
 
 		var x = rankIndex * CardWidth;
 		var y = suitIndex * CardHeight;

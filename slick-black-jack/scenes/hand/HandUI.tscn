@@ -80,71 +80,72 @@ load_path = "res://.godot/imported/cards.png-a544c830257d2f6f4dd08b51c228af1e.ct
 atlas = SubResource("CompressedTexture2D_wif74")
 region = Rect2(624, 0, 48, 64)
 
-[node name="Hand" type="HBoxContainer"]
-custom_minimum_size = Vector2(328, 0)
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.172
-anchor_right = 0.5
-anchor_bottom = 0.172
-offset_left = -50.0
-offset_top = -31.920002
-offset_right = 50.0
-offset_bottom = 32.079998
-grow_horizontal = 2
-theme_override_constants/separation = -20
-alignment = 1
+[node name="Hand" type="VBoxContainer"]
+offset_left = 192.0
+offset_right = 520.0
+offset_bottom = 64.0
 script = ExtResource("1_5s1xj")
 
-[node name="Panel" parent="." instance=ExtResource("2_jefut")]
+[node name="ScoreLabel" type="Label" parent="."]
+layout_mode = 2
+text = "21"
+horizontal_alignment = 1
+
+[node name="Cards" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(328, 0)
+layout_mode = 2
+theme_override_constants/separation = -20
+alignment = 1
+
+[node name="Panel" parent="Cards" instance=ExtResource("2_jefut")]
 layout_mode = 2
 texture = SubResource("AtlasTexture_jefut")
 
-[node name="Panel2" parent="." instance=ExtResource("2_jefut")]
+[node name="Panel2" parent="Cards" instance=ExtResource("2_jefut")]
 layout_mode = 2
 texture = SubResource("AtlasTexture_lh0ee")
 
-[node name="Panel3" parent="." instance=ExtResource("2_jefut")]
+[node name="Panel3" parent="Cards" instance=ExtResource("2_jefut")]
 visible = false
 layout_mode = 2
 texture = SubResource("AtlasTexture_ki7id")
 
-[node name="Panel4" parent="." instance=ExtResource("2_jefut")]
+[node name="Panel4" parent="Cards" instance=ExtResource("2_jefut")]
 visible = false
 layout_mode = 2
 texture = SubResource("AtlasTexture_f1ugg")
 
-[node name="Panel5" parent="." instance=ExtResource("2_jefut")]
+[node name="Panel5" parent="Cards" instance=ExtResource("2_jefut")]
 visible = false
 layout_mode = 2
 texture = SubResource("AtlasTexture_n5ph1")
 
-[node name="Panel6" parent="." instance=ExtResource("2_jefut")]
+[node name="Panel6" parent="Cards" instance=ExtResource("2_jefut")]
 visible = false
 layout_mode = 2
 texture = SubResource("AtlasTexture_cdwew")
 
-[node name="Panel7" parent="." instance=ExtResource("2_jefut")]
+[node name="Panel7" parent="Cards" instance=ExtResource("2_jefut")]
 visible = false
 layout_mode = 2
 texture = SubResource("AtlasTexture_baoht")
 
-[node name="Panel8" parent="." instance=ExtResource("2_jefut")]
+[node name="Panel8" parent="Cards" instance=ExtResource("2_jefut")]
 visible = false
 layout_mode = 2
 texture = SubResource("AtlasTexture_rs6p6")
 
-[node name="Panel9" parent="." instance=ExtResource("2_jefut")]
+[node name="Panel9" parent="Cards" instance=ExtResource("2_jefut")]
 visible = false
 layout_mode = 2
 texture = SubResource("AtlasTexture_ptq8n")
 
-[node name="Panel10" parent="." instance=ExtResource("2_jefut")]
+[node name="Panel10" parent="Cards" instance=ExtResource("2_jefut")]
 visible = false
 layout_mode = 2
 texture = SubResource("AtlasTexture_jh0v0")
 
-[node name="Panel11" parent="." instance=ExtResource("2_jefut")]
+[node name="Panel11" parent="Cards" instance=ExtResource("2_jefut")]
 visible = false
 layout_mode = 2
 texture = SubResource("AtlasTexture_eni85")

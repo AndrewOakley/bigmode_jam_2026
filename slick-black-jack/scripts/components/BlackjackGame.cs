@@ -88,14 +88,14 @@ namespace SlickBlackJack.Components {
             }
             
             await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
-            DealerHand.AddCard(Deck.DrawCard(), true);
+            DealerHand.AddCard(Deck.DrawCard());
             for (var i = 0; i < NumberOfPlayers; i++) {
                 await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
                 Players[i].Hand.AddCard(Deck.DrawCard());
             }
             
             await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
-            DealerHand.AddCard(Deck.DrawCard());
+            DealerHand.AddCard(Deck.DrawCard(), true);
 
             // Check for immediate blackjacks
             var dealerHasBlackjack = DealerHand.IsBlackjack();

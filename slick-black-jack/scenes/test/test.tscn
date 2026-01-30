@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cpk63f74thfsv" path="res://scenes/test/Test.cs" id="1_m7npr"]
 [ext_resource type="PackedScene" uid="uid://bvli2013m2a38" path="res://scenes/black_jack_table.tscn" id="2_da6vm"]
 [ext_resource type="PackedScene" uid="uid://c2nwtq6fu1vo6" path="res://scenes/hand/HandUI.tscn" id="2_st4qh"]
-[ext_resource type="Texture2D" uid="uid://dg6mybiv2phmo" path="res://assets/sprite-sheets/characters/hairlineGuyIdle.png" id="4_51e2l"]
+[ext_resource type="Texture2D" uid="uid://woso4crfe7ro" path="res://assets/sprite-sheets/characters/hairlineGuyIdle.png" id="4_51e2l"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oj4i3"]
 atlas = ExtResource("4_51e2l")
@@ -101,44 +101,47 @@ _npcHandUI2 = NodePath("Hands/NpcHand2")
 [node name="Hands" type="Node" parent="."]
 
 [node name="DealerHand" parent="Hands" instance=ExtResource("2_st4qh")]
+anchors_preset = -1
 anchor_left = 0.49400002
 anchor_top = 0.256
 anchor_right = 0.49400002
 anchor_bottom = 0.256
-offset_left = 172.84
-offset_top = 30.839996
-offset_right = 500.84
-offset_bottom = 94.84
-rotation = 3.1415927
+offset_left = -168.16
+offset_top = -23.160004
+offset_right = 159.84
+offset_bottom = 40.839996
 
 [node name="PlayerHand" parent="Hands" instance=ExtResource("2_st4qh")]
+anchors_preset = -1
 anchor_top = 0.717
 anchor_bottom = 0.717
-offset_left = -171.0
-offset_top = -37.119995
-offset_right = 157.0
+offset_left = 148.0
+offset_top = -64.119995
+offset_right = 476.0
 offset_bottom = 26.880005
 
 [node name="NpcHand1" parent="Hands" instance=ExtResource("2_st4qh")]
+anchors_preset = -1
 anchor_left = 0.84300005
 anchor_top = 0.551
 anchor_right = 0.84300005
 anchor_bottom = 0.551
-offset_left = -137.52002
-offset_top = 91.64
-offset_right = 190.47998
-offset_bottom = 155.64
+offset_left = -157.52005
+offset_top = 75.64
+offset_right = 170.47998
+offset_bottom = 166.64
 rotation = -0.7763446
 
 [node name="NpcHand2" parent="Hands" instance=ExtResource("2_st4qh")]
+anchors_preset = -1
 anchor_left = 0.14400001
 anchor_top = 0.49500003
 anchor_right = 0.14400001
 anchor_bottom = 0.49500003
-offset_left = -60.160004
-offset_top = -156.20001
-offset_right = 267.84
-offset_bottom = -92.2
+offset_left = -35.160004
+offset_top = -172.20001
+offset_right = 292.84
+offset_bottom = -81.20001
 rotation = 1.0309832
 
 [node name="Hit" type="Button" parent="."]
@@ -165,7 +168,7 @@ autoplay = "default"
 frame_progress = 0.7646224
 
 [node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="."]
-position = Vector2(313, 32)
+position = Vector2(315, 32)
 rotation = 1.5707964
 sprite_frames = SubResource("SpriteFrames_bg4ew")
 autoplay = "default"
