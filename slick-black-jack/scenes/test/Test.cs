@@ -10,6 +10,6 @@ public partial class Test : Node  {
         _table.StartNewRound();
         GD.Print(_table.GetDealerHand().ToString());
         _dealerHandUI.SetHand(_table.GetDealerHand());
-        _playerHandUI.SetHand(_table.GetPlayerHand());
+        _playerHandUI.SetHand(_table.GetPlayerHand(0));
      }
 }

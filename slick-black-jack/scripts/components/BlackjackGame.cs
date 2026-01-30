@@ -19,20 +19,30 @@ namespace SlickBlackJack.Components {
 
     public partial class BlackjackGame : RefCounted {
         public Deck Deck { get; private set; }
-        public Hand PlayerHand { get; private set; }
+        public System.Collections.Generic.List<Hand> PlayerHands { get; private set; }
         public Hand DealerHand { get; private set; }
         public GameState State { get; private set; }
-        public GameResult Result { get; private set; }
+        public System.Collections.Generic.List<GameResult> Results { get; private set; }
+        public int CurrentPlayerIndex { get; private set; }
+        public int NumberOfPlayers { get; private set; }
 
         private int _numberOfDecks;
 
-        public BlackjackGame(int numberOfDecks = 1) {
+        public BlackjackGame(int numberOfDecks = 1, int numberOfPlayers = 3) {
             _numberOfDecks = numberOfDecks;
+            NumberOfPlayers = numberOfPlayers;
             Deck = new Deck(numberOfDecks);
-            PlayerHand = new Hand();
+            PlayerHands = new System.Collections.Generic.List<Hand>();
+            for (int i = 0; i < numberOfPlayers; i++) {
+                PlayerHands.Add(new Hand());
+            }
             DealerHand = new Hand();
             State = GameState.Betting;
-            Result = GameResult.None;
+            Results = new System.Collections.Generic.List<GameResult>();
+            for (int i = 0; i < numberOfPlayers; i++) {
+                Results.Add(GameResult.None);
+            }
+            CurrentPlayerIndex = 0;
         }
 
         /// <summary>
@@ -45,35 +55,61 @@ namespace SlickBlackJack.Components {
                 GD.Print("Deck reshuffled");
             }
 
-            PlayerHand.Clear();
+            // Clear all player hands
+            foreach (var hand in PlayerHands) {
+                hand.Clear();
+            }
             DealerHand.Clear();
-            Result = GameResult.None;
 
-            // Deal initial cards: Player, Dealer, Player, Dealer
-            PlayerHand.AddCard(Deck.DrawCard());
+            // Reset all results
+            for (int i = 0; i < NumberOfPlayers; i++) {
+                Results[i] = GameResult.None;
+            }
+
+            CurrentPlayerIndex = 0;
+
+            // Deal initial cards: round-robin style
+            // First card to each player, then dealer, then second card to each player, then dealer
+            for (int i = 0; i < NumberOfPlayers; i++) {
+                PlayerHands[i].AddCard(Deck.DrawCard());
+            }
             DealerHand.AddCard(Deck.DrawCard());
-            PlayerHand.AddCard(Deck.DrawCard());
+            for (int i = 0; i < NumberOfPlayers; i++) {
+                PlayerHands[i].AddCard(Deck.DrawCard());
+            }
             DealerHand.AddCard(Deck.DrawCard());
 
             // Check for immediate blackjacks
-            if (PlayerHand.IsBlackjack()) {
-                if (DealerHand.IsBlackjack()) {
-                    State = GameState.RoundOver;
-                    Result = GameResult.Push;
+            bool dealerHasBlackjack = DealerHand.IsBlackjack();
+            bool allPlayersFinished = true;
+
+            for (int i = 0; i < NumberOfPlayers; i++) {
+                if (PlayerHands[i].IsBlackjack()) {
+                    if (dealerHasBlackjack) {
+                        Results[i] = GameResult.Push;
+                    } else {
+                        Results[i] = GameResult.PlayerBlackjack;
+                    }
+                } else if (dealerHasBlackjack) {
+                    Results[i] = GameResult.DealerWin;
                 } else {
-                    State = GameState.RoundOver;
-                    Result = GameResult.PlayerBlackjack;
+                    allPlayersFinished = false;
                 }
-            } else if (DealerHand.IsBlackjack()) {
+            }
+
+            if (allPlayersFinished) {
                 State = GameState.RoundOver;
-                Result = GameResult.DealerWin;
             } else {
                 State = GameState.PlayerTurn;
+                // Skip to first player who hasn't finished
+                while (CurrentPlayerIndex < NumberOfPlayers && Results[CurrentPlayerIndex] != GameResult.None) {
+                    CurrentPlayerIndex++;
+                }
             }
         }
 
         /// <summary>
-        /// Player hits (takes another card)
+        /// Current player hits (takes another card)
         /// </summary>
         public void Hit() {
             if (State != GameState.PlayerTurn) {
@@ -81,16 +117,16 @@ namespace SlickBlackJack.Components {
                 return;
             }
 
-            PlayerHand.AddCard(Deck.DrawCard());
+            PlayerHands[CurrentPlayerIndex].AddCard(Deck.DrawCard());
 
-            if (PlayerHand.IsBusted()) {
-                State = GameState.RoundOver;
-                Result = GameResult.DealerWin;
+            if (PlayerHands[CurrentPlayerIndex].IsBusted()) {
+                Results[CurrentPlayerIndex] = GameResult.DealerWin;
+                MoveToNextPlayer();
             }
         }
 
         /// <summary>
-        /// Player stands (ends their turn)
+        /// Current player stands (ends their turn)
         /// </summary>
         public void Stand() {
             if (State != GameState.PlayerTurn) {
@@ -98,8 +134,25 @@ namespace SlickBlackJack.Components {
                 return;
             }
 
-            State = GameState.DealerTurn;
-            PlayDealerTurn();
+            MoveToNextPlayer();
+        }
+
+        /// <summary>
+        /// Moves to the next player or starts dealer turn if all players are done
+        /// </summary>
+        private void MoveToNextPlayer() {
+            CurrentPlayerIndex++;
+
+            // Skip players who already finished (blackjack/bust)
+            while (CurrentPlayerIndex < NumberOfPlayers && Results[CurrentPlayerIndex] != GameResult.None) {
+                CurrentPlayerIndex++;
+            }
+
+            if (CurrentPlayerIndex >= NumberOfPlayers) {
+                // All players finished, dealer's turn
+                State = GameState.DealerTurn;
+                PlayDealerTurn();
+            }
         }
 
         /// <summary>
@@ -114,22 +167,30 @@ namespace SlickBlackJack.Components {
         }
 
         /// <summary>
-        /// Determines the winner after both player and dealer have finished
+        /// Determines the winner after both players and dealer have finished
         /// </summary>
         private void DetermineWinner() {
             State = GameState.RoundOver;
 
-            int playerValue = PlayerHand.GetValue();
             int dealerValue = DealerHand.GetValue();
 
-            if (DealerHand.IsBusted()) {
-                Result = GameResult.PlayerWin;
-            } else if (playerValue > dealerValue) {
-                Result = GameResult.PlayerWin;
-            } else if (dealerValue > playerValue) {
-                Result = GameResult.DealerWin;
-            } else {
-                Result = GameResult.Push;
+            for (int i = 0; i < NumberOfPlayers; i++) {
+                // Skip players who already have a result (blackjack/bust)
+                if (Results[i] != GameResult.None) {
+                    continue;
+                }
+
+                int playerValue = PlayerHands[i].GetValue();
+
+                if (DealerHand.IsBusted()) {
+                    Results[i] = GameResult.PlayerWin;
+                } else if (playerValue > dealerValue) {
+                    Results[i] = GameResult.PlayerWin;
+                } else if (dealerValue > playerValue) {
+                    Results[i] = GameResult.DealerWin;
+                } else {
+                    Results[i] = GameResult.Push;
+                }
             }
         }
 

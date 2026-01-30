@@ -3,6 +3,7 @@ using SlickBlackJack.Components;
 
 public partial class BlackjackTable : Node {
     [Export] public int NumberOfDecks { get; set; } = 1;
+    [Export] public int NumberOfPlayers { get; set; } = 3;
 
     private BlackjackGame _game;
 
@@ -10,20 +11,23 @@ public partial class BlackjackTable : Node {
     public delegate void RoundStartedEventHandler();
 
     [Signal]
-    public delegate void HitEventHandler(Card card);
+    public delegate void HitEventHandler(int playerIndex, Card card);
 
     [Signal]
-    public delegate void StoodEventHandler();
+    public delegate void StoodEventHandler(int playerIndex);
+
+    [Signal]
+    public delegate void PlayerTurnStartedEventHandler(int playerIndex);
 
     [Signal]
     public delegate void DealerRevealedEventHandler();
 
     [Signal]
-    public delegate void RoundEndedEventHandler(GameResult result);
+    public delegate void RoundEndedEventHandler();
 
     public override void _Ready() {
-        _game = new BlackjackGame(NumberOfDecks);
-        GD.Print("Blackjack Table initialized");
+        _game = new BlackjackGame(NumberOfDecks, NumberOfPlayers);
+        GD.Print($"Blackjack Table initialized with {NumberOfPlayers} players");
     }
 
     /// <summary>
@@ -37,12 +41,15 @@ public partial class BlackjackTable : Node {
 
         // If round ended immediately (blackjacks), emit the signal
         if (_game.State == GameState.RoundOver) {
-            EmitSignal(SignalName.RoundEnded, (int)_game.Result);
+            EmitSignal(SignalName.RoundEnded);
+        } else {
+            // Emit signal for first player's turn
+            EmitSignal(SignalName.PlayerTurnStarted, _game.CurrentPlayerIndex);
         }
     }
 
     /// <summary>
-    /// Player hits (requests another card)
+    /// Current player hits (requests another card)
     /// </summary>
     public void PlayerHit() {
         if (_game.State != GameState.PlayerTurn) {
@@ -50,20 +57,29 @@ public partial class BlackjackTable : Node {
             return;
         }
 
+        int playerIndex = _game.CurrentPlayerIndex;
         _game.Hit();
-        var lastCard = _game.PlayerHand.GetCards()[_game.PlayerHand.CardCount - 1];
-        EmitSignal(SignalName.Hit, lastCard);
+        var lastCard = _game.PlayerHands[playerIndex].GetCards()[_game.PlayerHands[playerIndex].CardCount - 1];
+        EmitSignal(SignalName.Hit, playerIndex, lastCard);
 
         PrintGameState();
 
-        // Check if round ended (player busted)
-        if (_game.State == GameState.RoundOver) {
-            EmitSignal(SignalName.RoundEnded, (int)_game.Result);
+        // Check if this player busted and moved to next player
+        if (_game.State == GameState.PlayerTurn && _game.CurrentPlayerIndex != playerIndex) {
+            EmitSignal(SignalName.PlayerTurnStarted, _game.CurrentPlayerIndex);
+        }
+
+        // Check if all players are done and dealer plays
+        if (_game.State == GameState.DealerTurn || _game.State == GameState.RoundOver) {
+            EmitSignal(SignalName.DealerRevealed);
+            if (_game.State == GameState.RoundOver) {
+                EmitSignal(SignalName.RoundEnded);
+            }
         }
     }
 
     /// <summary>
-    /// Player stands (ends their turn, dealer plays)
+    /// Current player stands (ends their turn)
     /// </summary>
     public void PlayerStand() {
         if (_game.State != GameState.PlayerTurn) {
@@ -71,21 +87,32 @@ public partial class BlackjackTable : Node {
             return;
         }
 
+        int playerIndex = _game.CurrentPlayerIndex;
         _game.Stand();
-        EmitSignal(SignalName.Stood);
-        EmitSignal(SignalName.DealerRevealed);
+        EmitSignal(SignalName.Stood, playerIndex);
 
         PrintGameState();
 
-        // Dealer has finished playing, round is over
-        EmitSignal(SignalName.RoundEnded, (int)_game.Result);
+        // Check if moved to next player or dealer
+        if (_game.State == GameState.PlayerTurn) {
+            EmitSignal(SignalName.PlayerTurnStarted, _game.CurrentPlayerIndex);
+        } else if (_game.State == GameState.DealerTurn || _game.State == GameState.RoundOver) {
+            EmitSignal(SignalName.DealerRevealed);
+            if (_game.State == GameState.RoundOver) {
+                EmitSignal(SignalName.RoundEnded);
+            }
+        }
     }
 
     /// <summary>
-    /// Gets the current player hand value
+    /// Gets a specific player's hand value
     /// </summary>
-    public int GetPlayerValue() {
-        return _game.PlayerHand.GetValue();
+    public int GetPlayerValue(int playerIndex) {
+        if (playerIndex < 0 || playerIndex >= NumberOfPlayers) {
+            GD.PrintErr($"Invalid player index: {playerIndex}");
+            return 0;
+        }
+        return _game.PlayerHands[playerIndex].GetValue();
     }
 
     /// <summary>
@@ -103,17 +130,25 @@ public partial class BlackjackTable : Node {
     }
 
     /// <summary>
-    /// Gets all player cards
+    /// Gets all cards for a specific player
     /// </summary>
-    public Card[] GetPlayerCards() {
-        return _game.PlayerHand.GetCards().ToArray();
+    public Card[] GetPlayerCards(int playerIndex) {
+        if (playerIndex < 0 || playerIndex >= NumberOfPlayers) {
+            GD.PrintErr($"Invalid player index: {playerIndex}");
+            return new Card[0];
+        }
+        return _game.PlayerHands[playerIndex].GetCards().ToArray();
     }
-    
+
     /// <summary>
-    /// Gets dealer hand
+    /// Gets a specific player's hand
     /// </summary>
-    public Hand GetPlayerHand() {
-        return _game.PlayerHand;
+    public Hand GetPlayerHand(int playerIndex) {
+        if (playerIndex < 0 || playerIndex >= NumberOfPlayers) {
+            GD.PrintErr($"Invalid player index: {playerIndex}");
+            return null;
+        }
+        return _game.PlayerHands[playerIndex];
     }
 
     /// <summary>
@@ -122,12 +157,19 @@ public partial class BlackjackTable : Node {
     public Card[] GetDealerCards() {
         return _game.DealerHand.GetCards().ToArray();
     }
-    
+
     /// <summary>
     /// Gets dealer hand
     /// </summary>
     public Hand GetDealerHand() {
         return _game.DealerHand;
+    }
+
+    /// <summary>
+    /// Gets the current player index
+    /// </summary>
+    public int GetCurrentPlayerIndex() {
+        return _game.CurrentPlayerIndex;
     }
 
     /// <summary>
@@ -145,10 +187,14 @@ public partial class BlackjackTable : Node {
     }
 
     /// <summary>
-    /// Gets current game result
+    /// Gets game result for a specific player
     /// </summary>
-    public GameResult GetGameResult() {
-        return _game.Result;
+    public GameResult GetGameResult(int playerIndex) {
+        if (playerIndex < 0 || playerIndex >= NumberOfPlayers) {
+            GD.PrintErr($"Invalid player index: {playerIndex}");
+            return GameResult.None;
+        }
+        return _game.Results[playerIndex];
     }
 
     /// <summary>
@@ -157,7 +203,13 @@ public partial class BlackjackTable : Node {
     private void PrintGameState() {
         GD.Print("--- Game State ---");
         GD.Print($"State: {_game.State}");
-        GD.Print($"Player Hand: {_game.PlayerHand}");
+        if (_game.State == GameState.PlayerTurn) {
+            GD.Print($"Current Player: {_game.CurrentPlayerIndex}");
+        }
+
+        for (int i = 0; i < NumberOfPlayers; i++) {
+            GD.Print($"Player {i} Hand: {_game.PlayerHands[i]}");
+        }
 
         if (ShouldRevealDealerHand()) {
             GD.Print($"Dealer Hand: {_game.DealerHand}");
@@ -166,7 +218,9 @@ public partial class BlackjackTable : Node {
         }
 
         if (_game.State == GameState.RoundOver) {
-            GD.Print($"Result: {_game.Result}");
+            for (int i = 0; i < NumberOfPlayers; i++) {
+                GD.Print($"Player {i} Result: {_game.Results[i]}");
+            }
         }
         GD.Print("------------------");
     }

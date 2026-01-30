@@ -1,13 +1,17 @@
-[gd_scene load_steps=2 format=3 uid="uid://b6u7iaay5cqmu"]
+[gd_scene load_steps=4 format=3 uid="uid://b6u7iaay5cqmu"]
 
 [ext_resource type="Script" uid="uid://daypcbavet6rq" path="res://scenes/card/CardUI.cs" id="1_qnn7r"]
 
-[node name="Card" type="Panel"]
-custom_minimum_size = Vector2(100, 150)
-script = ExtResource("1_qnn7r")
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_472ju"]
+load_path = "res://.godot/imported/cards.png-a544c830257d2f6f4dd08b51c228af1e.ctex"
 
-[node name="Label" type="Label" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-text = "4 S"
+[sub_resource type="AtlasTexture" id="AtlasTexture_472ju"]
+atlas = SubResource("CompressedTexture2D_472ju")
+region = Rect2(624, 0, 48, 64)
+
+[node name="Card" type="TextureRect"]
+custom_minimum_size = Vector2(48, 64)
+offset_right = 48.0
+offset_bottom = 64.0
+texture = SubResource("AtlasTexture_472ju")
+script = ExtResource("1_qnn7r")

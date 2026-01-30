@@ -14,6 +14,7 @@ namespace SlickBlackJack.Components {
             _random = new Random();
             _cards = new List<Card>();
             InitializeDeck(numberOfDecks);
+            Shuffle();
         }
 
         /// <summary>

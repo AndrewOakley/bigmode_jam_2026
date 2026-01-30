@@ -2,10 +2,10 @@ using Godot;
 
 namespace SlickBlackJack.Components {
 	public enum Suit {
-		Hearts,
-		Diamonds,
-		Clubs,
-		Spades
+		Hearts = 1,
+		Diamonds = 2,
+		Spades = 3,
+		Clubs = 4,
 	}
 
 	public enum Rank {
