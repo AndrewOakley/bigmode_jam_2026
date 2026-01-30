@@ -5,7 +5,10 @@ using System.Linq;
 namespace SlickBlackJack.Components {
     public partial class Hand : RefCounted {
         [Signal]
-        public delegate void CardAddedEventHandler(Card card);
+        public delegate void CardAddedEventHandler(Card card, bool faceDown = false);
+        
+        [Signal]
+        public delegate void FlipDealerCardEventHandler();
         
         private List<Card> _cards;
 
@@ -13,10 +16,10 @@ namespace SlickBlackJack.Components {
             _cards = new List<Card>();
         }
 
-        public void AddCard(Card card) {
+        public void AddCard(Card card, bool faceDown = false) {
             if (card != null) {
                 _cards.Add(card);
-                EmitSignal(SignalName.CardAdded, card);
+                EmitSignal(SignalName.CardAdded, card, faceDown);
             }
         }
 
@@ -84,6 +87,11 @@ namespace SlickBlackJack.Components {
         public override string ToString() {
             var cardStrings = _cards.Select(c => c.ToString());
             return $"[{string.Join(", ", cardStrings)}] = {GetValue()}";
+        }
+
+        public void FlipOverDealerCard() {
+            // TODO: This is a hacky way to reveal the dealer's first card'
+            EmitSignal(SignalName.FlipDealerCard);
         }
     }
 }

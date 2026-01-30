@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SlickBlackJack.Components {
     public enum GameState {
@@ -28,6 +29,7 @@ namespace SlickBlackJack.Components {
         public int NumberOfPlayers { get; private set; }
 
         private int _numberOfDecks;
+        private const int DealOutTimer = 500;
 
         public BlackjackGame(int numberOfDecks = 1, int numberOfPlayers = 3) {
             _numberOfDecks = numberOfDecks;
@@ -40,6 +42,11 @@ namespace SlickBlackJack.Components {
                     Hand = new Hand(),
                     Chips = 1000
                 });
+                
+                // TODO: change this but for now hard code player to always be 2nd
+                if (i == 1) {
+                    Players[i].IsNpc = false;
+                }
             }
             DealerHand = new Hand();
             State = GameState.Betting;
@@ -53,7 +60,7 @@ namespace SlickBlackJack.Components {
         /// <summary>
         /// Starts a new round of blackjack
         /// </summary>
-        public void StartNewRound() {
+        public async void StartNewRound() {
             // Check if deck needs reshuffling (less than 25% remaining)
             if (Deck.CardsRemaining < (_numberOfDecks * 52) / 4) {
                 Deck.Reset(_numberOfDecks);
@@ -76,12 +83,18 @@ namespace SlickBlackJack.Components {
             // Deal initial cards: round-robin style
             // First card to each player, then dealer, then second card to each player, then dealer
             for (var i = 0; i < NumberOfPlayers; i++) {
+                await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
                 Players[i].Hand.AddCard(Deck.DrawCard());
             }
-            DealerHand.AddCard(Deck.DrawCard());
+            
+            await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
+            DealerHand.AddCard(Deck.DrawCard(), true);
             for (var i = 0; i < NumberOfPlayers; i++) {
+                await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
                 Players[i].Hand.AddCard(Deck.DrawCard());
             }
+            
+            await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
             DealerHand.AddCard(Deck.DrawCard());
 
             // Check for immediate blackjacks
@@ -104,11 +117,18 @@ namespace SlickBlackJack.Components {
 
             if (allPlayersFinished) {
                 State = GameState.RoundOver;
+                PlayDealerTurn(); // TODO: fix this hacky way of showing dealers hand on blackjack
             } else {
                 State = GameState.PlayerTurn;
                 // Skip to first player who hasn't finished
                 while (CurrentPlayerIndex < NumberOfPlayers && Results[CurrentPlayerIndex] != GameResult.None) {
                     CurrentPlayerIndex++;
+                }
+                
+                // TODO: consolidate this logic with the move to next player method
+                if (Players[CurrentPlayerIndex].IsNpc) {
+                    // TODO: implement NPC logic
+                    Stand();
                 }
             }
         }
@@ -117,13 +137,14 @@ namespace SlickBlackJack.Components {
         /// Current player hits (takes another card)
         /// </summary>
         public void Hit() {
+            
             if (State != GameState.PlayerTurn) {
                 GD.PrintErr("Cannot hit - not player's turn");
                 return;
             }
 
             Players[CurrentPlayerIndex].Hand.AddCard(Deck.DrawCard());
-
+            
             if (Players[CurrentPlayerIndex].Hand.IsBusted()) {
                 Results[CurrentPlayerIndex] = GameResult.DealerWin;
                 MoveToNextPlayer();
@@ -157,14 +178,25 @@ namespace SlickBlackJack.Components {
                 // All players finished, dealer's turn
                 State = GameState.DealerTurn;
                 PlayDealerTurn();
+                return;
+            }
+            
+            if (Players[CurrentPlayerIndex].IsNpc) {
+                // TODO: implement NPC logic
+                Stand();
+                return;
             }
         }
 
         /// <summary>
         /// Dealer plays according to standard rules: hit on 16 or less, stand on 17 or more
         /// </summary>
-        private void PlayDealerTurn() {
+        private async void PlayDealerTurn() {
+            await Task.Delay(TimeSpan.FromMilliseconds(1000));
+            DealerHand.FlipOverDealerCard();
+            
             while (DealerHand.GetValue() < 17) {
+                await Task.Delay(TimeSpan.FromMilliseconds(1000));
                 DealerHand.AddCard(Deck.DrawCard());
             }
 

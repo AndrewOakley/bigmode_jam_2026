@@ -7,14 +7,16 @@ public partial class CardUI : TextureRect {
 	private const int CardHeight = 64;
 	private Vector2 FaceDownOffset = new Vector2(1 * CardWidth, 4 * CardHeight);
 
-	private Card _card;
+	public Card Card;
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
+		Card = null;
+		Hide();
 	}
 	
 	public void SetCard(Card card, bool faceDown = false) {
-		_card = card;
+		Card = card;
 
 		if (card == null) {
 			Hide();

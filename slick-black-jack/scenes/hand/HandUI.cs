@@ -5,6 +5,7 @@ using SlickBlackJack.Components;
 
 public partial class HandUI : HBoxContainer {
 	public Hand Hand { get; private set; }
+	
 	private readonly List<CardUI> _cardUIs = [];
 	
 	public override void _Ready() {
@@ -27,28 +28,29 @@ public partial class HandUI : HBoxContainer {
 
 		Hand = hand;
 		Hand.CardAdded += OnCardAdded;
-
-		var handCards = Hand.GetCards();
-		for (var i = 0; i < _cardUIs.Count; i++) {
-			if (i >= handCards.Count) {
-				_cardUIs[i].SetCard(null);
-				continue;
-			}
-			
-			var faceDown = i == handCards.Count - 1 && isDealer;
-			_cardUIs[i].SetCard(handCards[i], faceDown);
+		if (isDealer) {
+			Hand.FlipDealerCard += OnFlipDealerCard;
 		}
 	}
 
-	private void OnCardAdded(Card card) {
+	private void OnCardAdded(Card card, bool faceDown = false) {
 		var handCards = Hand.GetCards();
 		for (var i = 0; i < _cardUIs.Count; i++) {
-			if (i >= handCards.Count) {
-				_cardUIs[i].SetCard(null);
-				continue;
+			// place a card in next available slot
+			if (_cardUIs[i].Card == null) {
+				_cardUIs[i].SetCard(handCards[i], faceDown);
+				return;
 			}
-			
-			_cardUIs[i].SetCard(handCards[i]);
+		}
+	}
+	
+	private void OnFlipDealerCard() {
+		var handCards = Hand.GetCards();
+		for (var i = 0; i < _cardUIs.Count; i++) {
+			if (_cardUIs[i].Card != null) {
+				_cardUIs[i].SetCard(handCards[i]);
+				return;
+			}
 		}
 	}
 }

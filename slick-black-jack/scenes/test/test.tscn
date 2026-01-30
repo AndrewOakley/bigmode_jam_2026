@@ -1,24 +1,145 @@
-[gd_scene load_steps=4 format=3 uid="uid://c3ksnt0ea2ray"]
+[gd_scene load_steps=17 format=3 uid="uid://c3ksnt0ea2ray"]
 
 [ext_resource type="Script" uid="uid://cpk63f74thfsv" path="res://scenes/test/Test.cs" id="1_m7npr"]
 [ext_resource type="PackedScene" uid="uid://bvli2013m2a38" path="res://scenes/black_jack_table.tscn" id="2_da6vm"]
 [ext_resource type="PackedScene" uid="uid://c2nwtq6fu1vo6" path="res://scenes/hand/HandUI.tscn" id="2_st4qh"]
+[ext_resource type="Texture2D" uid="uid://dg6mybiv2phmo" path="res://assets/sprite-sheets/characters/hairlineGuyIdle.png" id="4_51e2l"]
 
-[node name="Node" type="Node" node_paths=PackedStringArray("_table", "_dealerHandUI", "_playerHandUI")]
+[sub_resource type="AtlasTexture" id="AtlasTexture_oj4i3"]
+atlas = ExtResource("4_51e2l")
+region = Rect2(0, 0, 90, 127)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k6n02"]
+atlas = ExtResource("4_51e2l")
+region = Rect2(90, 0, 90, 127)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1suh2"]
+atlas = ExtResource("4_51e2l")
+region = Rect2(180, 0, 90, 127)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2ns80"]
+atlas = ExtResource("4_51e2l")
+region = Rect2(270, 0, 90, 127)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5unt0"]
+atlas = ExtResource("4_51e2l")
+region = Rect2(360, 0, 90, 127)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_saoeg"]
+atlas = ExtResource("4_51e2l")
+region = Rect2(450, 0, 90, 127)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_we7ej"]
+atlas = ExtResource("4_51e2l")
+region = Rect2(540, 0, 90, 127)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xi5sv"]
+atlas = ExtResource("4_51e2l")
+region = Rect2(630, 0, 90, 127)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2dgve"]
+atlas = ExtResource("4_51e2l")
+region = Rect2(720, 0, 90, 127)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x4ubh"]
+atlas = ExtResource("4_51e2l")
+region = Rect2(810, 0, 90, 127)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xm0ii"]
+atlas = ExtResource("4_51e2l")
+region = Rect2(900, 0, 90, 127)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bg4ew"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oj4i3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k6n02")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1suh2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2ns80")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5unt0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_saoeg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_we7ej")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xi5sv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2dgve")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x4ubh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xm0ii")
+}],
+"loop": true,
+"name": &"default",
+"speed": 2.0
+}]
+
+[node name="Node" type="Node" node_paths=PackedStringArray("_table", "_dealerHandUI", "_playerHandUI", "_npcHandUI1", "_npcHandUI2")]
 script = ExtResource("1_m7npr")
 _table = NodePath("BlackJackTable")
 _dealerHandUI = NodePath("Hands/DealerHand")
 _playerHandUI = NodePath("Hands/PlayerHand")
+_npcHandUI1 = NodePath("Hands/NpcHand1")
+_npcHandUI2 = NodePath("Hands/NpcHand2")
 
 [node name="Hands" type="Node" parent="."]
 
 [node name="DealerHand" parent="Hands" instance=ExtResource("2_st4qh")]
+anchor_left = 0.49400002
+anchor_top = 0.256
+anchor_right = 0.49400002
+anchor_bottom = 0.256
+offset_left = 172.84
+offset_top = 30.839996
+offset_right = 500.84
+offset_bottom = 94.84
+rotation = 3.1415927
 
 [node name="PlayerHand" parent="Hands" instance=ExtResource("2_st4qh")]
-offset_left = -40.0
-offset_top = 267.0
-offset_right = 60.0
-offset_bottom = 331.0
+anchor_top = 0.717
+anchor_bottom = 0.717
+offset_left = -171.0
+offset_top = -37.119995
+offset_right = 157.0
+offset_bottom = 26.880005
+
+[node name="NpcHand1" parent="Hands" instance=ExtResource("2_st4qh")]
+anchor_left = 0.84300005
+anchor_top = 0.551
+anchor_right = 0.84300005
+anchor_bottom = 0.551
+offset_left = -137.52002
+offset_top = 91.64
+offset_right = 190.47998
+offset_bottom = 155.64
+rotation = -0.7763446
+
+[node name="NpcHand2" parent="Hands" instance=ExtResource("2_st4qh")]
+anchor_left = 0.14400001
+anchor_top = 0.49500003
+anchor_right = 0.14400001
+anchor_bottom = 0.49500003
+offset_left = -60.160004
+offset_top = -156.20001
+offset_right = 267.84
+offset_bottom = -92.2
+rotation = 1.0309832
 
 [node name="Hit" type="Button" parent="."]
 offset_left = 124.0
@@ -35,7 +156,42 @@ offset_bottom = 324.0
 text = "Stand"
 
 [node name="BlackJackTable" parent="." instance=ExtResource("2_da6vm")]
-NumberOfPlayers = 1
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(320, 324)
+rotation = -1.5707964
+sprite_frames = SubResource("SpriteFrames_bg4ew")
+autoplay = "default"
+frame_progress = 0.7646224
+
+[node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="."]
+position = Vector2(313, 32)
+rotation = 1.5707964
+sprite_frames = SubResource("SpriteFrames_bg4ew")
+autoplay = "default"
+frame_progress = 0.6895687
+
+[node name="AnimatedSprite2D3" type="AnimatedSprite2D" parent="."]
+position = Vector2(35.999992, 221)
+rotation = -0.55881417
+sprite_frames = SubResource("SpriteFrames_bg4ew")
+autoplay = "default"
+frame_progress = 0.6895687
+
+[node name="AnimatedSprite2D4" type="AnimatedSprite2D" parent="."]
+position = Vector2(592, 247.99998)
+rotation = 3.8804643
+sprite_frames = SubResource("SpriteFrames_bg4ew")
+autoplay = "default"
+frame_progress = 0.6895687
+
+[node name="Restart" type="Button" parent="."]
+offset_left = 21.0
+offset_top = 10.0
+offset_right = 86.0
+offset_bottom = 41.0
+text = "Restart"
 
 [connection signal="pressed" from="Hit" to="." method="OnHitPressed"]
 [connection signal="pressed" from="Stand" to="." method="OnStandPressed"]
+[connection signal="pressed" from="Restart" to="." method="OnRestartPressed"]
