@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace SlickBlackJack.Components {
     public partial class Hand : RefCounted {
+        [Signal]
+        public delegate void CardAddedEventHandler(Card card);
+        
         private List<Card> _cards;
 
         public Hand() {
@@ -13,6 +16,7 @@ namespace SlickBlackJack.Components {
         public void AddCard(Card card) {
             if (card != null) {
                 _cards.Add(card);
+                EmitSignal(SignalName.CardAdded, card);
             }
         }
 

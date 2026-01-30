@@ -59,7 +59,7 @@ public partial class BlackjackTable : Node {
 
         int playerIndex = _game.CurrentPlayerIndex;
         _game.Hit();
-        var lastCard = _game.PlayerHands[playerIndex].GetCards()[_game.PlayerHands[playerIndex].CardCount - 1];
+        var lastCard = _game.Players[playerIndex].Hand.GetCards()[_game.Players[playerIndex].Hand.CardCount - 1];
         EmitSignal(SignalName.Hit, playerIndex, lastCard);
 
         PrintGameState();
@@ -112,7 +112,7 @@ public partial class BlackjackTable : Node {
             GD.PrintErr($"Invalid player index: {playerIndex}");
             return 0;
         }
-        return _game.PlayerHands[playerIndex].GetValue();
+        return _game.Players[playerIndex].Hand.GetValue();
     }
 
     /// <summary>
@@ -137,7 +137,7 @@ public partial class BlackjackTable : Node {
             GD.PrintErr($"Invalid player index: {playerIndex}");
             return new Card[0];
         }
-        return _game.PlayerHands[playerIndex].GetCards().ToArray();
+        return _game.Players[playerIndex].Hand.GetCards().ToArray();
     }
 
     /// <summary>
@@ -148,7 +148,18 @@ public partial class BlackjackTable : Node {
             GD.PrintErr($"Invalid player index: {playerIndex}");
             return null;
         }
-        return _game.PlayerHands[playerIndex];
+        return _game.Players[playerIndex].Hand;
+    }
+    
+    /// <summary>
+    /// Gets a specific player
+    /// </summary>
+    public Player GetPlayer(int playerIndex) {
+        if (playerIndex < 0 || playerIndex >= NumberOfPlayers) {
+            GD.PrintErr($"Invalid player index: {playerIndex}");
+            return null;
+        }
+        return _game.Players[playerIndex];
     }
 
     /// <summary>
@@ -208,7 +219,7 @@ public partial class BlackjackTable : Node {
         }
 
         for (int i = 0; i < NumberOfPlayers; i++) {
-            GD.Print($"Player {i} Hand: {_game.PlayerHands[i]}");
+            GD.Print($"Player {i} Hand: {_game.Players[i].Hand}");
         }
 
         if (ShouldRevealDealerHand()) {

@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 namespace SlickBlackJack.Components {
     public enum GameState {
@@ -19,10 +20,10 @@ namespace SlickBlackJack.Components {
 
     public partial class BlackjackGame : RefCounted {
         public Deck Deck { get; private set; }
-        public System.Collections.Generic.List<Hand> PlayerHands { get; private set; }
+        public List<Player> Players { get; private set; }
         public Hand DealerHand { get; private set; }
         public GameState State { get; private set; }
-        public System.Collections.Generic.List<GameResult> Results { get; private set; }
+        public List<GameResult> Results { get; private set; }
         public int CurrentPlayerIndex { get; private set; }
         public int NumberOfPlayers { get; private set; }
 
@@ -32,14 +33,18 @@ namespace SlickBlackJack.Components {
             _numberOfDecks = numberOfDecks;
             NumberOfPlayers = numberOfPlayers;
             Deck = new Deck(numberOfDecks);
-            PlayerHands = new System.Collections.Generic.List<Hand>();
-            for (int i = 0; i < numberOfPlayers; i++) {
-                PlayerHands.Add(new Hand());
+            Players = [];
+            for (var i = 0; i < numberOfPlayers; i++) {
+                Players.Add(new Player {
+                    Name = $"Player {i + 1}",
+                    Hand = new Hand(),
+                    Chips = 1000
+                });
             }
             DealerHand = new Hand();
             State = GameState.Betting;
-            Results = new System.Collections.Generic.List<GameResult>();
-            for (int i = 0; i < numberOfPlayers; i++) {
+            Results = [];
+            for (var i = 0; i < numberOfPlayers; i++) {
                 Results.Add(GameResult.None);
             }
             CurrentPlayerIndex = 0;
@@ -56,13 +61,13 @@ namespace SlickBlackJack.Components {
             }
 
             // Clear all player hands
-            foreach (var hand in PlayerHands) {
-                hand.Clear();
+            foreach (var player in Players) {
+                player.Hand.Clear();
             }
             DealerHand.Clear();
 
             // Reset all results
-            for (int i = 0; i < NumberOfPlayers; i++) {
+            for (var i = 0; i < NumberOfPlayers; i++) {
                 Results[i] = GameResult.None;
             }
 
@@ -70,21 +75,21 @@ namespace SlickBlackJack.Components {
 
             // Deal initial cards: round-robin style
             // First card to each player, then dealer, then second card to each player, then dealer
-            for (int i = 0; i < NumberOfPlayers; i++) {
-                PlayerHands[i].AddCard(Deck.DrawCard());
+            for (var i = 0; i < NumberOfPlayers; i++) {
+                Players[i].Hand.AddCard(Deck.DrawCard());
             }
             DealerHand.AddCard(Deck.DrawCard());
-            for (int i = 0; i < NumberOfPlayers; i++) {
-                PlayerHands[i].AddCard(Deck.DrawCard());
+            for (var i = 0; i < NumberOfPlayers; i++) {
+                Players[i].Hand.AddCard(Deck.DrawCard());
             }
             DealerHand.AddCard(Deck.DrawCard());
 
             // Check for immediate blackjacks
-            bool dealerHasBlackjack = DealerHand.IsBlackjack();
-            bool allPlayersFinished = true;
+            var dealerHasBlackjack = DealerHand.IsBlackjack();
+            var allPlayersFinished = true;
 
-            for (int i = 0; i < NumberOfPlayers; i++) {
-                if (PlayerHands[i].IsBlackjack()) {
+            for (var i = 0; i < NumberOfPlayers; i++) {
+                if (Players[i].Hand.IsBlackjack()) {
                     if (dealerHasBlackjack) {
                         Results[i] = GameResult.Push;
                     } else {
@@ -117,9 +122,9 @@ namespace SlickBlackJack.Components {
                 return;
             }
 
-            PlayerHands[CurrentPlayerIndex].AddCard(Deck.DrawCard());
+            Players[CurrentPlayerIndex].Hand.AddCard(Deck.DrawCard());
 
-            if (PlayerHands[CurrentPlayerIndex].IsBusted()) {
+            if (Players[CurrentPlayerIndex].Hand.IsBusted()) {
                 Results[CurrentPlayerIndex] = GameResult.DealerWin;
                 MoveToNextPlayer();
             }
@@ -172,15 +177,15 @@ namespace SlickBlackJack.Components {
         private void DetermineWinner() {
             State = GameState.RoundOver;
 
-            int dealerValue = DealerHand.GetValue();
+            var dealerValue = DealerHand.GetValue();
 
-            for (int i = 0; i < NumberOfPlayers; i++) {
+            for (var i = 0; i < NumberOfPlayers; i++) {
                 // Skip players who already have a result (blackjack/bust)
                 if (Results[i] != GameResult.None) {
                     continue;
                 }
 
-                int playerValue = PlayerHands[i].GetValue();
+                var playerValue = Players[i].Hand.GetValue();
 
                 if (DealerHand.IsBusted()) {
                     Results[i] = GameResult.PlayerWin;

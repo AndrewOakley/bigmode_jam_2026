@@ -13,14 +13,41 @@ public partial class HandUI : HBoxContainer {
 				_cardUIs.Add(cardUi);
 			}
 		}
-		
 	}
 	
-	public void SetHand(Hand hand) {
-		Hand = hand;
+	public void SetHand(Hand hand, bool isDealer = false) {
+		// Unsubscribe from previous hand
+		if (Hand != null) {
+			Hand.CardAdded -= OnCardAdded;
+		}
+		
+		if (hand == null) {
+			return;
+		}
 
-		var handCards = hand.GetCards();
+		Hand = hand;
+		Hand.CardAdded += OnCardAdded;
+
+		var handCards = Hand.GetCards();
 		for (var i = 0; i < _cardUIs.Count; i++) {
+			if (i >= handCards.Count) {
+				_cardUIs[i].SetCard(null);
+				continue;
+			}
+			
+			var faceDown = i == handCards.Count - 1 && isDealer;
+			_cardUIs[i].SetCard(handCards[i], faceDown);
+		}
+	}
+
+	private void OnCardAdded(Card card) {
+		var handCards = Hand.GetCards();
+		for (var i = 0; i < _cardUIs.Count; i++) {
+			if (i >= handCards.Count) {
+				_cardUIs[i].SetCard(null);
+				continue;
+			}
+			
 			_cardUIs[i].SetCard(handCards[i]);
 		}
 	}
