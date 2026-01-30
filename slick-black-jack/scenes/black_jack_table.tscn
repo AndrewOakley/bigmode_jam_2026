@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bvli2013m2a38"]
+
+[ext_resource type="Script" uid="uid://cxtdaftb6u0y0" path="res://scripts/BlackjackTable.cs" id="1_do1ck"]
+
+[node name="BlackJackTable" type="Node"]
+script = ExtResource("1_do1ck")

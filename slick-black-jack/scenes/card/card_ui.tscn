@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://b6u7iaay5cqmu"]
+
+[ext_resource type="Script" uid="uid://daypcbavet6rq" path="res://scenes/card/CardUI.cs" id="1_qnn7r"]
+
+[node name="Card" type="Panel"]
+custom_minimum_size = Vector2(100, 150)
+script = ExtResource("1_qnn7r")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "4 S"
