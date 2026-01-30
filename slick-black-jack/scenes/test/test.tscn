@@ -1,6 +1,59 @@
-[gd_scene load_steps=2 format=3 uid="uid://c3ksnt0ea2ray"]
+[gd_scene load_steps=5 format=3 uid="uid://c3ksnt0ea2ray"]
 
 [ext_resource type="Script" uid="uid://cpk63f74thfsv" path="res://scenes/test/Test.cs" id="1_m7npr"]
+[ext_resource type="Script" uid="uid://dba4oiiukcnt5" path="res://scenes/hand/HandUI.cs" id="2_51e2l"]
+[ext_resource type="PackedScene" uid="uid://bvli2013m2a38" path="res://scenes/black_jack_table.tscn" id="2_da6vm"]
+[ext_resource type="PackedScene" uid="uid://b6u7iaay5cqmu" path="res://scenes/card/card_ui.tscn" id="2_st4qh"]
 
-[node name="Node" type="Node"]
+[node name="Node" type="Node" node_paths=PackedStringArray("_table", "_dealerHandUI", "_playerHandUI")]
 script = ExtResource("1_m7npr")
+_table = NodePath("BlackJackTable")
+_dealerHandUI = NodePath("Control/HBoxContainer")
+_playerHandUI = NodePath("Control/HBoxContainer2")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1151.0
+offset_bottom = 649.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -152.5
+offset_right = 152.5
+offset_bottom = 172.0
+grow_horizontal = 2
+alignment = 1
+script = ExtResource("2_51e2l")
+
+[node name="Panel" parent="Control/HBoxContainer" instance=ExtResource("2_st4qh")]
+layout_mode = 2
+
+[node name="Panel2" parent="Control/HBoxContainer" instance=ExtResource("2_st4qh")]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -152.5
+offset_top = -172.0
+offset_right = 152.5
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+script = ExtResource("2_51e2l")
+
+[node name="Panel" parent="Control/HBoxContainer2" instance=ExtResource("2_st4qh")]
+layout_mode = 2
+
+[node name="Panel2" parent="Control/HBoxContainer2" instance=ExtResource("2_st4qh")]
+layout_mode = 2
+
+[node name="BlackJackTable" parent="." instance=ExtResource("2_da6vm")]
