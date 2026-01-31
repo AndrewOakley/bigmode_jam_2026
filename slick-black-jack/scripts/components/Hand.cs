@@ -24,7 +24,7 @@ namespace SlickBlackJack.Components {
         [Signal] public delegate void HandStoodEventHandler();
         [Signal] public delegate void CardRemovedEventHandler();
         
-        public HandStatus Status { get; private set; }
+        public HandStatus Status { get; set; }
         public HandResult Result { get; set; }
         private List<Card> _cards;
 
@@ -44,7 +44,7 @@ namespace SlickBlackJack.Components {
             }
             
             if (forceSplitCards) {
-                card = new Card(card.Suit, Rank.Ten);
+                card = new Card(card.Suit, Rank.Ace);
             }
             
             if (card == null) {

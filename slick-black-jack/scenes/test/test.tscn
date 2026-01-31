@@ -1,93 +1,19 @@
-[gd_scene load_steps=22 format=3 uid="uid://c3ksnt0ea2ray"]
+[gd_scene load_steps=10 format=3 uid="uid://c3ksnt0ea2ray"]
 
 [ext_resource type="Script" uid="uid://cpk63f74thfsv" path="res://scenes/test/Test.cs" id="1_m7npr"]
 [ext_resource type="PackedScene" uid="uid://bvli2013m2a38" path="res://scenes/black_jack_table.tscn" id="2_da6vm"]
-[ext_resource type="PackedScene" uid="uid://c2nwtq6fu1vo6" path="res://scenes/hand/HandUI.tscn" id="2_st4qh"]
 [ext_resource type="Texture2D" uid="uid://dwdpvc6sp26s7" path="res://assets/floor.png" id="2_we7ej"]
-[ext_resource type="Texture2D" uid="uid://c4gmrmey6m712" path="res://assets/sprite-sheets/characters/dealer/body.png" id="4_2dgve"]
-[ext_resource type="Texture2D" uid="uid://couv3croc1e7l" path="res://assets/sprite-sheets/characters/dealer/head.png" id="5_x4ubh"]
+[ext_resource type="PackedScene" uid="uid://c5m1i0e1rpq6w" path="res://scenes/dealer/dealer.tscn" id="5_5unt0"]
 [ext_resource type="PackedScene" uid="uid://ca3mq4iyvkm1v" path="res://scenes/Player/characters/jack.tscn" id="6_2ns80"]
 [ext_resource type="Texture2D" uid="uid://baxxjxca3nu8a" path="res://assets/table.png" id="6_k6n02"]
 [ext_resource type="PackedScene" uid="uid://c5kwgoqs23bvg" path="res://scenes/Player/characters/headphones.tscn" id="7_5unt0"]
 [ext_resource type="PackedScene" uid="uid://gog6jny4ukt4" path="res://scenes/Player/characters/glasses.tscn" id="8_5unt0"]
-[ext_resource type="PackedScene" uid="uid://26044rjfas4p" path="res://scenes/ControlsUI.tscn" id="10_saoeg"]
+[ext_resource type="PackedScene" uid="uid://bsoodols5srp3" path="res://scenes/ControlsUI.tscn" id="10_saoeg"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ct545"]
-atlas = ExtResource("4_2dgve")
-region = Rect2(0, 0, 85, 133)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_fbv4r"]
-atlas = ExtResource("4_2dgve")
-region = Rect2(85, 0, 85, 133)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_o25gc"]
-atlas = ExtResource("4_2dgve")
-region = Rect2(170, 0, 85, 133)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ec6vr"]
-atlas = ExtResource("4_2dgve")
-region = Rect2(255, 0, 85, 133)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_24is6"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ct545")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_fbv4r")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_o25gc")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ec6vr")
-}],
-"loop": true,
-"name": &"default",
-"speed": 2.0
-}]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_740cx"]
-atlas = ExtResource("5_x4ubh")
-region = Rect2(0, 0, 85, 133)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_6qydu"]
-atlas = ExtResource("5_x4ubh")
-region = Rect2(85, 0, 85, 133)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_w1ro7"]
-atlas = ExtResource("5_x4ubh")
-region = Rect2(170, 0, 85, 133)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_g17ms"]
-atlas = ExtResource("5_x4ubh")
-region = Rect2(255, 0, 85, 133)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_1ofdx"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_740cx")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_6qydu")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_w1ro7")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_g17ms")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
-
-[node name="Node" type="Node" node_paths=PackedStringArray("_table", "_dealerHandUi")]
+[node name="Node" type="Node" node_paths=PackedStringArray("_table", "_gameUi")]
 script = ExtResource("1_m7npr")
 _table = NodePath("BlackJackTable")
-_dealerHandUi = NodePath("BlackJackTable/Dealer/DealerHand")
+_gameUi = NodePath("GameUI")
 
 [node name="Floor" type="Sprite2D" parent="."]
 modulate = Color(0.49354547, 0.49354553, 0.49354535, 1)
@@ -104,54 +30,23 @@ position = Vector2(402, 188.00002)
 scale = Vector2(0.57886183, 0.57886183)
 texture = ExtResource("6_k6n02")
 
-[node name="Dealer" type="Node2D" parent="BlackJackTable"]
-z_index = 1
-position = Vector2(66, 12.000015)
-
-[node name="DealerHand" parent="BlackJackTable/Dealer" instance=ExtResource("2_st4qh")]
-anchors_preset = -1
-anchor_left = 0.49400002
-anchor_top = 0.256
-anchor_right = 0.49400002
-anchor_bottom = 0.256
-offset_left = 163.0
-offset_top = 78.0
-offset_right = 491.0
-offset_bottom = 123.0
-metadata/_edit_use_anchors_ = true
-
-[node name="body" type="AnimatedSprite2D" parent="BlackJackTable/Dealer"]
-z_index = -3
-position = Vector2(326, 37)
-rotation = 1.5707964
-sprite_frames = SubResource("SpriteFrames_24is6")
-autoplay = "default"
-frame_progress = 0.89561033
-
-[node name="head" type="AnimatedSprite2D" parent="BlackJackTable/Dealer"]
-position = Vector2(325, 37.999985)
-rotation = 1.5707964
-sprite_frames = SubResource("SpriteFrames_1ofdx")
-autoplay = "default"
-frame_progress = 0.05689106
+[node name="Dealer" parent="BlackJackTable" instance=ExtResource("5_5unt0")]
+position = Vector2(67, 23)
 
 [node name="Players" type="Node" parent="BlackJackTable"]
 
 [node name="glasses" parent="BlackJackTable/Players" instance=ExtResource("8_5unt0")]
 position = Vector2(581, 221)
 rotation = -2.5321772
-Name = "andy"
 
 [node name="jack" parent="BlackJackTable/Players" instance=ExtResource("6_2ns80")]
 position = Vector2(389, 313)
 rotation = -1.5707964
-Name = "andy"
 
 [node name="headphones" parent="BlackJackTable/Players" instance=ExtResource("7_5unt0")]
 position = Vector2(207.00002, 232.00002)
 rotation = -0.64692277
-Name = "andy"
 
-[node name="Control" parent="." instance=ExtResource("10_saoeg")]
+[node name="GameUI" parent="." instance=ExtResource("10_saoeg")]
 metadata/_edit_group_ = true
 metadata/_edit_lock_ = true

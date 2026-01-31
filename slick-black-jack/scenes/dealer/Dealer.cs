@@ -36,4 +36,8 @@ public partial class Dealer : Node2D {
         var tween = CreateTween();
         tween.TweenProperty(DealerFinger, "global_position", handUi.DealerPointTo.GlobalPosition, 0.3);
     }
+    
+    public Card GetUpCard() {
+        return Hand.GetCards()[0];
+    }
 }

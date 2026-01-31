@@ -116,41 +116,65 @@ namespace SlickBlackJack.Components {
                     CurrentPlayerIndex++;
                 }
                 
-                // TODO: consolidate this logic with the move to next player method
-                if (Players[CurrentPlayerIndex].IsNpc) {
-                    // TODO: implement NPC logic
-                    Stand();
+                await PlayNpcTurn();
+            }
+        }
+
+        private async Task PlayNpcTurn() {
+            var currentPlayer = Players[CurrentPlayerIndex];
+            if (CurrentPlayerIndex >= NumberOfPlayers || !currentPlayer.IsNpc) return;
+            
+            while (currentPlayer.HasActiveHand()) {
+                await Task.Delay(TimeSpan.FromMilliseconds(1000));
+                var npcMove = currentPlayer.NpcTurn(Dealer.GetUpCard().GetValue());
+
+                switch (npcMove) {
+                    case PlayerMove.Hit:
+                        var done = Hit();
+                        if (done || !currentPlayer.HasActiveHand()) return;
+                        break;
+                    case PlayerMove.Stand:
+                        Stand();
+                        return;
+                    case PlayerMove.Split:
+                        await Split();
+                        
+                        if (!currentPlayer.HasActiveHand()) return;
+                        
+                        break;
+                    case PlayerMove.DoubleDown:
+                        GD.PrintErr("Double down not implemented yet");
+                        Stand();
+                        break;
+                    default:
+                        GD.PrintErr($"Invalid npc move: {npcMove}");
+                        break;
                 }
             }
         }
-        
-        // private void OnPlayerHandChanged(int handIndex) {
-        //     var currentHandUI = Players[CurrentPlayerIndex].GetCurrentHandUI();
-        //     if (currentHandUI == null) return;
-        //     
-        //     Dealer.DealerPointToHand(Players[CurrentPlayerIndex].GetCurrentHandUI());
-        // }
 
         /// <summary>
         /// Current player hits (takes another card)
         /// </summary>
-        public void Hit() {
+        public bool Hit() {
             if (State != GameState.PlayerTurn) {
                 GD.PrintErr("Cannot hit - not player's turn");
-                return;
+                return false;
             }
 
             var currentPlayer = Players[CurrentPlayerIndex];
-            var busted = currentPlayer.HitCurrentHand(Deck.DrawCard());
-            if (busted) {
+            var done = currentPlayer.HitCurrentHand(Deck.DrawCard());
+            if (done) {
                 MoveToNextPlayer();
             }
+
+            return done;
         }
         
         /// <summary>
         /// Current player splits
         /// </summary>
-        public bool Split() {
+        public async Task<bool> Split() {
             if (State != GameState.PlayerTurn) {
                 GD.PrintErr("Cannot split - not player's turn");
                 return false;
@@ -171,14 +195,13 @@ namespace SlickBlackJack.Components {
                 return false;
             }
             
-            DelayedPointToCurrentHand(100);
             
-            return true;
-        }
-        
-        public async void DelayedPointToCurrentHand(int delayMilliseconds) {
-            await Task.Delay(TimeSpan.FromMilliseconds(delayMilliseconds));
+            await Task.Delay(TimeSpan.FromMilliseconds(100));
             Dealer.DealerPointToHand(Players[CurrentPlayerIndex].GetCurrentHandUI());
+            await Task.Delay(TimeSpan.FromMilliseconds(500));
+            Hit();
+
+            return true;
         }
 
         /// <summary>
@@ -219,11 +242,8 @@ namespace SlickBlackJack.Components {
                 await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
                 Hit();
             }
-            
-            if (Players[CurrentPlayerIndex].IsNpc) {
-                // TODO: implement NPC logic
-                Stand();
-            }
+
+            await PlayNpcTurn();
         }
 
         /// <summary>

@@ -103,14 +103,11 @@ public partial class BlackjackTable : Node {
         }
 
         int playerIndex = _game.CurrentPlayerIndex;
-        var success = _game.Split();
+        var success = await _game.Split();
 
         if (!success) {
             return;
         }
-        
-        await Task.Delay(TimeSpan.FromMilliseconds(1000));
-        PlayerHit();
         
         PrintGameState();
         
