@@ -24,12 +24,15 @@ namespace SlickBlackJack.Components {
         public List<Player> Players { get; private set; }
         public Hand DealerHand { get; private set; }
         public GameState State { get; private set; }
-        public List<GameResult> Results { get; private set; }
         public int CurrentPlayerIndex { get; private set; }
         public int NumberOfPlayers { get; private set; }
 
         private int _numberOfDecks;
         private const int DealOutTimer = 500;
+        private const int InitalChipCount = 1000;
+        
+        // FOR DEBUGGING
+        private bool ForcePlayerBlackjack = true;
 
         public BlackjackGame(int numberOfDecks = 1, int numberOfPlayers = 3) {
             _numberOfDecks = numberOfDecks;
@@ -39,8 +42,8 @@ namespace SlickBlackJack.Components {
             for (var i = 0; i < numberOfPlayers; i++) {
                 Players.Add(new Player {
                     Name = $"Player {i + 1}",
-                    Hand = new Hand(),
-                    Chips = 1000
+                    Hands = [],
+                    Chips = InitalChipCount
                 });
                 
                 // TODO: change this but for now hard code player to always be 2nd
@@ -50,10 +53,6 @@ namespace SlickBlackJack.Components {
             }
             DealerHand = new Hand();
             State = GameState.Betting;
-            Results = [];
-            for (var i = 0; i < numberOfPlayers; i++) {
-                Results.Add(GameResult.None);
-            }
             CurrentPlayerIndex = 0;
         }
 
@@ -69,29 +68,25 @@ namespace SlickBlackJack.Components {
 
             // Clear all player hands
             foreach (var player in Players) {
-                player.Hand.Clear();
+                player.StartRound();
             }
             DealerHand.Clear();
-
-            // Reset all results
-            for (var i = 0; i < NumberOfPlayers; i++) {
-                Results[i] = GameResult.None;
-            }
-
             CurrentPlayerIndex = 0;
 
             // Deal initial cards: round-robin style
             // First card to each player, then dealer, then second card to each player, then dealer
             for (var i = 0; i < NumberOfPlayers; i++) {
                 await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
-                Players[i].Hand.AddCard(Deck.DrawCard());
+                var forceBlackjack = ForcePlayerBlackjack && !Players[i].IsNpc;
+                Players[i].InitialDeal(Deck.DrawCard(), forceBlackjack);
             }
             
             await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
             DealerHand.AddCard(Deck.DrawCard());
             for (var i = 0; i < NumberOfPlayers; i++) {
                 await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
-                Players[i].Hand.AddCard(Deck.DrawCard());
+                var forceBlackjack = ForcePlayerBlackjack && !Players[i].IsNpc;
+                Players[i].InitialDeal(Deck.DrawCard(), forceBlackjack);
             }
             
             await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
@@ -102,14 +97,14 @@ namespace SlickBlackJack.Components {
             var allPlayersFinished = true;
 
             for (var i = 0; i < NumberOfPlayers; i++) {
-                if (Players[i].Hand.IsBlackjack()) {
+                if (Players[i].GetCurrentHand().IsBlackjack()) {
                     if (dealerHasBlackjack) {
-                        Results[i] = GameResult.Push;
+                        Players[i].GetCurrentHand().Result = HandResult.Push;
                     } else {
-                        Results[i] = GameResult.PlayerBlackjack;
+                        Players[i].GetCurrentHand().Result = HandResult.PlayerBlackjack;
                     }
                 } else if (dealerHasBlackjack) {
-                    Results[i] = GameResult.DealerWin;
+                    Players[i].GetCurrentHand().Result = HandResult.DealerWin;
                 } else {
                     allPlayersFinished = false;
                 }
@@ -121,7 +116,7 @@ namespace SlickBlackJack.Components {
             } else {
                 State = GameState.PlayerTurn;
                 // Skip to first player who hasn't finished
-                while (CurrentPlayerIndex < NumberOfPlayers && Results[CurrentPlayerIndex] != GameResult.None) {
+                while (CurrentPlayerIndex < NumberOfPlayers && Players[CurrentPlayerIndex].GetCurrentHand().Result != HandResult.None) {
                     CurrentPlayerIndex++;
                 }
                 
@@ -143,10 +138,10 @@ namespace SlickBlackJack.Components {
                 return;
             }
 
-            Players[CurrentPlayerIndex].Hand.AddCard(Deck.DrawCard());
-            
-            if (Players[CurrentPlayerIndex].Hand.IsBusted()) {
-                Results[CurrentPlayerIndex] = GameResult.DealerWin;
+            Hand activeHand = Players[CurrentPlayerIndex].GetCurrentHand();
+            activeHand.AddCard(Deck.DrawCard());
+            if (activeHand.IsBusted()) {
+                activeHand.Result = HandResult.DealerWin;
                 MoveToNextPlayer();
             }
         }
@@ -170,7 +165,7 @@ namespace SlickBlackJack.Components {
             CurrentPlayerIndex++;
 
             // Skip players who already finished (blackjack/bust)
-            while (CurrentPlayerIndex < NumberOfPlayers && Results[CurrentPlayerIndex] != GameResult.None) {
+            while (CurrentPlayerIndex < NumberOfPlayers && !Players[CurrentPlayerIndex].HasActiveHand()) {
                 CurrentPlayerIndex++;
             }
 
@@ -212,22 +207,7 @@ namespace SlickBlackJack.Components {
             var dealerValue = DealerHand.GetValue();
 
             for (var i = 0; i < NumberOfPlayers; i++) {
-                // Skip players who already have a result (blackjack/bust)
-                if (Results[i] != GameResult.None) {
-                    continue;
-                }
-
-                var playerValue = Players[i].Hand.GetValue();
-
-                if (DealerHand.IsBusted()) {
-                    Results[i] = GameResult.PlayerWin;
-                } else if (playerValue > dealerValue) {
-                    Results[i] = GameResult.PlayerWin;
-                } else if (dealerValue > playerValue) {
-                    Results[i] = GameResult.DealerWin;
-                } else {
-                    Results[i] = GameResult.Push;
-                }
+                Players[i].DetermineHandResults(dealerValue);
             }
         }
 

@@ -59,7 +59,7 @@ public partial class BlackjackTable : Node {
 
         int playerIndex = _game.CurrentPlayerIndex;
         _game.Hit();
-        var lastCard = _game.Players[playerIndex].Hand.GetCards()[_game.Players[playerIndex].Hand.CardCount - 1];
+        var lastCard = _game.Players[playerIndex].GetCurrentHand().GetCards()[_game.Players[playerIndex].GetCurrentHand().CardCount - 1];
         EmitSignal(SignalName.Hit, playerIndex, lastCard);
 
         PrintGameState();
@@ -112,7 +112,7 @@ public partial class BlackjackTable : Node {
             GD.PrintErr($"Invalid player index: {playerIndex}");
             return 0;
         }
-        return _game.Players[playerIndex].Hand.GetValue();
+        return _game.Players[playerIndex].GetCurrentHand().GetValue();
     }
 
     /// <summary>
@@ -137,7 +137,7 @@ public partial class BlackjackTable : Node {
             GD.PrintErr($"Invalid player index: {playerIndex}");
             return new Card[0];
         }
-        return _game.Players[playerIndex].Hand.GetCards().ToArray();
+        return _game.Players[playerIndex].GetCurrentHand().GetCards().ToArray();
     }
 
     /// <summary>
@@ -148,7 +148,7 @@ public partial class BlackjackTable : Node {
             GD.PrintErr($"Invalid player index: {playerIndex}");
             return null;
         }
-        return _game.Players[playerIndex].Hand;
+        return _game.Players[playerIndex].GetCurrentHand();
     }
     
     /// <summary>
@@ -198,17 +198,6 @@ public partial class BlackjackTable : Node {
     }
 
     /// <summary>
-    /// Gets game result for a specific player
-    /// </summary>
-    public GameResult GetGameResult(int playerIndex) {
-        if (playerIndex < 0 || playerIndex >= NumberOfPlayers) {
-            GD.PrintErr($"Invalid player index: {playerIndex}");
-            return GameResult.None;
-        }
-        return _game.Results[playerIndex];
-    }
-
-    /// <summary>
     /// Helper method to print current game state to console (useful for debugging)
     /// </summary>
     private void PrintGameState() {
@@ -219,7 +208,8 @@ public partial class BlackjackTable : Node {
         }
 
         for (int i = 0; i < NumberOfPlayers; i++) {
-            GD.Print($"Player {i} Hand: {_game.Players[i].Hand}");
+            GD.Print($"Player {i} Hands:");
+            _game.Players[i].PrintHands();
         }
 
         if (ShouldRevealDealerHand()) {
@@ -230,7 +220,8 @@ public partial class BlackjackTable : Node {
 
         if (_game.State == GameState.RoundOver) {
             for (int i = 0; i < NumberOfPlayers; i++) {
-                GD.Print($"Player {i} Result: {_game.Results[i]}");
+                GD.Print($"Player {i} Results:");
+                _game.Players[i].PrintResults();
             }
         }
         GD.Print("------------------");

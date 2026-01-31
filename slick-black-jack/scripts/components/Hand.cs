@@ -3,29 +3,69 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace SlickBlackJack.Components {
+    public enum HandStatus {
+        Empty,
+        Active,
+        Done,
+    }
+    
+    public enum HandResult { 
+        None,
+        PlayerWin,
+        DealerWin,
+        Push,
+        PlayerBlackjack
+    }
+    
     public partial class Hand : RefCounted {
-        [Signal]
-        public delegate void CardAddedEventHandler(Card card, bool faceDown = false);
+        [Signal] public delegate void CardAddedEventHandler(Card card, bool faceDown = false);
+        [Signal] public delegate void FlipDealerCardEventHandler();
+        [Signal] public delegate void HandChangedEventHandler();
+        [Signal] public delegate void HandStoodEventHandler();
         
-        [Signal]
-        public delegate void FlipDealerCardEventHandler();
-        
+        public HandStatus Status { get; private set; }
+        public HandResult Result { get; set; }
         private List<Card> _cards;
 
         public Hand() {
             _cards = new List<Card>();
+            Status = HandStatus.Empty;
         }
 
-        public void AddCard(Card card, bool faceDown = false) {
-            if (card != null) {
-                _cards.Add(card);
-                EmitSignal(SignalName.CardAdded, card, faceDown);
+        public void AddCard(Card card, bool faceDown = false, bool forceBlackjack = false) {
+            if (forceBlackjack && card.GetValue() != 10) {
+                card = new Card(card.Suit, Rank.Ace);
             }
+            
+            if (card == null) {
+                GD.PrintErr("Cannot add null card to hand");
+                return;
+            };
+            
+            _cards.Add(card);
+            EmitSignal(SignalName.CardAdded, card, faceDown);
+            EmitSignal(SignalName.HandChanged);
+            
+            if (Status == HandStatus.Empty) {
+                Status = HandStatus.Active;
+            }
+            
+            if (GetValue() >= 21) {
+                Status = HandStatus.Done;
+            }
+        }
+
+        public void Stand() {
+            Status = HandStatus.Done;
+            EmitSignal(SignalName.HandStood);
         }
 
         public void Clear() {
             _cards.Clear();
+            Status = HandStatus.Empty;
+            EmitSignal(SignalName.HandChanged);
         }
+
 
         public int CardCount => _cards.Count;
 
@@ -83,7 +123,7 @@ namespace SlickBlackJack.Components {
 
             return value <= 21;
         }
-
+        
         public override string ToString() {
             var cardStrings = _cards.Select(c => c.ToString());
             return $"[{string.Join(", ", cardStrings)}] = {GetValue()}";
@@ -92,6 +132,10 @@ namespace SlickBlackJack.Components {
         public void FlipOverDealerCard() {
             // TODO: This is a hacky way to reveal the dealer's first card'
             EmitSignal(SignalName.FlipDealerCard);
+        }
+
+        public void SplitHand() {
+            
         }
     }
 }

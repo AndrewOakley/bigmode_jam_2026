@@ -115,10 +115,10 @@ offset_bottom = 40.839996
 anchors_preset = -1
 anchor_top = 0.717
 anchor_bottom = 0.717
-offset_left = 148.0
-offset_top = -64.119995
-offset_right = 476.0
-offset_bottom = 26.880005
+offset_left = 146.0
+offset_top = -66.119995
+offset_right = 474.0
+offset_bottom = 24.880005
 
 [node name="NpcHand1" parent="Hands" instance=ExtResource("2_st4qh")]
 anchors_preset = -1
