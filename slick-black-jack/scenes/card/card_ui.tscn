@@ -3,13 +3,14 @@
 [ext_resource type="Texture2D" uid="uid://do44dtnpifsgn" path="res://assets/sprite-sheets/cards-small.png" id="1_0hxw5"]
 [ext_resource type="Script" uid="uid://daypcbavet6rq" path="res://scenes/card/CardUI.cs" id="1_qnn7r"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_0hxw5"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_472ju"]
 atlas = ExtResource("1_0hxw5")
-region = Rect2(17, 135, 15, 22)
+region = Rect2(17, 7, 15, 22)
 
 [node name="Card" type="TextureRect"]
-custom_minimum_size = Vector2(17, 22)
-offset_right = 48.0
-offset_bottom = 64.0
-texture = SubResource("AtlasTexture_0hxw5")
+custom_minimum_size = Vector2(15, 22)
+offset_top = -1.0
+offset_right = 15.0
+offset_bottom = 21.0
+texture = SubResource("AtlasTexture_472ju")
 script = ExtResource("1_qnn7r")

@@ -3,9 +3,13 @@ using System;
 using SlickBlackJack.Components;
 
 public partial class CardUI : TextureRect {
-	private const int CardWidth = 48;
-	private const int CardHeight = 64;
-	private Vector2 FaceDownOffset = new Vector2(1 * CardWidth, 4 * CardHeight);
+	private const int AtlasRegionOffsetX = 17;
+	private const int AtlasRegionOffsetY = 7;
+	private const int AtlasRegionSeparationX = 32;
+	private const int AtlasRegionSeparationY = 32;
+	private const int CardWidth = 15;
+	private const int CardHeight = 22;
+	private Vector2 FaceDownCoordinate = new Vector2(0, 4);
 
 	public Card Card;
 	
@@ -42,9 +46,8 @@ public partial class CardUI : TextureRect {
 			return;
 		}
 		
-		var atlasTexture = (AtlasTexture)Texture;
 		if (faceDown) {
-			atlasTexture.Region = new Rect2(FaceDownOffset.X, FaceDownOffset.Y, CardWidth, CardHeight);
+			SetAtlasTexture((int)FaceDownCoordinate.X, (int)FaceDownCoordinate.Y);
 			Show();
 			return;
 		}
@@ -53,10 +56,15 @@ public partial class CardUI : TextureRect {
 		var rankIndex = (int)Card.Rank - 1;
 		var suitIndex = (int)Card.Suit - 1;
 
-		var x = rankIndex * CardWidth;
-		var y = suitIndex * CardHeight;
-
-		atlasTexture.Region = new Rect2(x, y, CardWidth, CardHeight);
+		SetAtlasTexture(rankIndex, suitIndex);
 		Show();
+	}
+
+	private void SetAtlasTexture(int x, int y) {
+		var adjustedX = (x * AtlasRegionSeparationX) + AtlasRegionOffsetX;
+		var adjustedY = (y * AtlasRegionSeparationY) + AtlasRegionOffsetY;
+		
+		var atlasTexture = (AtlasTexture)Texture;
+		atlasTexture.Region = new Rect2(adjustedX, adjustedY, CardWidth, CardHeight);
 	}
 }

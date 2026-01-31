@@ -6,8 +6,8 @@
 [node name="Hand" type="VBoxContainer"]
 offset_left = 192.0
 offset_right = 520.0
-offset_bottom = 64.0
-scale = Vector2(0.998287, 0.99489254)
+offset_bottom = 45.0
+theme_override_constants/separation = 0
 script = ExtResource("1_5s1xj")
 
 [node name="ScoreLabel" type="Label" parent="."]
@@ -18,11 +18,47 @@ horizontal_alignment = 1
 [node name="Cards" type="HBoxContainer" parent="."]
 custom_minimum_size = Vector2(328, 0)
 layout_mode = 2
-theme_override_constants/separation = -10
+theme_override_constants/separation = 0
 alignment = 1
 
-[node name="Card" parent="Cards" instance=ExtResource("2_jefut")]
+[node name="Panel" parent="Cards" instance=ExtResource("2_jefut")]
 layout_mode = 2
 
-[node name="Card2" parent="Cards" instance=ExtResource("2_jefut")]
+[node name="Panel2" parent="Cards" instance=ExtResource("2_jefut")]
+layout_mode = 2
+
+[node name="Panel3" parent="Cards" instance=ExtResource("2_jefut")]
+visible = false
+layout_mode = 2
+
+[node name="Panel4" parent="Cards" instance=ExtResource("2_jefut")]
+visible = false
+layout_mode = 2
+
+[node name="Panel5" parent="Cards" instance=ExtResource("2_jefut")]
+visible = false
+layout_mode = 2
+
+[node name="Panel6" parent="Cards" instance=ExtResource("2_jefut")]
+visible = false
+layout_mode = 2
+
+[node name="Panel7" parent="Cards" instance=ExtResource("2_jefut")]
+visible = false
+layout_mode = 2
+
+[node name="Panel8" parent="Cards" instance=ExtResource("2_jefut")]
+visible = false
+layout_mode = 2
+
+[node name="Panel9" parent="Cards" instance=ExtResource("2_jefut")]
+visible = false
+layout_mode = 2
+
+[node name="Panel10" parent="Cards" instance=ExtResource("2_jefut")]
+visible = false
+layout_mode = 2
+
+[node name="Panel11" parent="Cards" instance=ExtResource("2_jefut")]
+visible = false
 layout_mode = 2

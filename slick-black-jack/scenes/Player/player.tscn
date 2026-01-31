@@ -10,12 +10,13 @@ Name = "andy"
 IsNpc = false
 
 [node name="Hands" type="HBoxContainer" parent="."]
-offset_left = 106.0
-offset_top = -205.0
-offset_right = 518.0
-offset_bottom = -146.0
+offset_left = -180.33995
+offset_top = -35.29344
+offset_right = 276.66003
+offset_bottom = 9.706558
 rotation = 1.5707964
-theme_override_constants/separation = -300
+pivot_offset = Vector2(228.02325, 35.31669)
+theme_override_constants/separation = -285
 alignment = 1
 
 [node name="Hand" parent="Hands" instance=ExtResource("2_c4h5g")]
@@ -24,5 +25,8 @@ layout_mode = 2
 [node name="Hand2" parent="Hands" instance=ExtResource("2_c4h5g")]
 layout_mode = 2
 
-[node name="Hand3" parent="Hands" instance=ExtResource("2_c4h5g")]
-layout_mode = 2
+[node name="body" type="AnimatedSprite2D" parent="."]
+autoplay = "default"
+
+[node name="head" type="AnimatedSprite2D" parent="."]
+autoplay = "default"
