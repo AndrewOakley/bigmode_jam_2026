@@ -22,10 +22,10 @@ namespace SlickBlackJack.Components {
     public partial class BlackjackGame : RefCounted {
         public Deck Deck { get; private set; }
         public List<Player> Players { get; private set; }
-        public Hand DealerHand { get; private set; }
         public GameState State { get; private set; }
         public int CurrentPlayerIndex { get; private set; }
         public int NumberOfPlayers { get; private set; }
+        public Dealer Dealer { get; private set; }
 
         private int _numberOfDecks;
         private const int DealOutTimer = 500;
@@ -34,14 +34,19 @@ namespace SlickBlackJack.Components {
         // FOR DEBUGGING
         private bool ForcePlayerBlackjack = false;
         private bool ForcePlayerSplitCards = true;
-
-        public BlackjackGame(List<Player> players, int numberOfDecks = 1) {
+        
+        public BlackjackGame(Dealer dealer, List<Player> players, int numberOfDecks = 1) {
+            Dealer = dealer;
             Players = players;
+            //
+            // foreach (var player in Players) {
+            //     player.CurrentHandChanged += OnPlayerHandChanged;
+            // }
+            
             NumberOfPlayers = players.Count;
             
             _numberOfDecks = numberOfDecks;
             Deck = new Deck(numberOfDecks);
-            DealerHand = new Hand();
             State = GameState.Betting;
             CurrentPlayerIndex = 0;
         }
@@ -60,7 +65,8 @@ namespace SlickBlackJack.Components {
             foreach (var player in Players) {
                 player.StartRound();
             }
-            DealerHand.Clear();
+
+            Dealer.StartRound();
             CurrentPlayerIndex = 0;
 
             // Deal initial cards: round-robin style
@@ -72,7 +78,7 @@ namespace SlickBlackJack.Components {
             }
             
             await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
-            DealerHand.AddCard(Deck.DrawCard());
+            Dealer.AddCard(Deck.DrawCard());
             for (var i = 0; i < NumberOfPlayers; i++) {
                 await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
                 var forceBlackjack = ForcePlayerBlackjack && !Players[i].IsNpc;
@@ -80,10 +86,10 @@ namespace SlickBlackJack.Components {
             }
             
             await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
-            DealerHand.AddCard(Deck.DrawCard(), true);
+            Dealer.AddCard(Deck.DrawCard());
 
             // Check for immediate blackjacks
-            var dealerHasBlackjack = DealerHand.IsBlackjack();
+            var dealerHasBlackjack = Dealer.Hand.IsBlackjack();
             var allPlayersFinished = true;
 
             for (var i = 0; i < NumberOfPlayers; i++) {
@@ -117,6 +123,13 @@ namespace SlickBlackJack.Components {
                 }
             }
         }
+        
+        // private void OnPlayerHandChanged(int handIndex) {
+        //     var currentHandUI = Players[CurrentPlayerIndex].GetCurrentHandUI();
+        //     if (currentHandUI == null) return;
+        //     
+        //     Dealer.DealerPointToHand(Players[CurrentPlayerIndex].GetCurrentHandUI());
+        // }
 
         /// <summary>
         /// Current player hits (takes another card)
@@ -158,7 +171,14 @@ namespace SlickBlackJack.Components {
                 return false;
             }
             
+            DelayedPointToCurrentHand(100);
+            
             return true;
+        }
+        
+        public async void DelayedPointToCurrentHand(int delayMilliseconds) {
+            await Task.Delay(TimeSpan.FromMilliseconds(delayMilliseconds));
+            Dealer.DealerPointToHand(Players[CurrentPlayerIndex].GetCurrentHandUI());
         }
 
         /// <summary>
@@ -194,6 +214,7 @@ namespace SlickBlackJack.Components {
                 return;
             }
             
+            Dealer.DealerPointToHand(Players[CurrentPlayerIndex].GetCurrentHandUI());
             while (Players[CurrentPlayerIndex].GetCurrentHand().CardCount < 2) {
                 await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
                 Hit();
@@ -210,11 +231,11 @@ namespace SlickBlackJack.Components {
         /// </summary>
         private async void PlayDealerTurn() {
             await Task.Delay(TimeSpan.FromMilliseconds(1000));
-            DealerHand.FlipOverDealerCard();
+            Dealer.Hand.FlipOverDealerCard();
             
-            while (DealerHand.GetValue() < 17) {
+            while (Dealer.Hand.GetValue() < 17) {
                 await Task.Delay(TimeSpan.FromMilliseconds(1000));
-                DealerHand.AddCard(Deck.DrawCard());
+                Dealer.AddCard(Deck.DrawCard());
             }
 
             DetermineWinner();
@@ -226,7 +247,7 @@ namespace SlickBlackJack.Components {
         private void DetermineWinner() {
             State = GameState.RoundOver;
 
-            var dealerValue = DealerHand.GetValue();
+            var dealerValue = Dealer.Hand.GetValue();
 
             for (var i = 0; i < NumberOfPlayers; i++) {
                 Players[i].DetermineHandResults(dealerValue);
@@ -235,9 +256,9 @@ namespace SlickBlackJack.Components {
 
         /// <summary>
         /// Gets the dealer's visible card (first card)
-        /// </summary>
+        /// </summary>      
         public Card GetDealerUpCard() {
-            var cards = DealerHand.GetCards();
+            var cards = Dealer.Hand.GetCards();
             return cards.Count > 0 ? cards[0] : null;
         }
 

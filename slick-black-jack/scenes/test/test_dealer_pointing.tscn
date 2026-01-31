@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://ceyav8kx8tu64"]
+
+[ext_resource type="Script" uid="uid://cyr8wtu7i38e5" path="res://scenes/test/TestDealerPointing.cs" id="1_74hfw"]
+[ext_resource type="PackedScene" uid="uid://c5m1i0e1rpq6w" path="res://scenes/dealer/dealer.tscn" id="1_fwc8u"]
+[ext_resource type="PackedScene" uid="uid://c2nwtq6fu1vo6" path="res://scenes/hand/HandUI.tscn" id="2_froku"]
+
+[node name="TestDealerPointing" type="Node2D" node_paths=PackedStringArray("Dealer", "HandUi")]
+script = ExtResource("1_74hfw")
+Dealer = NodePath("Dealer")
+HandUi = NodePath("Hand")
+
+[node name="Dealer" parent="." instance=ExtResource("1_fwc8u")]
+position = Vector2(41, 25)
+
+[node name="Hand" parent="." instance=ExtResource("2_froku")]
+offset_left = 216.0
+offset_top = 243.0
+offset_right = 544.0
+offset_bottom = 288.0

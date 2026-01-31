@@ -6,6 +6,7 @@ using SlickBlackJack.Components;
 
 public partial class HandUI : Control {
 	public Hand Hand { get; private set; }
+	public Marker2D DealerPointTo;
 
 	private Label _scoreLabel;
 	private HBoxContainer _cardsContainer;
@@ -14,6 +15,7 @@ public partial class HandUI : Control {
 	public override void _Ready() {
 		_scoreLabel = GetNode<Label>("ScoreLabel");
 		_cardsContainer = GetNode<HBoxContainer>("Cards");
+		DealerPointTo = GetNode<Marker2D>("DealerPointTo");
 		
 		foreach (var child in _cardsContainer.GetChildren()) {
 			if (child is CardUI cardUi) {

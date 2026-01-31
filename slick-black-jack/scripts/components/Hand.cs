@@ -172,9 +172,5 @@ namespace SlickBlackJack.Components {
             // TODO: This is a hacky way to reveal the dealer's first card'
             EmitSignal(SignalName.FlipDealerCard);
         }
-
-        public void SplitHand() {
-            
-        }
     }
 }

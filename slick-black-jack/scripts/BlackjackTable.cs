@@ -12,6 +12,7 @@ public partial class BlackjackTable : Node {
     
     private List<Player> _players = [];
     private BlackjackGame _game;
+    private Dealer _dealer;
 
     [Signal]
     public delegate void RoundStartedEventHandler();
@@ -39,7 +40,9 @@ public partial class BlackjackTable : Node {
             }
         }
         
-        _game = new BlackjackGame(_players, NumberOfDecks);
+        _dealer ??= GetNode<Dealer>("Dealer");
+        
+        _game = new BlackjackGame(_dealer, _players, NumberOfDecks);
         GD.Print($"Blackjack Table initialized with {NumberOfPlayers} players");
     }
 
@@ -170,7 +173,7 @@ public partial class BlackjackTable : Node {
     /// Gets the current dealer hand value
     /// </summary>
     public int GetDealerValue() {
-        return _game.DealerHand.GetValue();
+        return _game.Dealer.Hand.GetValue();
     }
 
     /// <summary>
@@ -217,14 +220,14 @@ public partial class BlackjackTable : Node {
     /// Gets all dealer cards (use ShouldRevealDealerHand to check if they should be visible)
     /// </summary>
     public Card[] GetDealerCards() {
-        return _game.DealerHand.GetCards().ToArray();
+        return _game.Dealer.Hand.GetCards().ToArray();
     }
 
     /// <summary>
     /// Gets dealer hand
     /// </summary>
     public Hand GetDealerHand() {
-        return _game.DealerHand;
+        return _game.Dealer.Hand;
     }
 
     /// <summary>
@@ -264,7 +267,7 @@ public partial class BlackjackTable : Node {
         }
 
         if (ShouldRevealDealerHand()) {
-            GD.Print($"Dealer Hand: {_game.DealerHand}");
+            GD.Print($"Dealer Hand: {_game.Dealer.Hand}");
         } else {
             GD.Print($"Dealer Up Card: {GetDealerUpCard()}");
         }

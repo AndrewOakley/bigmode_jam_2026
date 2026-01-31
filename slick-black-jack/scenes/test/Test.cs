@@ -4,11 +4,15 @@ using System;
 public partial class Test : Node {
     [Export] private BlackjackTable _table;
     [Export] private HandUI _dealerHandUi;
+    [Export] private GameUI _gameUi;
     
     public override void _Ready() {
+        _gameUi ??= GetNode<GameUI>("GameUI");
+        _gameUi.Hit += OnHitPressed;
+        _gameUi.Stand += OnStandPressed;
+        _gameUi.Split += OnSplitPressed;
+        
         _table.StartNewRound();
-        GD.Print(_table.GetDealerHand().ToString());
-        _dealerHandUi.SetHand(_table.GetDealerHand(), true);
      }
     
     private void OnHitPressed() {
@@ -17,11 +21,6 @@ public partial class Test : Node {
     
     private void OnStandPressed() {
         _table.PlayerStand();
-    }
-    
-    private void OnRestartPressed() {
-        GD.Print("Restarting...");
-        GetTree().ReloadCurrentScene();
     }
     
     private void OnSplitPressed() {

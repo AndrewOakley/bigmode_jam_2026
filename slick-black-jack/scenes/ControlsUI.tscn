@@ -1,5 +1,6 @@
-[gd_scene load_steps=10 format=3 uid="uid://26044rjfas4p"]
+[gd_scene load_steps=11 format=3 uid="uid://bsoodols5srp3"]
 
+[ext_resource type="Script" uid="uid://bll4aq7db2eej" path="res://scenes/game_ui/GameUI.cs" id="1_2jtrj"]
 [ext_resource type="FontFile" uid="uid://cq3yt1gs4m3ka" path="res://assets/fonts/ARCADECLASSIC.TTF" id="1_8rf5x"]
 [ext_resource type="Texture2D" uid="uid://bg3usjwjbx1o0" path="res://assets/items/ace.png" id="2_asvp3"]
 [ext_resource type="Texture2D" uid="uid://ccrqhagk5pi21" path="res://assets/items/phone.png" id="3_2jtrj"]
@@ -30,7 +31,7 @@ font_size = 14
 atlas = ExtResource("4_mrh3v")
 region = Rect2(0, 9, 16, 23)
 
-[node name="Control" type="Control"]
+[node name="GameUI" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -39,6 +40,7 @@ offset_top = 2.0
 offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_2jtrj")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
@@ -165,3 +167,8 @@ texture = ExtResource("3_2jtrj")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(20, 332)
 texture = SubResource("AtlasTexture_nelv4")
+
+[connection signal="pressed" from="Panel3/Hit" to="." method="OnHitPressed"]
+[connection signal="pressed" from="Panel3/Split" to="." method="OnSplitPressed"]
+[connection signal="pressed" from="Panel3/Stand" to="." method="OnStandPressed"]
+[connection signal="pressed" from="Panel3/Restart" to="." method="OnRestartPressed"]

@@ -68,3 +68,6 @@ layout_mode = 2
 [node name="Panel11" parent="Cards" instance=ExtResource("2_jefut")]
 visible = false
 layout_mode = 2
+
+[node name="DealerPointTo" type="Marker2D" parent="."]
+position = Vector2(163, -1)

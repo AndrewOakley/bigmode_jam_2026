@@ -5,6 +5,8 @@ using SlickBlackJack.Components;
 
 
 public partial class Player : Node2D {
+    [Signal] public delegate void CurrentHandChangedEventHandler(int index);
+    
     [Export] public Container HandsUIContainer { get; set; }
     [Export] public string Name { get; set; }
     [Export] public bool IsNpc { get; set; } = true;
@@ -26,6 +28,16 @@ public partial class Player : Node2D {
         }
         
         return Hands[CurrentHandIndex];
+    }
+    
+    // HandsUI is reverse of Hands, need to get the reversed value index
+    public HandUI GetCurrentHandUI() {
+        int uiIndex = Hands.Count - 1 - CurrentHandIndex;
+        if (uiIndex < 0 || uiIndex >= Hands.Count) {
+            return null;
+        }
+
+        return HandsUIContainer.GetChild(uiIndex) as HandUI;
     }
 
     public void StartRound() {
@@ -100,6 +112,7 @@ public partial class Player : Node2D {
         if (activeHand.IsBusted()) {
             activeHand.Result = HandResult.DealerWin;
             CurrentHandIndex++;
+            EmitSignal(SignalName.CurrentHandChanged, CurrentHandIndex);
             
             return true;
         }
@@ -111,6 +124,7 @@ public partial class Player : Node2D {
         Hand activeHand = GetCurrentHand();
         activeHand.Stand();
         CurrentHandIndex++;
+        EmitSignal(SignalName.CurrentHandChanged, CurrentHandIndex);
     }
     
     public bool HasActiveHand() {
