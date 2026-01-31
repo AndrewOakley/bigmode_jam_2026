@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://woso4crfe7ro"
-path="res://.godot/imported/hairlineGuyIdle.png-55748d415c460de3500da2c0592ac024.ctex"
+uid="uid://cy6wvmii4o5a7"
+path="res://.godot/imported/head.png-f80bb11705d97acc971b8eafbdf76e2a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprite-sheets/characters/hairlineGuyIdle.png"
-dest_files=["res://.godot/imported/hairlineGuyIdle.png-55748d415c460de3500da2c0592ac024.ctex"]
+source_file="res://assets/sprite-sheets/characters/baldGuy/head.png"
+dest_files=["res://.godot/imported/head.png-f80bb11705d97acc971b8eafbdf76e2a.ctex"]
 
 [params]
 

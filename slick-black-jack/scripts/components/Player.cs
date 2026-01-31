@@ -9,7 +9,6 @@ public partial class Player : Node2D {
     [Export] public string Name { get; set; }
     [Export] public bool IsNpc { get; set; } = true;
     
-    
     public List<Hand> Hands { get; set; } = []; // holds the list of all hands (needed for splitting)
     public int Chips { get; set; } = 1000;
     public int CurrentHandIndex { get; set; } = 0;

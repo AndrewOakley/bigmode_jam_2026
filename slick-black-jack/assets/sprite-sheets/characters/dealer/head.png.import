@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dinik2r8rt8t0"
-path="res://.godot/imported/baldGuy.png-1df272e1bf552ec56510f21cc76722a3.ctex"
+uid="uid://couv3croc1e7l"
+path="res://.godot/imported/head.png-8748c77fcc2e059d89f002b3daeed284.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprite-sheets/characters/baldGuy.png"
-dest_files=["res://.godot/imported/baldGuy.png-1df272e1bf552ec56510f21cc76722a3.ctex"]
+source_file="res://assets/sprite-sheets/characters/dealer/head.png"
+dest_files=["res://.godot/imported/head.png-8748c77fcc2e059d89f002b3daeed284.ctex"]
 
 [params]
 
