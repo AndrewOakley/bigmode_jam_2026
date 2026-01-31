@@ -175,6 +175,7 @@ animations = [{
 }]
 
 [node name="Player" instance=ExtResource("1_emri4")]
+Name = "glasses"
 IsNpc = true
 
 [node name="Hands" parent="." index="0"]

@@ -33,6 +33,7 @@ namespace SlickBlackJack.Components {
         
         // FOR DEBUGGING
         private bool ForcePlayerBlackjack = false;
+        private bool ForcePlayerSplitCards = true;
 
         public BlackjackGame(List<Player> players, int numberOfDecks = 1) {
             Players = players;
@@ -67,7 +68,7 @@ namespace SlickBlackJack.Components {
             for (var i = 0; i < NumberOfPlayers; i++) {
                 await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
                 var forceBlackjack = ForcePlayerBlackjack && !Players[i].IsNpc;
-                Players[i].InitialDeal(Deck.DrawCard(), forceBlackjack);
+                Players[i].InitialDeal(Deck.DrawCard(), forceBlackjack, ForcePlayerSplitCards);
             }
             
             await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
@@ -75,7 +76,7 @@ namespace SlickBlackJack.Components {
             for (var i = 0; i < NumberOfPlayers; i++) {
                 await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
                 var forceBlackjack = ForcePlayerBlackjack && !Players[i].IsNpc;
-                Players[i].InitialDeal(Deck.DrawCard(), forceBlackjack);
+                Players[i].InitialDeal(Deck.DrawCard(), forceBlackjack, ForcePlayerSplitCards);
             }
             
             await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
@@ -121,18 +122,43 @@ namespace SlickBlackJack.Components {
         /// Current player hits (takes another card)
         /// </summary>
         public void Hit() {
-            
             if (State != GameState.PlayerTurn) {
                 GD.PrintErr("Cannot hit - not player's turn");
                 return;
             }
 
-            Hand activeHand = Players[CurrentPlayerIndex].GetCurrentHand();
-            activeHand.AddCard(Deck.DrawCard());
-            if (activeHand.IsBusted()) {
-                activeHand.Result = HandResult.DealerWin;
+            var currentPlayer = Players[CurrentPlayerIndex];
+            var busted = currentPlayer.HitCurrentHand(Deck.DrawCard());
+            if (busted) {
                 MoveToNextPlayer();
             }
+        }
+        
+        /// <summary>
+        /// Current player splits
+        /// </summary>
+        public bool Split() {
+            if (State != GameState.PlayerTurn) {
+                GD.PrintErr("Cannot split - not player's turn");
+                return false;
+            }
+
+            var currentPlayer = Players[CurrentPlayerIndex];
+            Hand activeHand = currentPlayer.GetCurrentHand();
+            var canSplit = activeHand.CanSplit();
+            
+            if (!canSplit) {
+                GD.PrintErr("Cannot split");
+                return false;
+            }
+            
+            var success = currentPlayer.SplitHand();
+            if (!success) {
+                GD.PrintErr("Failed to split hand");
+                return false;
+            }
+            
+            return true;
         }
 
         /// <summary>
@@ -144,18 +170,21 @@ namespace SlickBlackJack.Components {
                 return;
             }
 
+            Players[CurrentPlayerIndex].StandCurrentHand();
             MoveToNextPlayer();
         }
 
         /// <summary>
         /// Moves to the next player or starts dealer turn if all players are done
         /// </summary>
-        private void MoveToNextPlayer() {
-            CurrentPlayerIndex++;
-
-            // Skip players who already finished (blackjack/bust)
-            while (CurrentPlayerIndex < NumberOfPlayers && !Players[CurrentPlayerIndex].HasActiveHand()) {
+        private async void MoveToNextPlayer() {
+            if (!Players[CurrentPlayerIndex].HasActiveHand()) {
                 CurrentPlayerIndex++;
+
+                // Skip players who already finished (blackjack/bust)
+                while (CurrentPlayerIndex < NumberOfPlayers && !Players[CurrentPlayerIndex].HasActiveHand()) {
+                    CurrentPlayerIndex++;
+                }
             }
 
             if (CurrentPlayerIndex >= NumberOfPlayers) {
@@ -165,10 +194,14 @@ namespace SlickBlackJack.Components {
                 return;
             }
             
+            while (Players[CurrentPlayerIndex].GetCurrentHand().CardCount < 2) {
+                await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
+                Hit();
+            }
+            
             if (Players[CurrentPlayerIndex].IsNpc) {
                 // TODO: implement NPC logic
                 Stand();
-                return;
             }
         }
 

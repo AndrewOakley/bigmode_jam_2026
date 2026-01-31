@@ -26,5 +26,6 @@ public partial class Test : Node {
     
     private void OnSplitPressed() {
         GD.Print("Split...");
+        _table.PlayerSplit();
     }
 }

@@ -189,6 +189,7 @@ animations = [{
 }]
 
 [node name="Player" instance=ExtResource("1_oq1x1")]
+Name = "jack"
 
 [node name="body" parent="." index="1"]
 sprite_frames = SubResource("SpriteFrames_ewxb1")

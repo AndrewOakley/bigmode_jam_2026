@@ -161,6 +161,7 @@ animations = [{
 }]
 
 [node name="Player" instance=ExtResource("1_l650y")]
+Name = "headphones"
 IsNpc = true
 
 [node name="Hands" parent="." index="0"]

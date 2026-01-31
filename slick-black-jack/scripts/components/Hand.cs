@@ -22,6 +22,7 @@ namespace SlickBlackJack.Components {
         [Signal] public delegate void FlipDealerCardEventHandler();
         [Signal] public delegate void HandChangedEventHandler();
         [Signal] public delegate void HandStoodEventHandler();
+        [Signal] public delegate void CardRemovedEventHandler();
         
         public HandStatus Status { get; private set; }
         public HandResult Result { get; set; }
@@ -31,10 +32,19 @@ namespace SlickBlackJack.Components {
             _cards = new List<Card>();
             Status = HandStatus.Empty;
         }
-
-        public void AddCard(Card card, bool faceDown = false, bool forceBlackjack = false) {
+        
+        public void StandHand() {
+            Status = HandStatus.Done;
+            EmitSignal(SignalName.HandStood);
+        }
+        
+        public void AddCard(Card card, bool faceDown = false, bool forceBlackjack = false, bool forceSplitCards = false) {
             if (forceBlackjack && card.GetValue() != 10) {
                 card = new Card(card.Suit, Rank.Ace);
+            }
+            
+            if (forceSplitCards) {
+                card = new Card(card.Suit, Rank.Ten);
             }
             
             if (card == null) {
@@ -53,6 +63,21 @@ namespace SlickBlackJack.Components {
             if (GetValue() >= 21) {
                 Status = HandStatus.Done;
             }
+        }
+
+        public Card RemoveCard(int index) {
+            if (index < 0 || index >= _cards.Count) {
+                GD.PrintErr("Invalid card index for removal");
+                return null;
+            }
+            
+            var cardRemoved = _cards[index];
+            _cards.RemoveAt(index);
+            
+            EmitSignal(SignalName.CardRemoved);
+            EmitSignal(SignalName.HandChanged);
+            
+            return cardRemoved;
         }
 
         public void Stand() {
@@ -122,6 +147,20 @@ namespace SlickBlackJack.Components {
             }
 
             return value <= 21;
+        }
+        
+        public bool CanSplit() {
+            if (CardCount != 2) {
+                GD.Print("Cannot split - invalid hand size");
+                return false;
+            }
+            
+            if (_cards[0].GetValue() != _cards[1].GetValue()) {
+                GD.Print("Cannot split - cards are not of equal value");
+                return false;
+            }
+
+            return true;
         }
         
         public override string ToString() {

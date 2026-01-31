@@ -38,6 +38,7 @@ public partial class HandUI : Control {
 
 		Hand = hand;
 		Hand.CardAdded += OnCardAdded;
+		Hand.CardRemoved += RefreshCards;
 		if (isDealer) {
 			Hand.FlipDealerCard += OnFlipDealerCard;
 		}
@@ -65,5 +66,19 @@ public partial class HandUI : Control {
 			_scoreLabel.Text = Hand.GetValue().ToString();
 			_scoreLabel.Show();
 		}
+	}
+	
+	private void RefreshCards() {
+		var handCards = Hand.GetCards();
+		for (var i = 0; i < _cardUIs.Count; i++) {
+			if (i >= handCards.Count) {
+				_cardUIs[i].SetCard(null);
+				continue;
+			}
+			
+			_cardUIs[i].SetCard(handCards[i]);
+		}
+		
+		_scoreLabel.Text = Hand.GetValue().ToString();
 	}
 }

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Godot;
 using SlickBlackJack.Components;
 
@@ -70,8 +72,7 @@ public partial class BlackjackTable : Node {
 
         int playerIndex = _game.CurrentPlayerIndex;
         _game.Hit();
-        var lastCard = _game.Players[playerIndex].GetCurrentHand().GetCards()[_game.Players[playerIndex].GetCurrentHand().CardCount - 1];
-        EmitSignal(SignalName.Hit, playerIndex, lastCard);
+        EmitSignal(SignalName.Hit, playerIndex);
 
         PrintGameState();
 
@@ -87,6 +88,45 @@ public partial class BlackjackTable : Node {
                 EmitSignal(SignalName.RoundEnded);
             }
         }
+    }
+    
+    /// <summary>
+    /// Current player splits
+    /// </summary>
+    public async void PlayerSplit() {
+        if (_game.State != GameState.PlayerTurn) {
+            GD.PrintErr("Cannot split - not player's turn");
+            return;
+        }
+
+        int playerIndex = _game.CurrentPlayerIndex;
+        var success = _game.Split();
+
+        if (!success) {
+            return;
+        }
+        
+        await Task.Delay(TimeSpan.FromMilliseconds(1000));
+        PlayerHit();
+        
+        PrintGameState();
+        
+        // var lastCard = _game.Players[playerIndex].GetCurrentHand().GetCards()[_game.Players[playerIndex].GetCurrentHand().CardCount - 1];
+        // EmitSignal(SignalName.Hit, playerIndex, lastCard);
+        //
+        //
+        // // Check if this player busted and moved to next player
+        // if (_game.State == GameState.PlayerTurn && _game.CurrentPlayerIndex != playerIndex) {
+        //     EmitSignal(SignalName.PlayerTurnStarted, _game.CurrentPlayerIndex);
+        // }
+        //
+        // // Check if all players are done and dealer plays
+        // if (_game.State == GameState.DealerTurn || _game.State == GameState.RoundOver) {
+        //     EmitSignal(SignalName.DealerRevealed);
+        //     if (_game.State == GameState.RoundOver) {
+        //         EmitSignal(SignalName.RoundEnded);
+        //     }
+        // }
     }
 
     /// <summary>
