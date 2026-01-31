@@ -147,7 +147,7 @@ region = Rect2(814, 0, 74, 130)
 [sub_resource type="SpriteFrames" id="SpriteFrames_gcluf"]
 animations = [{
 "frames": [{
-"duration": 1.0,
+"duration": 30.0,
 "texture": SubResource("AtlasTexture_ccbxo")
 }, {
 "duration": 1.0,
@@ -156,7 +156,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_h2nrv")
 }, {
-"duration": 1.0,
+"duration": 30.0,
 "texture": SubResource("AtlasTexture_4rskq")
 }, {
 "duration": 1.0,
@@ -174,13 +174,13 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_uckv6")
 }, {
-"duration": 1.0,
+"duration": 30.0,
 "texture": SubResource("AtlasTexture_l8fhb")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_o22ha")
 }, {
-"duration": 1.0,
+"duration": 20.0,
 "texture": SubResource("AtlasTexture_acdoh")
 }],
 "loop": true,
@@ -196,3 +196,5 @@ sprite_frames = SubResource("SpriteFrames_ewxb1")
 
 [node name="head" parent="." index="2"]
 sprite_frames = SubResource("SpriteFrames_gcluf")
+frame = 11
+frame_progress = 0.47044283

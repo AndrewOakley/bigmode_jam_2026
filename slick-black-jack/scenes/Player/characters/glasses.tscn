@@ -136,34 +136,34 @@ region = Rect2(900, 0, 90, 127)
 [sub_resource type="SpriteFrames" id="SpriteFrames_dr4nv"]
 animations = [{
 "frames": [{
-"duration": 1.0,
+"duration": 6.0,
 "texture": SubResource("AtlasTexture_k0yba")
 }, {
-"duration": 1.0,
+"duration": 6.0,
 "texture": SubResource("AtlasTexture_7bs2w")
 }, {
-"duration": 1.0,
+"duration": 6.0,
 "texture": SubResource("AtlasTexture_ud6ld")
 }, {
-"duration": 1.0,
+"duration": 6.0,
 "texture": SubResource("AtlasTexture_kr7le")
 }, {
-"duration": 1.0,
+"duration": 6.0,
 "texture": SubResource("AtlasTexture_dfg35")
 }, {
-"duration": 1.0,
+"duration": 6.0,
 "texture": SubResource("AtlasTexture_5k4le")
 }, {
-"duration": 1.0,
+"duration": 6.0,
 "texture": SubResource("AtlasTexture_gk2sk")
 }, {
-"duration": 1.0,
+"duration": 0.51,
 "texture": SubResource("AtlasTexture_u63gc")
 }, {
-"duration": 1.0,
+"duration": 0.51,
 "texture": SubResource("AtlasTexture_etvys")
 }, {
-"duration": 1.0,
+"duration": 0.51,
 "texture": SubResource("AtlasTexture_btmye")
 }, {
 "duration": 1.0,
@@ -171,7 +171,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"default",
-"speed": 5.0
+"speed": 1.0
 }]
 
 [node name="Player" instance=ExtResource("1_emri4")]
@@ -190,3 +190,4 @@ sprite_frames = SubResource("SpriteFrames_opqh1")
 
 [node name="head" parent="." index="2"]
 sprite_frames = SubResource("SpriteFrames_dr4nv")
+frame_progress = 0.7584362

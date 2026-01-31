@@ -79,7 +79,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"default",
-"speed": 5.0
+"speed": 3.0
 }]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3sk4x"]
@@ -125,7 +125,7 @@ region = Rect2(729, 0, 81, 133)
 [sub_resource type="SpriteFrames" id="SpriteFrames_ijjlt"]
 animations = [{
 "frames": [{
-"duration": 1.0,
+"duration": 2.0,
 "texture": SubResource("AtlasTexture_3sk4x")
 }, {
 "duration": 1.0,
@@ -173,6 +173,8 @@ pivot_offset = Vector2(227.72441, 35.485428)
 
 [node name="body" parent="." index="1"]
 sprite_frames = SubResource("SpriteFrames_sdkod")
+frame_progress = 0.033250183
 
 [node name="head" parent="." index="2"]
 sprite_frames = SubResource("SpriteFrames_ijjlt")
+frame_progress = 0.7387414

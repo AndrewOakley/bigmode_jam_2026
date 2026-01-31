@@ -1,7 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://c2nwtq6fu1vo6"]
+[gd_scene load_steps=5 format=3 uid="uid://c2nwtq6fu1vo6"]
 
 [ext_resource type="Script" uid="uid://dba4oiiukcnt5" path="res://scenes/hand/HandUI.cs" id="1_5s1xj"]
+[ext_resource type="FontFile" uid="uid://cq3yt1gs4m3ka" path="res://assets/fonts/ARCADECLASSIC.TTF" id="2_4tt56"]
 [ext_resource type="PackedScene" uid="uid://b6u7iaay5cqmu" path="res://scenes/card/card_ui.tscn" id="2_jefut"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_lh0ee"]
+font = ExtResource("2_4tt56")
+font_size = 18
 
 [node name="Hand" type="VBoxContainer"]
 offset_left = 192.0
@@ -13,6 +18,7 @@ script = ExtResource("1_5s1xj")
 [node name="ScoreLabel" type="Label" parent="."]
 layout_mode = 2
 text = "21"
+label_settings = SubResource("LabelSettings_lh0ee")
 horizontal_alignment = 1
 
 [node name="Cards" type="HBoxContainer" parent="."]

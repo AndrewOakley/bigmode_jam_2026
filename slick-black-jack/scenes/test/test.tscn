@@ -45,7 +45,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"default",
-"speed": 3.0
+"speed": 2.0
 }]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_740cx"]
@@ -121,7 +121,7 @@ offset_bottom = 123.0
 metadata/_edit_use_anchors_ = true
 
 [node name="body" type="AnimatedSprite2D" parent="BlackJackTable/Dealer"]
-z_index = -1
+z_index = -3
 position = Vector2(326, 37)
 rotation = 1.5707964
 sprite_frames = SubResource("SpriteFrames_24is6")
@@ -129,7 +129,7 @@ autoplay = "default"
 frame_progress = 0.89561033
 
 [node name="head" type="AnimatedSprite2D" parent="BlackJackTable/Dealer"]
-position = Vector2(325, 54)
+position = Vector2(325, 37.999985)
 rotation = 1.5707964
 sprite_frames = SubResource("SpriteFrames_1ofdx")
 autoplay = "default"
@@ -140,14 +140,17 @@ frame_progress = 0.05689106
 [node name="glasses" parent="BlackJackTable/Players" instance=ExtResource("8_5unt0")]
 position = Vector2(581, 221)
 rotation = -2.5321772
+Name = "andy"
 
 [node name="jack" parent="BlackJackTable/Players" instance=ExtResource("6_2ns80")]
 position = Vector2(389, 313)
 rotation = -1.5707964
+Name = "andy"
 
 [node name="headphones" parent="BlackJackTable/Players" instance=ExtResource("7_5unt0")]
 position = Vector2(207.00002, 232.00002)
 rotation = -0.64692277
+Name = "andy"
 
 [node name="Control" parent="." instance=ExtResource("10_saoeg")]
 metadata/_edit_group_ = true
