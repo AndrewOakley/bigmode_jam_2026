@@ -1,14 +1,16 @@
-[gd_scene load_steps=20 format=3 uid="uid://c3ksnt0ea2ray"]
+[gd_scene load_steps=22 format=3 uid="uid://c3ksnt0ea2ray"]
 
 [ext_resource type="Script" uid="uid://cpk63f74thfsv" path="res://scenes/test/Test.cs" id="1_m7npr"]
 [ext_resource type="PackedScene" uid="uid://bvli2013m2a38" path="res://scenes/black_jack_table.tscn" id="2_da6vm"]
 [ext_resource type="PackedScene" uid="uid://c2nwtq6fu1vo6" path="res://scenes/hand/HandUI.tscn" id="2_st4qh"]
+[ext_resource type="Texture2D" uid="uid://dwdpvc6sp26s7" path="res://assets/floor.png" id="2_we7ej"]
 [ext_resource type="Texture2D" uid="uid://c4gmrmey6m712" path="res://assets/sprite-sheets/characters/dealer/body.png" id="4_2dgve"]
 [ext_resource type="Texture2D" uid="uid://couv3croc1e7l" path="res://assets/sprite-sheets/characters/dealer/head.png" id="5_x4ubh"]
 [ext_resource type="PackedScene" uid="uid://ca3mq4iyvkm1v" path="res://scenes/Player/characters/jack.tscn" id="6_2ns80"]
 [ext_resource type="Texture2D" uid="uid://baxxjxca3nu8a" path="res://assets/table.png" id="6_k6n02"]
 [ext_resource type="PackedScene" uid="uid://c5kwgoqs23bvg" path="res://scenes/Player/characters/headphones.tscn" id="7_5unt0"]
 [ext_resource type="PackedScene" uid="uid://gog6jny4ukt4" path="res://scenes/Player/characters/glasses.tscn" id="8_5unt0"]
+[ext_resource type="PackedScene" uid="uid://26044rjfas4p" path="res://scenes/ControlsUI.tscn" id="10_saoeg"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ct545"]
 atlas = ExtResource("4_2dgve")
@@ -87,18 +89,24 @@ script = ExtResource("1_m7npr")
 _table = NodePath("BlackJackTable")
 _dealerHandUi = NodePath("BlackJackTable/Dealer/DealerHand")
 
+[node name="Floor" type="Sprite2D" parent="."]
+modulate = Color(0.49354547, 0.49354553, 0.49354535, 1)
+z_index = -10
+position = Vector2(319.75, 182.25)
+scale = Vector2(0.62050533, 0.57804877)
+texture = ExtResource("2_we7ej")
+
 [node name="BlackJackTable" parent="." instance=ExtResource("2_da6vm")]
 
 [node name="Table" type="Sprite2D" parent="BlackJackTable"]
 z_index = -1
-position = Vector2(326, 176)
+position = Vector2(402, 188.00002)
 scale = Vector2(0.57886183, 0.57886183)
 texture = ExtResource("6_k6n02")
-metadata/_edit_lock_ = true
 
 [node name="Dealer" type="Node2D" parent="BlackJackTable"]
 z_index = 1
-position = Vector2(-10, 0)
+position = Vector2(66, 12.000015)
 
 [node name="DealerHand" parent="BlackJackTable/Dealer" instance=ExtResource("2_st4qh")]
 anchors_preset = -1
@@ -110,6 +118,7 @@ offset_left = 163.0
 offset_top = 78.0
 offset_right = 491.0
 offset_bottom = 123.0
+metadata/_edit_use_anchors_ = true
 
 [node name="body" type="AnimatedSprite2D" parent="BlackJackTable/Dealer"]
 z_index = -1
@@ -129,46 +138,17 @@ frame_progress = 0.05689106
 [node name="Players" type="Node" parent="BlackJackTable"]
 
 [node name="glasses" parent="BlackJackTable/Players" instance=ExtResource("8_5unt0")]
-position = Vector2(505, 208.99998)
+position = Vector2(581, 221)
 rotation = -2.5321772
 
 [node name="jack" parent="BlackJackTable/Players" instance=ExtResource("6_2ns80")]
-position = Vector2(313, 301)
+position = Vector2(389, 313)
 rotation = -1.5707964
 
 [node name="headphones" parent="BlackJackTable/Players" instance=ExtResource("7_5unt0")]
-position = Vector2(131.00002, 220)
+position = Vector2(207.00002, 232.00002)
 rotation = -0.64692277
 
-[node name="Hit" type="Button" parent="."]
-offset_left = 124.0
-offset_top = 292.0
-offset_right = 214.0
-offset_bottom = 323.0
-text = "Hit"
-
-[node name="Split" type="Button" parent="."]
-offset_left = 124.0
-offset_top = 327.0
-offset_right = 214.0
-offset_bottom = 358.0
-text = "Split"
-
-[node name="Stand" type="Button" parent="."]
-offset_left = 434.0
-offset_top = 293.0
-offset_right = 524.0
-offset_bottom = 324.0
-text = "Stand"
-
-[node name="Restart" type="Button" parent="."]
-offset_left = 21.0
-offset_top = 10.0
-offset_right = 86.0
-offset_bottom = 41.0
-text = "Restart"
-
-[connection signal="pressed" from="Hit" to="." method="OnHitPressed"]
-[connection signal="pressed" from="Split" to="." method="OnSplitPressed"]
-[connection signal="pressed" from="Stand" to="." method="OnStandPressed"]
-[connection signal="pressed" from="Restart" to="." method="OnRestartPressed"]
+[node name="Control" parent="." instance=ExtResource("10_saoeg")]
+metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
