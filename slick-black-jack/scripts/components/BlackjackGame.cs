@@ -32,25 +32,14 @@ namespace SlickBlackJack.Components {
         private const int InitalChipCount = 1000;
         
         // FOR DEBUGGING
-        private bool ForcePlayerBlackjack = true;
+        private bool ForcePlayerBlackjack = false;
 
-        public BlackjackGame(int numberOfDecks = 1, int numberOfPlayers = 3) {
+        public BlackjackGame(List<Player> players, int numberOfDecks = 1) {
+            Players = players;
+            NumberOfPlayers = players.Count;
+            
             _numberOfDecks = numberOfDecks;
-            NumberOfPlayers = numberOfPlayers;
             Deck = new Deck(numberOfDecks);
-            Players = [];
-            for (var i = 0; i < numberOfPlayers; i++) {
-                Players.Add(new Player {
-                    Name = $"Player {i + 1}",
-                    Hands = [],
-                    Chips = InitalChipCount
-                });
-                
-                // TODO: change this but for now hard code player to always be 2nd
-                if (i == 1) {
-                    Players[i].IsNpc = false;
-                }
-            }
             DealerHand = new Hand();
             State = GameState.Betting;
             CurrentPlayerIndex = 0;

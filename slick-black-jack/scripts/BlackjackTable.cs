@@ -1,10 +1,14 @@
+using System.Collections.Generic;
 using Godot;
 using SlickBlackJack.Components;
 
 public partial class BlackjackTable : Node {
     [Export] public int NumberOfDecks { get; set; } = 1;
-    [Export] public int NumberOfPlayers { get; set; } = 3;
+    [Export] public Node PlayersUIContainer { get; set; }
 
+    public int NumberOfPlayers => _players.Count;
+    
+    private List<Player> _players = [];
     private BlackjackGame _game;
 
     [Signal]
@@ -26,7 +30,14 @@ public partial class BlackjackTable : Node {
     public delegate void RoundEndedEventHandler();
 
     public override void _Ready() {
-        _game = new BlackjackGame(NumberOfDecks, NumberOfPlayers);
+        PlayersUIContainer ??= GetNode<Node>("Players");
+        foreach (var node in PlayersUIContainer.GetChildren()) {
+            if (node is Player playerNode) {
+                _players.Add(playerNode);
+            }
+        }
+        
+        _game = new BlackjackGame(_players, NumberOfDecks);
         GD.Print($"Blackjack Table initialized with {NumberOfPlayers} players");
     }
 

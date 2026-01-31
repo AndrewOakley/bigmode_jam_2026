@@ -1,9 +1,10 @@
-[gd_scene load_steps=17 format=3 uid="uid://c3ksnt0ea2ray"]
+[gd_scene load_steps=18 format=3 uid="uid://c3ksnt0ea2ray"]
 
 [ext_resource type="Script" uid="uid://cpk63f74thfsv" path="res://scenes/test/Test.cs" id="1_m7npr"]
 [ext_resource type="PackedScene" uid="uid://bvli2013m2a38" path="res://scenes/black_jack_table.tscn" id="2_da6vm"]
 [ext_resource type="PackedScene" uid="uid://c2nwtq6fu1vo6" path="res://scenes/hand/HandUI.tscn" id="2_st4qh"]
 [ext_resource type="Texture2D" uid="uid://woso4crfe7ro" path="res://assets/sprite-sheets/characters/hairlineGuyIdle.png" id="4_51e2l"]
+[ext_resource type="PackedScene" uid="uid://cljhd4qk0x3gi" path="res://scenes/Player/player.tscn" id="5_oj4i3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oj4i3"]
 atlas = ExtResource("4_51e2l")
@@ -90,59 +91,50 @@ animations = [{
 "speed": 2.0
 }]
 
-[node name="Node" type="Node" node_paths=PackedStringArray("_table", "_dealerHandUI", "_playerHandUI", "_npcHandUI1", "_npcHandUI2")]
+[node name="Node" type="Node" node_paths=PackedStringArray("_table", "_dealerHandUi")]
 script = ExtResource("1_m7npr")
 _table = NodePath("BlackJackTable")
-_dealerHandUI = NodePath("Hands/DealerHand")
-_playerHandUI = NodePath("Hands/PlayerHand")
-_npcHandUI1 = NodePath("Hands/NpcHand1")
-_npcHandUI2 = NodePath("Hands/NpcHand2")
+_dealerHandUi = NodePath("BlackJackTable/Dealer/DealerHand")
 
-[node name="Hands" type="Node" parent="."]
+[node name="BlackJackTable" parent="." instance=ExtResource("2_da6vm")]
 
-[node name="DealerHand" parent="Hands" instance=ExtResource("2_st4qh")]
+[node name="Dealer" type="Node2D" parent="BlackJackTable"]
+position = Vector2(-10, 0)
+
+[node name="DealerHand" parent="BlackJackTable/Dealer" instance=ExtResource("2_st4qh")]
 anchors_preset = -1
 anchor_left = 0.49400002
 anchor_top = 0.256
 anchor_right = 0.49400002
 anchor_bottom = 0.256
-offset_left = -168.16
-offset_top = -23.160004
-offset_right = 159.84
-offset_bottom = 40.839996
+offset_left = 166.0
+offset_top = 64.0
+offset_right = 494.0
+offset_bottom = 155.0
 
-[node name="PlayerHand" parent="Hands" instance=ExtResource("2_st4qh")]
-anchors_preset = -1
-anchor_top = 0.717
-anchor_bottom = 0.717
-offset_left = 146.0
-offset_top = -66.119995
-offset_right = 474.0
-offset_bottom = 24.880005
+[node name="Sprite" type="AnimatedSprite2D" parent="BlackJackTable/Dealer"]
+position = Vector2(331, 29)
+rotation = 1.5707964
+sprite_frames = SubResource("SpriteFrames_bg4ew")
+autoplay = "default"
+frame_progress = 0.6895687
 
-[node name="NpcHand1" parent="Hands" instance=ExtResource("2_st4qh")]
-anchors_preset = -1
-anchor_left = 0.84300005
-anchor_top = 0.551
-anchor_right = 0.84300005
-anchor_bottom = 0.551
-offset_left = -157.52005
-offset_top = 75.64
-offset_right = 170.47998
-offset_bottom = 166.64
-rotation = -0.7763446
+[node name="Players" type="Node" parent="BlackJackTable"]
 
-[node name="NpcHand2" parent="Hands" instance=ExtResource("2_st4qh")]
-anchors_preset = -1
-anchor_left = 0.14400001
-anchor_top = 0.49500003
-anchor_right = 0.14400001
-anchor_bottom = 0.49500003
-offset_left = -35.160004
-offset_top = -172.20001
-offset_right = 292.84
-offset_bottom = -81.20001
-rotation = 1.0309832
+[node name="Player" parent="BlackJackTable/Players" instance=ExtResource("5_oj4i3")]
+position = Vector2(320, 320)
+rotation = -1.5823417
+
+[node name="LeftNpc" parent="BlackJackTable/Players" instance=ExtResource("5_oj4i3")]
+position = Vector2(48.000008, 248)
+rotation = -0.89878166
+Name = "left"
+
+[node name="RightNpc" parent="BlackJackTable/Players" instance=ExtResource("5_oj4i3")]
+position = Vector2(594.00006, 234.99998)
+rotation = -2.4603388
+Name = "right"
+IsNpc = true
 
 [node name="Hit" type="Button" parent="."]
 offset_left = 124.0
@@ -151,42 +143,19 @@ offset_right = 214.0
 offset_bottom = 323.0
 text = "Hit"
 
+[node name="Split" type="Button" parent="."]
+offset_left = 124.0
+offset_top = 327.0
+offset_right = 214.0
+offset_bottom = 358.0
+text = "Split"
+
 [node name="Stand" type="Button" parent="."]
 offset_left = 434.0
 offset_top = 293.0
 offset_right = 524.0
 offset_bottom = 324.0
 text = "Stand"
-
-[node name="BlackJackTable" parent="." instance=ExtResource("2_da6vm")]
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(320, 324)
-rotation = -1.5707964
-sprite_frames = SubResource("SpriteFrames_bg4ew")
-autoplay = "default"
-frame_progress = 0.7646224
-
-[node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="."]
-position = Vector2(315, 32)
-rotation = 1.5707964
-sprite_frames = SubResource("SpriteFrames_bg4ew")
-autoplay = "default"
-frame_progress = 0.6895687
-
-[node name="AnimatedSprite2D3" type="AnimatedSprite2D" parent="."]
-position = Vector2(35.999992, 221)
-rotation = -0.55881417
-sprite_frames = SubResource("SpriteFrames_bg4ew")
-autoplay = "default"
-frame_progress = 0.6895687
-
-[node name="AnimatedSprite2D4" type="AnimatedSprite2D" parent="."]
-position = Vector2(592, 247.99998)
-rotation = 3.8804643
-sprite_frames = SubResource("SpriteFrames_bg4ew")
-autoplay = "default"
-frame_progress = 0.6895687
 
 [node name="Restart" type="Button" parent="."]
 offset_left = 21.0
@@ -196,5 +165,6 @@ offset_bottom = 41.0
 text = "Restart"
 
 [connection signal="pressed" from="Hit" to="." method="OnHitPressed"]
+[connection signal="pressed" from="Split" to="." method="OnSplitPressed"]
 [connection signal="pressed" from="Stand" to="." method="OnStandPressed"]
 [connection signal="pressed" from="Restart" to="." method="OnRestartPressed"]

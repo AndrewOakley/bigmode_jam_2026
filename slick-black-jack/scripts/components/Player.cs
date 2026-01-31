@@ -1,19 +1,24 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using SlickBlackJack.Components;
 
-namespace SlickBlackJack.Components;
 
-public partial class Player : RefCounted {
-    public string Name { get; set; }
+public partial class Player : Node2D {
+    [Export] public HBoxContainer HandsUIContainer { get; set; }
+    [Export] public string Name { get; set; }
+    [Export] public bool IsNpc { get; set; } = true;
+    
+    
     public List<Hand> Hands { get; set; } = []; // holds the list of all hands (needed for splitting)
-    public int Chips { get; set; }
-    public bool IsNpc { get; set; } = true;
+    public int Chips { get; set; } = 1000;
     public int CurrentHandIndex { get; set; } = 0;
     
-    // public Hand GetActiveHand() {
-    //     return Hands.Find(hands => hands.Status == HandStatus.Active);
-    // }
+    private PackedScene _handScene = GD.Load<PackedScene>("res://scenes/hand/HandUI.tscn");
+
+    public override void _Ready() {
+        GD.Print("Player ready!");
+    }
 
     public Hand GetCurrentHand() {
         return Hands[CurrentHandIndex];
@@ -21,7 +26,15 @@ public partial class Player : RefCounted {
 
     public void StartRound() {
         Hands.Clear();
-        Hands.Add(new Hand());
+        foreach (var handUi in HandsUIContainer.GetChildren()) {
+            handUi.QueueFree();
+        }
+        
+        var hand = new Hand();
+        Hands.Add(hand);
+        var handNode = _handScene.Instantiate<HandUI>();
+        handNode.SetHand(hand);
+        HandsUIContainer.AddChild(handNode);
     }
 
     public void InitialDeal(Card card, bool forceBlackjack = false) {

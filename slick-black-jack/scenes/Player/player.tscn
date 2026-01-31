@@ -1,0 +1,113 @@
+[gd_scene load_steps=16 format=3 uid="uid://cljhd4qk0x3gi"]
+
+[ext_resource type="Script" uid="uid://bc2dypdqsitc3" path="res://scripts/components/Player.cs" id="1_1kbk7"]
+[ext_resource type="PackedScene" uid="uid://c2nwtq6fu1vo6" path="res://scenes/hand/HandUI.tscn" id="2_c4h5g"]
+[ext_resource type="Texture2D" uid="uid://woso4crfe7ro" path="res://assets/sprite-sheets/characters/hairlineGuyIdle.png" id="2_gqjuk"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oj4i3"]
+atlas = ExtResource("2_gqjuk")
+region = Rect2(0, 0, 90, 127)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k6n02"]
+atlas = ExtResource("2_gqjuk")
+region = Rect2(90, 0, 90, 127)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1suh2"]
+atlas = ExtResource("2_gqjuk")
+region = Rect2(180, 0, 90, 127)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2ns80"]
+atlas = ExtResource("2_gqjuk")
+region = Rect2(270, 0, 90, 127)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5unt0"]
+atlas = ExtResource("2_gqjuk")
+region = Rect2(360, 0, 90, 127)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_saoeg"]
+atlas = ExtResource("2_gqjuk")
+region = Rect2(450, 0, 90, 127)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_we7ej"]
+atlas = ExtResource("2_gqjuk")
+region = Rect2(540, 0, 90, 127)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xi5sv"]
+atlas = ExtResource("2_gqjuk")
+region = Rect2(630, 0, 90, 127)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2dgve"]
+atlas = ExtResource("2_gqjuk")
+region = Rect2(720, 0, 90, 127)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x4ubh"]
+atlas = ExtResource("2_gqjuk")
+region = Rect2(810, 0, 90, 127)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xm0ii"]
+atlas = ExtResource("2_gqjuk")
+region = Rect2(900, 0, 90, 127)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bg4ew"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oj4i3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k6n02")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1suh2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2ns80")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5unt0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_saoeg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_we7ej")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xi5sv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2dgve")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x4ubh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xm0ii")
+}],
+"loop": true,
+"name": &"default",
+"speed": 2.0
+}]
+
+[node name="Player" type="Node2D" node_paths=PackedStringArray("HandsUIContainer")]
+script = ExtResource("1_1kbk7")
+HandsUIContainer = NodePath("Hands")
+Name = "andy"
+IsNpc = false
+
+[node name="Hands" type="HBoxContainer" parent="."]
+offset_left = 131.0
+offset_top = -330.0
+offset_right = 791.0
+offset_bottom = -239.0
+rotation = 1.5707964
+theme_override_constants/separation = -225
+alignment = 1
+
+[node name="Hand" parent="Hands" instance=ExtResource("2_c4h5g")]
+layout_mode = 2
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_bg4ew")
+autoplay = "default"
+frame_progress = 0.7646224
