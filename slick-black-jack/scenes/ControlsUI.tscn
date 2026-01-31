@@ -23,7 +23,7 @@ border_color = Color(0.31061712, 0.31061712, 0.3106171, 1)
 bg_color = Color(0.3793692, 0.64329046, 0.73507607, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_r4xku"]
-line_spacing = -5.165
+line_spacing = -5.355
 font = ExtResource("1_8rf5x")
 font_size = 14
 

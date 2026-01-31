@@ -17,6 +17,7 @@ public partial class Player : Node2D {
     [Export] public Container HandsUIContainer { get; set; }
     [Export] public string Name { get; set; }
     [Export] public bool IsNpc { get; set; } = true;
+    [Export] public int Heat { get; set; } = 0;
     
     public List<Hand> Hands { get; set; } = []; // holds the list of all hands (needed for splitting)
     public int Chips { get; set; } = 1000;

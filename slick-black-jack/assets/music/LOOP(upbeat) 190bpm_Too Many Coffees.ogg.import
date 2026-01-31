@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://svpyso12jy6u"
+path="res://.godot/imported/LOOP(upbeat) 190bpm_Too Many Coffees.ogg-c4c62871db89ff7870cbbd899cc67e90.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/music/LOOP(upbeat) 190bpm_Too Many Coffees.ogg"
+dest_files=["res://.godot/imported/LOOP(upbeat) 190bpm_Too Many Coffees.ogg-c4c62871db89ff7870cbbd899cc67e90.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
