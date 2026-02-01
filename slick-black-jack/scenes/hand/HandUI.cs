@@ -118,6 +118,7 @@ public partial class HandUI : Control {
 	public void ShowResult(HandResult result) {
 		switch (result) {
 			case HandResult.None:
+				GD.Print($"No result to show. {Hand}");
 				return;
 			case HandResult.Push:
 				_pushResultLabel.Show();

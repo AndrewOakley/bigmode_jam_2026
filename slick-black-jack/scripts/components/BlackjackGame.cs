@@ -35,7 +35,7 @@ namespace SlickBlackJack.Components {
         
         // FOR DEBUGGING
         private bool ForcePlayerBlackjack = false;
-        private bool ForcePlayerSplitCards = false;
+        private bool ForcePlayerSplitCards = true;
         
         public BlackjackGame(Dealer dealer, List<Player> players, int numberOfDecks = 1) {
             Dealer = dealer;
@@ -92,34 +92,21 @@ namespace SlickBlackJack.Components {
 
             // Check for immediate blackjacks
             var dealerHasBlackjack = Dealer.Hand.IsBlackjack();
-            var allPlayersFinished = true;
 
-            for (var i = 0; i < NumberOfPlayers; i++) {
-                if (Players[i].GetCurrentHand().IsBlackjack()) {
-                    if (dealerHasBlackjack) {
-                        Players[i].GetCurrentHand().Result = HandResult.Push;
-                    } else {
-                        Players[i].GetCurrentHand().Result = HandResult.PlayerBlackjack;
-                    }
-                } else if (dealerHasBlackjack) {
-                    Players[i].GetCurrentHand().Result = HandResult.DealerWin;
-                } else {
-                    allPlayersFinished = false;
-                }
-            }
-
-            if (allPlayersFinished) {
+            if (dealerHasBlackjack) {
                 State = GameState.RoundOver;
                 await PlayDealerTurn(); // TODO: fix this hacky way of showing dealers hand on blackjack
-            } else {
-                State = GameState.PlayerTurn;
-                // Skip to first player who hasn't finished
-                while (CurrentPlayerIndex < NumberOfPlayers && Players[CurrentPlayerIndex].GetCurrentHand().Result != HandResult.None) {
-                    CurrentPlayerIndex++;
-                }
-                
-                await PlayNpcTurn();
+                return;
             }
+
+            State = GameState.PlayerTurn;
+            // Skip to first player who hasn't finished
+            while (CurrentPlayerIndex < NumberOfPlayers && Players[CurrentPlayerIndex].GetCurrentHand().Result != HandResult.None) {
+                CurrentPlayerIndex++;
+            }
+            
+            await Dealer.DealerPointToHand(Players[CurrentPlayerIndex].GetCurrentHandUI());
+            await PlayNpcTurn();
         }
 
         private async Task PlayNpcTurn() {
@@ -171,6 +158,7 @@ namespace SlickBlackJack.Components {
 
             var currentPlayer = Players[CurrentPlayerIndex];
             var done = currentPlayer.HitCurrentHand(Deck.DrawCard());
+            
             if (done) {
                 MoveToNextPlayer();
             }
@@ -237,7 +225,7 @@ namespace SlickBlackJack.Components {
             
             
             await Task.Delay(TimeSpan.FromMilliseconds(100));
-            Dealer.DealerPointToHand(Players[CurrentPlayerIndex].GetCurrentHandUI());
+            await Dealer.DealerPointToHand(Players[CurrentPlayerIndex].GetCurrentHandUI());
             await Task.Delay(TimeSpan.FromMilliseconds(500));
             Hit();
 
@@ -277,7 +265,7 @@ namespace SlickBlackJack.Components {
                 return;
             }
             
-            Dealer.DealerPointToHand(Players[CurrentPlayerIndex].GetCurrentHandUI());
+            await Dealer.DealerPointToHand(Players[CurrentPlayerIndex].GetCurrentHandUI());
             while (Players[CurrentPlayerIndex].GetCurrentHand().CardCount < 2) {
                 await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
                 Hit();
@@ -290,6 +278,7 @@ namespace SlickBlackJack.Components {
         /// Dealer plays according to standard rules: hit on 16 or less, stand on 17 or more
         /// </summary>
         private async Task PlayDealerTurn() {
+            Dealer.StartDealerTurn();
             await Task.Delay(TimeSpan.FromMilliseconds(1000));
             Dealer.Hand.FlipOverDealerCard();
             

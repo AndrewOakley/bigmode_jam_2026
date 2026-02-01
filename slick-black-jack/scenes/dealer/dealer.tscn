@@ -112,10 +112,13 @@ autoplay = "default"
 frame_progress = 0.05689106
 
 [node name="DealerFinger" type="Marker2D" parent="."]
-position = Vector2(453, 139.99998)
+position = Vector2(408, 126)
 
 [node name="arm" type="Sprite2D" parent="DealerFinger"]
 position = Vector2(-12, -37)
 texture = ExtResource("5_b5ndd")
+
+[node name="FingerOrigin" type="Marker2D" parent="."]
+position = Vector2(408, 125)
 
 [editable path="HandContainer/DealerHand"]

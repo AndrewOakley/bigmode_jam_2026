@@ -143,13 +143,7 @@ public partial class Player : Node2D {
         for (var i = 0; i < Hands.Count; i++) {
             var hand = Hands[i];
             var handUi = GetHandUIByIndex(i);
-
-            if (hand.Result != HandResult.None) {
-                handUi.ShowResult(hand.Result);
-                AdjustChips(hand);
-                return;
-            };
-
+            
             var playerValue = hand.GetValue();
             if (playerValue > 21) {
                 hand.Result = HandResult.DealerWin;
@@ -162,6 +156,9 @@ public partial class Player : Node2D {
             }
             else if (playerValue < dealerValue) {
                 hand.Result = HandResult.DealerWin;
+            }
+            else if (hand.IsBlackjack() && dealerValue != 21) {
+                hand.Result = HandResult.PlayerBlackjack;
             }
             else {
                 hand.Result = HandResult.Push;
@@ -188,6 +185,10 @@ public partial class Player : Node2D {
         
         if (activeHand.IsBusted()) {
             activeHand.Result = HandResult.DealerWin;
+        }
+
+        if (activeHand.IsBlackjack()) {
+            activeHand.Result = HandResult.PlayerBlackjack;
         }
         
         if (activeHand.GetValue() >= 21) {

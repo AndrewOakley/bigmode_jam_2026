@@ -63,7 +63,7 @@ public partial class BlackjackTable : Node {
 
         PrintGameState();
     }
-
+    
     /// <summary>
     /// Current player hits (requests another card)
     /// </summary>
