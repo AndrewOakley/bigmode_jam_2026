@@ -191,6 +191,10 @@ animations = [{
 [node name="Player" instance=ExtResource("1_oq1x1")]
 Name = "jack"
 
+[node name="Hands" parent="." index="0"]
+offset_left = -128.0
+offset_right = 329.0
+
 [node name="body" parent="." index="1"]
 position = Vector2(4, 0)
 sprite_frames = SubResource("SpriteFrames_x00a8")

@@ -7,6 +7,9 @@ using SlickBlackJack.Components;
 public partial class HandUI : Control {
 	public Hand Hand { get; private set; }
 	public Marker2D DealerPointTo;
+	private Label _winResultLabel;
+	private Label _lossResultLabel;
+	private Label _pushResultLabel;
 
 	private Label _scoreLabel;
 	private HBoxContainer _cardsContainer;
@@ -16,6 +19,13 @@ public partial class HandUI : Control {
 		_scoreLabel = GetNode<Label>("ScoreLabel");
 		_cardsContainer = GetNode<HBoxContainer>("Cards");
 		DealerPointTo = GetNode<Marker2D>("DealerPointTo");
+		_winResultLabel = GetNode<Label>("WinResult");
+		_lossResultLabel = GetNode<Label>("LossResult");
+		_pushResultLabel = GetNode<Label>("PushResult");
+		
+		_winResultLabel.Hide();
+		_lossResultLabel.Hide();
+		_pushResultLabel.Hide();
 		
 		foreach (var child in _cardsContainer.GetChildren()) {
 			if (child is CardUI cardUi) {
@@ -82,5 +92,27 @@ public partial class HandUI : Control {
 		}
 		
 		_scoreLabel.Text = Hand.GetValue().ToString();
+	}
+	
+	public void ShowResult(HandResult result) {
+		switch (result) {
+			case HandResult.None:
+				return;
+			case HandResult.Push:
+				_pushResultLabel.Show();
+				break;
+			case HandResult.PlayerWin:
+				_winResultLabel.Show();
+				break;
+			case HandResult.DealerWin:
+				_lossResultLabel.Show();
+				break;
+			case HandResult.PlayerBlackjack:
+				_winResultLabel.Text = "Blackjack!";
+				_winResultLabel.Show();
+				break;
+			default:
+				throw new ArgumentOutOfRangeException(nameof(result), result, null);
+		}
 	}
 }

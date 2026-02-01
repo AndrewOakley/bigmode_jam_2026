@@ -12,9 +12,9 @@ public partial class Test : Node {
         _gameUi.Stand += OnStandPressed;
         _gameUi.Split += OnSplitPressed;
         _gameUi.DoubleDown += OnDoubleDownPressed;
+        _table.RoundEnded += RoundEnded;
         
         _table.StartNewRound();
-        _table.RoundEnded += RoundEnded;
      }
     
     private void OnHitPressed() {

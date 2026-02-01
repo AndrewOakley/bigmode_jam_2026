@@ -299,6 +299,8 @@ namespace SlickBlackJack.Components {
             }
 
             DetermineWinner();
+            
+            await Task.Delay(TimeSpan.FromMilliseconds(1000));
 
             EmitSignal(SignalName.RoundEnded);
         }

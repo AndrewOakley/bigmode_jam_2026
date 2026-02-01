@@ -57,8 +57,8 @@ public partial class BlackjackTable : Node {
     /// <summary>
     /// Starts a new round of blackjack
     /// </summary>
-    public void StartNewRound() {
-        _game.StartNewRound();
+    public async void StartNewRound() {
+        await _game.StartNewRound();
         EmitSignal(SignalName.RoundStarted);
 
         PrintGameState();
@@ -78,19 +78,6 @@ public partial class BlackjackTable : Node {
         EmitSignal(SignalName.Hit, playerIndex);
 
         PrintGameState();
-
-        // Check if this player busted and moved to next player
-        if (_game.State == GameState.PlayerTurn && _game.CurrentPlayerIndex != playerIndex) {
-            EmitSignal(SignalName.PlayerTurnStarted, _game.CurrentPlayerIndex);
-        }
-
-        // Check if all players are done and dealer plays
-        if (_game.State == GameState.DealerTurn || _game.State == GameState.RoundOver) {
-            EmitSignal(SignalName.DealerRevealed);
-            if (_game.State == GameState.RoundOver) {
-                EmitSignal(SignalName.RoundEnded);
-            }
-        }
     }
     
     public void PlayerDoubleDown() {
@@ -108,19 +95,6 @@ public partial class BlackjackTable : Node {
         EmitSignal(SignalName.DoubleDown, playerIndex);
 
         PrintGameState();
-
-        // Check if this player busted and moved to next player
-        if (_game.State == GameState.PlayerTurn && _game.CurrentPlayerIndex != playerIndex) {
-            EmitSignal(SignalName.PlayerTurnStarted, _game.CurrentPlayerIndex);
-        }
-
-        // Check if all players are done and dealer plays
-        if (_game.State == GameState.DealerTurn || _game.State == GameState.RoundOver) {
-            EmitSignal(SignalName.DealerRevealed);
-            if (_game.State == GameState.RoundOver) {
-                EmitSignal(SignalName.RoundEnded);
-            }
-        }
     }
     
     /// <summary>
@@ -173,16 +147,6 @@ public partial class BlackjackTable : Node {
         EmitSignal(SignalName.Stood, playerIndex);
 
         PrintGameState();
-
-        // Check if moved to next player or dealer
-        if (_game.State == GameState.PlayerTurn) {
-            EmitSignal(SignalName.PlayerTurnStarted, _game.CurrentPlayerIndex);
-        } else if (_game.State == GameState.DealerTurn || _game.State == GameState.RoundOver) {
-            EmitSignal(SignalName.DealerRevealed);
-            if (_game.State == GameState.RoundOver) {
-                EmitSignal(SignalName.RoundEnded);
-            }
-        }
     }
 
     /// <summary>

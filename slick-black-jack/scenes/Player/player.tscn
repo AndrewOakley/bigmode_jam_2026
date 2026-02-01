@@ -10,9 +10,9 @@ Name = "andy"
 IsNpc = false
 
 [node name="Hands" type="HBoxContainer" parent="."]
-offset_left = -180.33995
+offset_left = -161.0
 offset_top = -35.29344
-offset_right = 276.66003
+offset_right = 296.0
 offset_bottom = 58.70656
 rotation = 1.5707964
 pivot_offset = Vector2(228.02325, 35.31669)

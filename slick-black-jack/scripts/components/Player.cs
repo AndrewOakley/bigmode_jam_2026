@@ -47,6 +47,15 @@ public partial class Player : Node2D {
 
         return HandsUIContainer.GetChild(uiIndex) as HandUI;
     }
+    
+    public HandUI GetHandUIByIndex(int index) {
+        int uiIndex = Hands.Count - 1 - index;
+        if (uiIndex < 0 || uiIndex >= Hands.Count) {
+            throw new IndexOutOfRangeException($"Invalid hand UI index: {index}");
+        }
+
+        return HandsUIContainer.GetChild(uiIndex) as HandUI;
+    }
 
     public void StartRound() {
         Hands.Clear();
@@ -95,8 +104,14 @@ public partial class Player : Node2D {
     }
 
     public void DetermineHandResults(int dealerValue) {
-        foreach (var hand in Hands) {
-            if (hand.Result != HandResult.None) continue;
+        for (var i = 0; i < Hands.Count; i++) {
+            var hand = Hands[i];
+            var handUi = GetHandUIByIndex(i);
+
+            if (hand.Result != HandResult.None) {
+                handUi.ShowResult(hand.Result);
+                return;
+            };
 
             var playerValue = hand.GetValue();
             if (playerValue > 21) {
@@ -114,6 +129,8 @@ public partial class Player : Node2D {
             else {
                 hand.Result = HandResult.Push;
             }
+            
+            handUi.ShowResult(hand.Result);
         }
     }
 

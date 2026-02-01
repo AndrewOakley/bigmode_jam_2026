@@ -11,10 +11,39 @@ font_color = Color(0.8745098, 0.91764706, 0.89411765, 1)
 
 [node name="Hand" type="VBoxContainer"]
 offset_left = 192.0
+offset_top = -16.0
 offset_right = 520.0
-offset_bottom = 45.0
+offset_bottom = 42.0
 theme_override_constants/separation = 0
+alignment = 2
 script = ExtResource("1_5s1xj")
+
+[node name="WinResult" type="Label" parent="."]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_4tt56")
+text = "Win"
+horizontal_alignment = 1
+
+[node name="LossResult" type="Label" parent="."]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_4tt56")
+text = "Loss"
+horizontal_alignment = 1
+
+[node name="PushResult" type="Label" parent="."]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.4745098, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_4tt56")
+text = "Push"
+horizontal_alignment = 1
 
 [node name="ScoreLabel" type="Label" parent="."]
 layout_mode = 2
@@ -71,4 +100,7 @@ visible = false
 layout_mode = 2
 
 [node name="DealerPointTo" type="Marker2D" parent="."]
-position = Vector2(163, -1)
+position = Vector2(163, 17)
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 2
