@@ -27,7 +27,7 @@ line_spacing = -5.355
 font = ExtResource("1_8rf5x")
 font_size = 14
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_nelv4"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_2jtrj"]
 atlas = ExtResource("4_mrh3v")
 region = Rect2(0, 9, 16, 23)
 
@@ -154,7 +154,7 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/Panel2/MarginContainer/VBoxContainer2/HBoxContainer3"]
 layout_mode = 2
-texture = SubResource("AtlasTexture_nelv4")
+texture = SubResource("AtlasTexture_2jtrj")
 
 [node name="Label7" type="Label" parent="VBoxContainer/Panel2/MarginContainer/VBoxContainer2/HBoxContainer3"]
 layout_mode = 2
