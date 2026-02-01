@@ -10,6 +10,8 @@ public partial class HandUI : Control {
 	private Label _winResultLabel;
 	private Label _lossResultLabel;
 	private Label _pushResultLabel;
+	private Label _chipCountLabel;
+	private TextureRect _chipTexture;
 
 	private Label _scoreLabel;
 	private HBoxContainer _cardsContainer;
@@ -22,10 +24,14 @@ public partial class HandUI : Control {
 		_winResultLabel = GetNode<Label>("WinResult");
 		_lossResultLabel = GetNode<Label>("LossResult");
 		_pushResultLabel = GetNode<Label>("PushResult");
+		_chipCountLabel = GetNode<Label>("%ChipCount");
+		_chipTexture = GetNode<TextureRect>("ChipTexture");
 		
 		_winResultLabel.Hide();
 		_lossResultLabel.Hide();
 		_pushResultLabel.Hide();
+		_chipCountLabel.Hide();
+		_chipTexture.Hide();
 		
 		foreach (var child in _cardsContainer.GetChildren()) {
 			if (child is CardUI cardUi) {
@@ -35,6 +41,10 @@ public partial class HandUI : Control {
 		}
 
 		_scoreLabel.Hide();
+
+		if (Hand != null) {
+			OnChipsChanged(Hand.Chips);
+		}
 	}
 	
 	public void SetHand(Hand hand, bool isDealer = false) {
@@ -51,6 +61,9 @@ public partial class HandUI : Control {
 		Hand = hand;
 		Hand.CardAdded += OnCardAdded;
 		Hand.CardRemoved += RefreshCards;
+		Hand.ChipsChanged += OnChipsChanged;
+		OnChipsChanged(Hand.Chips);
+		
 		if (isDealer) {
 			Hand.FlipDealerCard += OnFlipDealerCard;
 		}
@@ -69,6 +82,14 @@ public partial class HandUI : Control {
 			_scoreLabel.Show();
 			return;
 		}
+	}
+	
+	private void OnChipsChanged(int chipCount) {
+		if (chipCount == 0 || _chipCountLabel == null || _chipTexture == null) return;
+		
+		_chipCountLabel.Text = $"{chipCount}";
+		_chipCountLabel.Show();
+		_chipTexture.Show();
 	}
 	
 	private void OnFlipDealerCard() {

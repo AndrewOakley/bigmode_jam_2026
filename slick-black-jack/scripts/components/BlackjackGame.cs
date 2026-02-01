@@ -201,7 +201,7 @@ namespace SlickBlackJack.Components {
             GD.Print($"{Players[CurrentPlayerIndex].Name} doubled down");
 
             var currentPlayer = Players[CurrentPlayerIndex];
-            var done = currentPlayer.HitCurrentHand(Deck.DrawCard());
+            var done = currentPlayer.DoubleDownCurrentHand(Deck.DrawCard());
             if (done) {
                 MoveToNextPlayer();
             }

@@ -23,14 +23,26 @@ namespace SlickBlackJack.Components {
         [Signal] public delegate void HandChangedEventHandler();
         [Signal] public delegate void HandStoodEventHandler();
         [Signal] public delegate void CardRemovedEventHandler();
+        [Signal] public delegate void ChipsChangedEventHandler(int newChips);
         
         public HandStatus Status { get; set; }
         public HandResult Result { get; set; }
         private List<Card> _cards;
+        
+        private int _chips;
+        public int Chips {
+            get => _chips;
+            set {
+                _chips = value;
+                EmitSignal(SignalName.ChipsChanged, _chips);
+            }
+        }
 
-        public Hand() {
+        public Hand(int chips = 0) {
             _cards = new List<Card>();
             Status = HandStatus.Empty;
+            
+            Chips = chips;
         }
         
         public void StandHand() {

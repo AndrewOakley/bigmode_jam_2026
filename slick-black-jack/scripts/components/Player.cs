@@ -75,7 +75,9 @@ public partial class Player : Node2D {
             handUi.QueueFree();
         }
         
-        var hand = new Hand();
+        var hand = new Hand(PlayerBet);
+        Chips -= PlayerBet;
+        
         Hands.Add(hand);
         AddHandToUi(hand);
     }
@@ -97,14 +99,24 @@ public partial class Player : Node2D {
     }
 
     public bool SplitHand() {
+        // TODO: need to check if player has enough chips to split
         var currentHand = GetCurrentHand();
+
+        if (Chips <= 0) {
+            GD.Print("Not enough chips to split hand");
+            return false;
+        }
 
         if (!currentHand.CanSplit()) {
             GD.PrintErr($"invalid attempt to split {Name} hand {currentHand}");
             return false;
         }
+
+        var chipsForHand = Math.Min(currentHand.Chips, Chips);
+        var newHand = new Hand(chipsForHand);
         
-        var newHand = new Hand();
+        Chips -= chipsForHand;
+        
         Hands.Add(newHand);
         AddHandToUi(newHand);
         
@@ -114,6 +126,19 @@ public partial class Player : Node2D {
         return true;
     }
 
+    public bool DoubleDownCurrentHand(Card card) {
+        var currentHand = GetCurrentHand();
+
+        if (!currentHand.CanDoubleDown() && Chips > 0) return false;
+        
+        var chipsForHand = Math.Min(currentHand.Chips, Chips);
+        currentHand.Chips += chipsForHand;
+        
+        Chips -= chipsForHand;
+        
+        return HitCurrentHand(card);
+    }
+
     public void DetermineHandResults(int dealerValue) {
         for (var i = 0; i < Hands.Count; i++) {
             var hand = Hands[i];
@@ -121,7 +146,7 @@ public partial class Player : Node2D {
 
             if (hand.Result != HandResult.None) {
                 handUi.ShowResult(hand.Result);
-                AdjustChips(hand.Result);
+                AdjustChips(hand);
                 return;
             };
 
@@ -143,19 +168,16 @@ public partial class Player : Node2D {
             }
             
             handUi.ShowResult(hand.Result);
-            AdjustChips(hand.Result);
+            AdjustChips(hand);
         }
     }
 
-    public void AdjustChips(HandResult result) {
-        if (result == HandResult.PlayerWin) {
-            Chips += PlayerBet;
+    public void AdjustChips(Hand hand) {
+        if (hand.Result == HandResult.PlayerWin) {
+            Chips += hand.Chips * 2;
         }
-        else if (result == HandResult.DealerWin) {
-            Chips -= PlayerBet;
-        }
-        else if (result == HandResult.PlayerBlackjack) {
-            Chips += (int)(PlayerBet * (3.0 / 2.0));
+        else if (hand.Result == HandResult.PlayerBlackjack) {
+            Chips += hand.Chips + (int)(PlayerBet * (3.0 / 2.0));
         }
     }
 
