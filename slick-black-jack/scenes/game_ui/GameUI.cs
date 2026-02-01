@@ -61,7 +61,7 @@ public partial class GameUI : Control {
 	}
 	
 	private void UpdatePlayerChipCount(int chipCount) {
-		_playerChipCountLabel.Text = "Current: " + chipCount.ToString();
+		_playerChipCountLabel.Text = "Current: $" + chipCount.ToString();
 	}
 
 	private void UpdateNpcOneChipCount(int chipCount) {

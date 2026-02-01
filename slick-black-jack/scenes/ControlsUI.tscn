@@ -1,15 +1,18 @@
-[gd_scene load_steps=11 format=3 uid="uid://bsoodols5srp3"]
+[gd_scene load_steps=13 format=3 uid="uid://bsoodols5srp3"]
 
 [ext_resource type="Script" uid="uid://bll4aq7db2eej" path="res://scenes/game_ui/GameUI.cs" id="1_2jtrj"]
 [ext_resource type="FontFile" uid="uid://cq3yt1gs4m3ka" path="res://assets/fonts/ARCADECLASSIC.TTF" id="1_8rf5x"]
 [ext_resource type="Texture2D" uid="uid://bg3usjwjbx1o0" path="res://assets/items/ace.png" id="2_asvp3"]
+[ext_resource type="FontFile" uid="uid://ufuswpnuuugo" path="res://assets/fonts/ByteBounce.ttf" id="2_mrh3v"]
 [ext_resource type="Texture2D" uid="uid://ccrqhagk5pi21" path="res://assets/items/phone.png" id="3_2jtrj"]
 [ext_resource type="Texture2D" uid="uid://cs4kpitoxjsc6" path="res://assets/items/whiskey.png" id="4_mrh3v"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_8rf5x"]
 line_spacing = -6.41
-font = ExtResource("1_8rf5x")
+font = ExtResource("2_mrh3v")
 font_size = 18
+
+[sub_resource type="Theme" id="Theme_mrh3v"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8rf5x"]
 bg_color = Color(0.44991636, 0.6588591, 0.49743408, 1)
@@ -24,7 +27,7 @@ bg_color = Color(0.3793692, 0.64329046, 0.73507607, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_r4xku"]
 line_spacing = -5.355
-font = ExtResource("1_8rf5x")
+font = ExtResource("2_mrh3v")
 font_size = 14
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2jtrj"]
@@ -60,6 +63,8 @@ label_settings = SubResource("LabelSettings_8rf5x")
 [node name="PlayerChipCount" type="Label" parent="VBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme = SubResource("Theme_mrh3v")
+theme_override_colors/font_color = Color(0, 1, 0, 1)
 text = "Current: $25,543"
 label_settings = SubResource("LabelSettings_8rf5x")
 
