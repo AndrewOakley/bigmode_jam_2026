@@ -42,11 +42,9 @@ _table = NodePath("BlackJackTable")
 [node name="Floor" type="Sprite2D" parent="."]
 modulate = Color(0.49354547, 0.49354553, 0.49354535, 1)
 z_index = -10
-position = Vector2(319.75, 182.25)
-scale = Vector2(0.62050533, 0.57804877)
+position = Vector2(320.25, 179.99998)
+scale = Vector2(0.6214771, 0.58536583)
 texture = ExtResource("2_x4ubh")
-metadata/_edit_lock_ = true
-metadata/_edit_group_ = true
 
 [node name="BlackJackTable" parent="." instance=ExtResource("2_da6vm")]
 
