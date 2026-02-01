@@ -19,11 +19,12 @@ public partial class Player : Node2D {
     [Export] public string Name { get; set; }
     [Export] public bool IsNpc { get; set; } = true;
     [Export] public int Heat { get; set; } = 0;
-    [Export] public bool PlayWinSfx { get; set; }= false;
+    [Export] public bool PlayWinSfx { get; set; } = false;
     public List<Hand> Hands { get; set; } = []; // holds the list of all hands (needed for splitting)
     public int PlayerBet { get; set; } = 10;
 
     private AudioStreamPlayer _winSfx;
+    private AnimationPlayer _handAnimations;
     private int _chips = 1000;
     public int Chips {
         get => _chips;
@@ -40,7 +41,7 @@ public partial class Player : Node2D {
     public override void _Ready() {
         GD.Print("Player ready!");
         _winSfx = GetNode<AudioStreamPlayer>("WinSFX");
-
+        _handAnimations = GetNode<AnimationPlayer>("hand/handAnimations");
     }
 
     public Hand GetCurrentHand() {
@@ -125,7 +126,8 @@ public partial class Player : Node2D {
         
         var card = currentHand.RemoveCard(0);
         newHand.AddCard(card);
-        
+        _handAnimations?.Play("split");
+
         return true;
     }
 
@@ -138,7 +140,7 @@ public partial class Player : Node2D {
         currentHand.Chips += chipsForHand;
         
         Chips -= chipsForHand;
-        
+
         return HitCurrentHand(card);
     }
 
@@ -189,6 +191,7 @@ public partial class Player : Node2D {
     // Returns true if hand was busted
     public bool HitCurrentHand(Card card) {
         Hand activeHand = GetCurrentHand();
+        _handAnimations?.Play("hit");
         activeHand.AddCard(card);
         
         if (activeHand.IsBusted()) {
@@ -218,6 +221,7 @@ public partial class Player : Node2D {
         activeHand.Stand();
         CurrentHandIndex++;
         EmitSignal(SignalName.CurrentHandChanged, CurrentHandIndex);
+        _handAnimations?.Play("stand");
     }
     
     public bool HasActiveHand() {

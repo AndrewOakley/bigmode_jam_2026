@@ -69,7 +69,7 @@ tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.76666665, 1.7, 1.9143051),
+"times": PackedFloat32Array(0, 0.5, 1.0333334, 1.2476385),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [Vector2(-5.999996, 47), Vector2(2.9999986, 34), Vector2(2.9999986, 34), Vector2(-5.999996, 47)]
@@ -81,7 +81,7 @@ tracks/1/path = NodePath(".:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.43333334, 0.73333335, 1.746889, 1.8666667),
+"times": PackedFloat32Array(0.16666669, 0.4666667, 1.0802224, 1.2),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -105,19 +105,19 @@ tracks/3/path = NodePath(".:rotation")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.7),
+"times": PackedFloat32Array(0, 0.43333334),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [-1.9851662, -1.9851662]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
-tracks/4/enabled = true
+tracks/4/enabled = false
 tracks/4/path = NodePath(".:skew")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0.73333335, 1, 1.0999999, 1.3333334, 1.4, 1.7000002),
+"times": PackedFloat32Array(0.4666667, 0.73333335, 0.83333325, 1.0666667, 1.1333333, 1.4333335),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 0,
 "values": [0.0, 0.31198707, 0.0, 0.31198707, 0.0, 0.0]
@@ -133,7 +133,7 @@ tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.8690598, 0.96666664, 1.5333333, 1.8143051),
+"times": PackedFloat32Array(0, 0.6357265, 0.73333335, 1.1333333, 1.4143051),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
 "values": [Vector2(-5.999996, 47), Vector2(3, 36), Vector2(3, 36), Vector2(3, 36), Vector2(-5.999996, 47)]
@@ -145,7 +145,7 @@ tracks/1/path = NodePath(".:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.43333334, 0.93333334, 1.5468888, 1.6666666),
+"times": PackedFloat32Array(0.20000005, 0.70000005, 1.1468889, 1.2666668),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -535,6 +535,7 @@ animations = [{
 [node name="Player" groups=["main_player"] instance=ExtResource("1_oq1x1")]
 Name = "jack"
 PlayWinSfx = true
+PlayArmAnimations = true
 
 [node name="Hands" parent="." index="0" groups=["main_player"]]
 offset_left = -147.0
@@ -548,7 +549,7 @@ rotation = -1.9851662
 texture = ExtResource("2_5deju")
 offset = Vector2(0.16821861, 24.183275)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="hand" index="0"]
+[node name="handAnimations" type="AnimationPlayer" parent="hand" index="0"]
 libraries = {
 &"": SubResource("AnimationLibrary_igmgj")
 }

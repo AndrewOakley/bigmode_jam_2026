@@ -153,4 +153,4 @@ position = Vector2(163, 17)
 
 [node name="DealSFX" type="AudioStreamPlayer" parent="."]
 stream = SubResource("AudioStreamRandomizer_3j3rd")
-volume_db = -17.457
+volume_db = -8.914
