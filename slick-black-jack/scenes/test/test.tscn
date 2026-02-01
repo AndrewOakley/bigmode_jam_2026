@@ -1,52 +1,86 @@
-[gd_scene load_steps=10 format=3 uid="uid://c3ksnt0ea2ray"]
+[gd_scene load_steps=17 format=3 uid="uid://c3ksnt0ea2ray"]
 
 [ext_resource type="Script" uid="uid://cpk63f74thfsv" path="res://scenes/test/Test.cs" id="1_m7npr"]
 [ext_resource type="PackedScene" uid="uid://bvli2013m2a38" path="res://scenes/black_jack_table.tscn" id="2_da6vm"]
-[ext_resource type="Texture2D" uid="uid://dwdpvc6sp26s7" path="res://assets/floor.png" id="2_we7ej"]
+[ext_resource type="Texture2D" uid="uid://7mmqdimhvyup" path="res://assets/sprites/textures/floor.png" id="2_x4ubh"]
+[ext_resource type="Texture2D" uid="uid://baxxjxca3nu8a" path="res://assets/sprites/table.png" id="4_x4ubh"]
 [ext_resource type="PackedScene" uid="uid://c5m1i0e1rpq6w" path="res://scenes/dealer/dealer.tscn" id="5_5unt0"]
 [ext_resource type="PackedScene" uid="uid://ca3mq4iyvkm1v" path="res://scenes/Player/characters/jack.tscn" id="6_2ns80"]
-[ext_resource type="Texture2D" uid="uid://baxxjxca3nu8a" path="res://assets/table.png" id="6_k6n02"]
 [ext_resource type="PackedScene" uid="uid://c5kwgoqs23bvg" path="res://scenes/Player/characters/headphones.tscn" id="7_5unt0"]
 [ext_resource type="PackedScene" uid="uid://gog6jny4ukt4" path="res://scenes/Player/characters/glasses.tscn" id="8_5unt0"]
 [ext_resource type="PackedScene" uid="uid://bsoodols5srp3" path="res://scenes/ControlsUI.tscn" id="10_saoeg"]
+[ext_resource type="AudioStream" uid="uid://gw0s2msnpdtu" path="res://assets/music/casino midnight.wav" id="10_xi5sv"]
+[ext_resource type="AudioStream" uid="uid://svpyso12jy6u" path="res://assets/music/LOOP(upbeat) 190bpm_Too Many Coffees.ogg" id="11_2dgve"]
+[ext_resource type="AudioStream" uid="uid://bmnkegaba6voi" path="res://assets/music/highHeat.ogg" id="12_x4ubh"]
+[ext_resource type="AudioStream" uid="uid://od41ciesowgg" path="res://assets/music/LOOP(detective) 60bpm_Wandering In The Streets.ogg" id="13_x4ubh"]
+[ext_resource type="AudioStream" uid="uid://8hl3uwwwj7nv" path="res://assets/music/diamon heist.wav" id="14_xm0ii"]
 
-[node name="Node" type="Node" node_paths=PackedStringArray("_table", "_gameUi")]
+[sub_resource type="AudioStreamPlaylist" id="AudioStreamPlaylist_bg4ew"]
+shuffle = true
+fade_time = 0.68
+stream_count = 3
+stream_0 = ExtResource("14_xm0ii")
+stream_1 = ExtResource("10_xi5sv")
+stream_2 = ExtResource("13_x4ubh")
+
+[sub_resource type="AudioStreamInteractive" id="AudioStreamInteractive_xm0ii"]
+clip_count = 3
+clip_0/name = &"Casino Midnight"
+clip_0/stream = ExtResource("10_xi5sv")
+clip_0/auto_advance = 0
+clip_1/name = &"Loop(upbeat) 190 Bpm Too Many Coffees"
+clip_1/stream = ExtResource("11_2dgve")
+clip_1/auto_advance = 0
+clip_2/name = &"High Heat"
+clip_2/stream = ExtResource("12_x4ubh")
+clip_2/auto_advance = 0
+
+[node name="Node" type="Node" node_paths=PackedStringArray("_table")]
 script = ExtResource("1_m7npr")
 _table = NodePath("BlackJackTable")
-_gameUi = NodePath("GameUI")
 
 [node name="Floor" type="Sprite2D" parent="."]
 modulate = Color(0.49354547, 0.49354553, 0.49354535, 1)
 z_index = -10
 position = Vector2(319.75, 182.25)
 scale = Vector2(0.62050533, 0.57804877)
-texture = ExtResource("2_we7ej")
+texture = ExtResource("2_x4ubh")
+metadata/_edit_lock_ = true
+metadata/_edit_group_ = true
 
 [node name="BlackJackTable" parent="." instance=ExtResource("2_da6vm")]
 
 [node name="Table" type="Sprite2D" parent="BlackJackTable"]
 z_index = -1
-position = Vector2(402, 188.00002)
+position = Vector2(398, 174.00002)
 scale = Vector2(0.57886183, 0.57886183)
-texture = ExtResource("6_k6n02")
+texture = ExtResource("4_x4ubh")
 
 [node name="Dealer" parent="BlackJackTable" instance=ExtResource("5_5unt0")]
-position = Vector2(67, 23)
+position = Vector2(63, 9)
 
 [node name="Players" type="Node" parent="BlackJackTable"]
 
 [node name="glasses" parent="BlackJackTable/Players" instance=ExtResource("8_5unt0")]
-position = Vector2(581, 221)
+position = Vector2(577, 207)
 rotation = -2.5321772
 
 [node name="jack" parent="BlackJackTable/Players" instance=ExtResource("6_2ns80")]
-position = Vector2(389, 313)
+position = Vector2(385, 299)
 rotation = -1.5707964
 
 [node name="headphones" parent="BlackJackTable/Players" instance=ExtResource("7_5unt0")]
-position = Vector2(207.00002, 232.00002)
+position = Vector2(203.00002, 218.00002)
 rotation = -0.64692277
 
 [node name="GameUI" parent="." instance=ExtResource("10_saoeg")]
 metadata/_edit_group_ = true
 metadata/_edit_lock_ = true
+
+[node name="backgroundMusic" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamPlaylist_bg4ew")
+volume_db = -34.537
+autoplay = true
+
+[node name="musicIntensity" type="AudioStreamPlayer" parent="backgroundMusic"]
+stream = SubResource("AudioStreamInteractive_xm0ii")

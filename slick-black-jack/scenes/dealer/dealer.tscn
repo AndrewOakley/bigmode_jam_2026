@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" uid="uid://bsrhxukx78rbq" path="res://scenes/dealer/Dealer.cs" id="1_lhbsm"]
 [ext_resource type="PackedScene" uid="uid://c2nwtq6fu1vo6" path="res://scenes/hand/HandUI.tscn" id="2_atwe4"]
-[ext_resource type="Texture2D" uid="uid://c4gmrmey6m712" path="res://assets/sprite-sheets/characters/dealer/body.png" id="3_3qiar"]
-[ext_resource type="Texture2D" uid="uid://couv3croc1e7l" path="res://assets/sprite-sheets/characters/dealer/head.png" id="4_6pnfo"]
-[ext_resource type="Texture2D" uid="uid://bdb2ttrg4wn2o" path="res://assets/sprite-sheets/characters/dealer/dealerArm.png" id="5_b5ndd"]
+[ext_resource type="Texture2D" uid="uid://c4gmrmey6m712" path="res://assets/sprites/characters/dealer/body.png" id="3_3qiar"]
+[ext_resource type="Texture2D" uid="uid://couv3croc1e7l" path="res://assets/sprites/characters/dealer/head.png" id="4_6pnfo"]
+[ext_resource type="Texture2D" uid="uid://bdb2ttrg4wn2o" path="res://assets/sprites/characters/dealer/dealerArm.png" id="5_b5ndd"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ct545"]
 atlas = ExtResource("3_3qiar")
