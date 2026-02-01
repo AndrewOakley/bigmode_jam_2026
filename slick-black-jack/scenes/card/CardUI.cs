@@ -9,7 +9,7 @@ public partial class CardUI : TextureRect {
 	private const int AtlasRegionSeparationY = 32;
 	private const int CardWidth = 15;
 	private const int CardHeight = 22;
-	private Vector2 FaceDownCoordinate = new Vector2(0, 4);
+	private Vector2 FaceDownCoordinate = new Vector2(2, 4);
 
 	public Card Card;
 	

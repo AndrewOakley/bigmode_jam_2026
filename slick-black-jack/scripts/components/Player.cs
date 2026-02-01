@@ -136,6 +136,10 @@ public partial class Player : Node2D {
         return false;
     }
 
+    public bool CanDoubleDown() {
+        return GetCurrentHand().CanDoubleDown();
+    }
+
     public void StandCurrentHand() {
         Hand activeHand = GetCurrentHand();
         activeHand.Stand();
@@ -164,6 +168,7 @@ public partial class Player : Node2D {
         int handValue = currentHand.GetValue();
         bool isSoft = currentHand.IsSoft();
         bool canSplit = currentHand.CanSplit();
+        bool canDoubleDown = currentHand.CardCount == 2; // Can only double on initial two cards
 
         // Check for split first (only on initial two cards)
         if (canSplit) {
@@ -205,20 +210,47 @@ public partial class Player : Node2D {
             }
             // Soft 18 (A,7)
             else if (handValue == 18) {
+                if (canDoubleDown && (dealerUpcard == 3 || dealerUpcard == 4 || dealerUpcard == 5 || dealerUpcard == 6)) {
+                    return PlayerMove.DoubleDown;
+                }
                 if (dealerUpcard >= 9) {
                     return PlayerMove.Hit;
                 }
                 return PlayerMove.Stand;
             }
-            // Soft 17 or less - always hit
+            // Soft 17 (A,6) - double against 3-6
+            else if (handValue == 17 && canDoubleDown && dealerUpcard >= 3 && dealerUpcard <= 6) {
+                return PlayerMove.DoubleDown;
+            }
+            // Soft 15-16 (A,4 or A,5) - double against 4-6
+            else if ((handValue == 15 || handValue == 16) && canDoubleDown && dealerUpcard >= 4 && dealerUpcard <= 6) {
+                return PlayerMove.DoubleDown;
+            }
+            // Soft 13-14 (A,2 or A,3) - double against 5-6
+            else if ((handValue == 13 || handValue == 14) && canDoubleDown && dealerUpcard >= 5 && dealerUpcard <= 6) {
+                return PlayerMove.DoubleDown;
+            }
+            // Otherwise hit
             else {
                 return PlayerMove.Hit;
             }
         }
 
         // Hard hands
+        // Hard 11 - always double if possible
+        if (handValue == 11 && canDoubleDown) {
+            return PlayerMove.DoubleDown;
+        }
+        // Hard 10 - double if dealer shows 2-9
+        else if (handValue == 10 && canDoubleDown && dealerUpcard >= 2 && dealerUpcard <= 9) {
+            return PlayerMove.DoubleDown;
+        }
+        // Hard 9 - double if dealer shows 3-6
+        else if (handValue == 9 && canDoubleDown && dealerUpcard >= 3 && dealerUpcard <= 6) {
+            return PlayerMove.DoubleDown;
+        }
         // Always stand on 17+
-        if (handValue >= 17) {
+        else if (handValue >= 17) {
             return PlayerMove.Stand;
         }
         // Stand on 13-16 if dealer shows 2-6

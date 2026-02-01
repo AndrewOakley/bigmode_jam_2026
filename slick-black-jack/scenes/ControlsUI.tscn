@@ -103,6 +103,15 @@ offset_bottom = 102.0
 theme_override_fonts/font = ExtResource("1_8rf5x")
 text = "Stand"
 
+[node name="DoubleDown" type="Button" parent="Panel3"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 38.0
+offset_right = 77.0
+offset_bottom = 69.0
+theme_override_fonts/font = ExtResource("1_8rf5x")
+text = "Double DOwn"
+
 [node name="Restart" type="Button" parent="Panel3"]
 layout_mode = 0
 offset_left = 562.0
@@ -171,4 +180,5 @@ texture = SubResource("AtlasTexture_nelv4")
 [connection signal="pressed" from="Panel3/Hit" to="." method="OnHitPressed"]
 [connection signal="pressed" from="Panel3/Split" to="." method="OnSplitPressed"]
 [connection signal="pressed" from="Panel3/Stand" to="." method="OnStandPressed"]
+[connection signal="pressed" from="Panel3/DoubleDown" to="." method="OnDoubleDownPressed"]
 [connection signal="pressed" from="Panel3/Restart" to="." method="OnRestartPressed"]

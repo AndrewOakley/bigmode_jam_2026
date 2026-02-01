@@ -126,25 +126,30 @@ namespace SlickBlackJack.Components {
             
             while (currentPlayer.HasActiveHand()) {
                 await Task.Delay(TimeSpan.FromMilliseconds(1000));
+                if (currentPlayer.GetCurrentHand() == null) {
+                    GD.PrintErr("This is a bug, current hand should never be null, this is a bandaid for that lol");
+                    return;
+                }
+                
                 var npcMove = currentPlayer.NpcTurn(Dealer.GetUpCard().GetValue());
 
                 switch (npcMove) {
                     case PlayerMove.Hit:
-                        var done = Hit();
-                        if (done || !currentPlayer.HasActiveHand()) return;
+                        Hit();
                         break;
                     case PlayerMove.Stand:
-                        Stand();
+                        await Stand();
                         return;
                     case PlayerMove.Split:
                         await Split();
-                        
-                        if (!currentPlayer.HasActiveHand()) return;
-                        
                         break;
                     case PlayerMove.DoubleDown:
-                        GD.PrintErr("Double down not implemented yet");
-                        Stand();
+                        if (CanDoubleDown()) {
+                            DoubleDown();
+                        } else {
+                            GD.PrintErr("NPC cannot double down");
+                            Hit();
+                        }
                         break;
                     default:
                         GD.PrintErr($"Invalid npc move: {npcMove}");
@@ -169,6 +174,39 @@ namespace SlickBlackJack.Components {
             }
 
             return done;
+        }
+
+        public bool CanDoubleDown() {
+            if (State != GameState.PlayerTurn) {
+                GD.PrintErr("Cannot double down - not player's turn");
+                return false;
+            }
+
+            var currentPlayer = Players[CurrentPlayerIndex];
+            var currentHand = currentPlayer.GetCurrentHand();
+
+            return currentHand.CanDoubleDown();
+        }
+        
+        /// <summary>
+        /// Current player hits (takes another card)
+        /// </summary>
+        public async void DoubleDown() {
+            if (State != GameState.PlayerTurn) {
+                GD.PrintErr("Cannot double down - not player's turn");
+            }
+            
+            GD.Print($"{Players[CurrentPlayerIndex].Name} doubled down");
+
+            var currentPlayer = Players[CurrentPlayerIndex];
+            var done = currentPlayer.HitCurrentHand(Deck.DrawCard());
+            if (done) {
+                MoveToNextPlayer();
+            }
+            else {
+                await Stand();
+            }
+
         }
         
         /// <summary>
@@ -207,20 +245,20 @@ namespace SlickBlackJack.Components {
         /// <summary>
         /// Current player stands (ends their turn)
         /// </summary>
-        public void Stand() {
+        public async Task Stand() {
             if (State != GameState.PlayerTurn) {
                 GD.PrintErr("Cannot stand - not player's turn");
                 return;
             }
 
             Players[CurrentPlayerIndex].StandCurrentHand();
-            MoveToNextPlayer();
+            await MoveToNextPlayer();
         }
 
         /// <summary>
         /// Moves to the next player or starts dealer turn if all players are done
         /// </summary>
-        private async void MoveToNextPlayer() {
+        private async Task MoveToNextPlayer() {
             if (!Players[CurrentPlayerIndex].HasActiveHand()) {
                 CurrentPlayerIndex++;
 

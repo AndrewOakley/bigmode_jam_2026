@@ -11,6 +11,7 @@ public partial class Test : Node {
         _gameUi.Hit += OnHitPressed;
         _gameUi.Stand += OnStandPressed;
         _gameUi.Split += OnSplitPressed;
+        _gameUi.DoubleDown += OnDoubleDownPressed;
         
         _table.StartNewRound();
      }
@@ -21,6 +22,10 @@ public partial class Test : Node {
     
     private void OnStandPressed() {
         _table.PlayerStand();
+    }
+    
+    private void OnDoubleDownPressed() {
+        _table.PlayerDoubleDown();
     }
     
     private void OnSplitPressed() {

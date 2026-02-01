@@ -151,16 +151,18 @@ namespace SlickBlackJack.Components {
         
         public bool CanSplit() {
             if (CardCount != 2) {
-                GD.Print("Cannot split - invalid hand size");
                 return false;
             }
             
             if (_cards[0].GetValue() != _cards[1].GetValue()) {
-                GD.Print("Cannot split - cards are not of equal value");
                 return false;
             }
 
             return true;
+        }
+
+        public bool CanDoubleDown() {
+            return CardCount == 2;
         }
         
         public override string ToString() {
