@@ -57,7 +57,8 @@ layout_mode = 2
 text = "Goal: $1,000,000"
 label_settings = SubResource("LabelSettings_8rf5x")
 
-[node name="Label2" type="Label" parent="VBoxContainer/VBoxContainer"]
+[node name="PlayerChipCount" type="Label" parent="VBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Current: $25,543"
 label_settings = SubResource("LabelSettings_8rf5x")

@@ -21,6 +21,7 @@ public partial class Player : Node2D {
     [Export] public int Heat { get; set; } = 0;
 
     public List<Hand> Hands { get; set; } = []; // holds the list of all hands (needed for splitting)
+    public int PlayerBet { get; set; } = 10;
 
     private int _chips = 1000;
     public int Chips {
@@ -120,6 +121,7 @@ public partial class Player : Node2D {
 
             if (hand.Result != HandResult.None) {
                 handUi.ShowResult(hand.Result);
+                AdjustChips(hand.Result);
                 return;
             };
 
@@ -141,6 +143,19 @@ public partial class Player : Node2D {
             }
             
             handUi.ShowResult(hand.Result);
+            AdjustChips(hand.Result);
+        }
+    }
+
+    public void AdjustChips(HandResult result) {
+        if (result == HandResult.PlayerWin) {
+            Chips += PlayerBet;
+        }
+        else if (result == HandResult.DealerWin) {
+            Chips -= PlayerBet;
+        }
+        else if (result == HandResult.PlayerBlackjack) {
+            Chips += (int)(PlayerBet * (3.0 / 2.0));
         }
     }
 

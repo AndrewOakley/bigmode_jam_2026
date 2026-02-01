@@ -188,12 +188,13 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Player" instance=ExtResource("1_oq1x1")]
+[node name="Player" groups=["main_player"] instance=ExtResource("1_oq1x1")]
 Name = "jack"
 
 [node name="Hands" parent="." index="0"]
-offset_left = -128.0
-offset_right = 329.0
+offset_left = -162.0
+offset_right = 295.0
+offset_bottom = 22.706558
 
 [node name="body" parent="." index="1"]
 position = Vector2(4, 0)

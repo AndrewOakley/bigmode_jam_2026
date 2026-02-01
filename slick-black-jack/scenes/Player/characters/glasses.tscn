@@ -1,8 +1,8 @@
 [gd_scene load_steps=28 format=3 uid="uid://gog6jny4ukt4"]
 
 [ext_resource type="PackedScene" uid="uid://cljhd4qk0x3gi" path="res://scenes/Player/player.tscn" id="1_emri4"]
-[ext_resource type="Texture2D" uid="uid://diubfsberjeex" path="res://assets/sprite-sheets/characters/glassesGuy/body.png" id="2_4pcmr"]
-[ext_resource type="Texture2D" uid="uid://c0yeysoipp138" path="res://assets/sprite-sheets/characters/glassesGuy/head.png" id="3_l21ph"]
+[ext_resource type="Texture2D" uid="uid://diubfsberjeex" path="res://assets/sprites/characters/glassesGuy/body.png" id="2_4pcmr"]
+[ext_resource type="Texture2D" uid="uid://c0yeysoipp138" path="res://assets/sprites/characters/glassesGuy/head.png" id="3_l21ph"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cbcep"]
 atlas = ExtResource("2_4pcmr")
