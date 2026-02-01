@@ -85,4 +85,4 @@ autoplay = true
 stream = SubResource("AudioStreamInteractive_xm0ii")
 
 [node name="CheatMeter" parent="." instance=ExtResource("15_xm0ii")]
-position = Vector2(233, 180)
+position = Vector2(264, 152)

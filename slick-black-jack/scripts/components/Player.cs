@@ -19,12 +19,11 @@ public partial class Player : Node2D {
     [Export] public string Name { get; set; }
     [Export] public bool IsNpc { get; set; } = true;
     [Export] public int Heat { get; set; } = 0;
-
-    private Random _rng = new();
-
+    [Export] public bool PlayWinSfx { get; set; }= false;
     public List<Hand> Hands { get; set; } = []; // holds the list of all hands (needed for splitting)
     public int PlayerBet { get; set; } = 10;
 
+    private AudioStreamPlayer _winSfx;
     private int _chips = 1000;
     public int Chips {
         get => _chips;
@@ -40,7 +39,8 @@ public partial class Player : Node2D {
 
     public override void _Ready() {
         GD.Print("Player ready!");
-        
+        _winSfx = GetNode<AudioStreamPlayer>("WinSFX");
+
     }
 
     public Hand GetCurrentHand() {
@@ -165,6 +165,11 @@ public partial class Player : Node2D {
             }
             else {
                 hand.Result = HandResult.Push;
+            }
+            
+            
+            if ((hand.Result == HandResult.PlayerWin || hand.Result == HandResult.PlayerBlackjack) && PlayWinSfx) {
+                _winSfx.Play();
             }
             
             handUi.ShowResult(hand.Result);

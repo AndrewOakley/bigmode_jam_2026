@@ -534,6 +534,7 @@ animations = [{
 
 [node name="Player" groups=["main_player"] instance=ExtResource("1_oq1x1")]
 Name = "jack"
+PlayWinSfx = true
 
 [node name="Hands" parent="." index="0" groups=["main_player"]]
 offset_left = -147.0
@@ -570,3 +571,6 @@ sprite_frames = SubResource("SpriteFrames_mkiae")
 autoplay = "default"
 frame = 14
 frame_progress = 0.09998021
+
+[node name="WinSFX" parent="." index="5"]
+volume_db = -16.619

@@ -1,7 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://cljhd4qk0x3gi"]
+[gd_scene load_steps=7 format=3 uid="uid://cljhd4qk0x3gi"]
 
 [ext_resource type="Script" uid="uid://bc2dypdqsitc3" path="res://scripts/components/Player.cs" id="1_1kbk7"]
 [ext_resource type="PackedScene" uid="uid://c2nwtq6fu1vo6" path="res://scenes/hand/HandUI.tscn" id="2_c4h5g"]
+[ext_resource type="AudioStream" uid="uid://c0xlqtogwude1" path="res://assets/sfx/win1.wav" id="3_uiqp4"]
+[ext_resource type="AudioStream" uid="uid://4ntwgacxebs5" path="res://assets/sfx/win2.wav" id="4_hvfru"]
+[ext_resource type="AudioStream" uid="uid://ci7qi1radign7" path="res://assets/sfx/win3.wav" id="5_a06cl"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_dl1wr"]
+streams_count = 3
+stream_0/stream = ExtResource("3_uiqp4")
+stream_1/stream = ExtResource("4_hvfru")
+stream_2/stream = ExtResource("5_a06cl")
 
 [node name="Player2" type="Node2D" node_paths=PackedStringArray("HandsUIContainer")]
 script = ExtResource("1_1kbk7")
@@ -30,3 +39,7 @@ autoplay = "default"
 
 [node name="head" type="AnimatedSprite2D" parent="."]
 autoplay = "default"
+
+[node name="WinSFX" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamRandomizer_dl1wr")
+volume_db = -20.333
