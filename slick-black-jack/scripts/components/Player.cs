@@ -20,6 +20,8 @@ public partial class Player : Node2D {
     [Export] public bool IsNpc { get; set; } = true;
     [Export] public int Heat { get; set; } = 0;
 
+    private Random _rng = new();
+
     public List<Hand> Hands { get; set; } = []; // holds the list of all hands (needed for splitting)
     public int PlayerBet { get; set; } = 10;
 
@@ -38,6 +40,7 @@ public partial class Player : Node2D {
 
     public override void _Ready() {
         GD.Print("Player ready!");
+        
     }
 
     public Hand GetCurrentHand() {

@@ -16,6 +16,7 @@ public partial class HandUI : Control {
 	private Label _scoreLabel;
 	private HBoxContainer _cardsContainer;
 	private readonly List<CardUI> _cardUIs = [];
+	private AudioStreamPlayer _sfxPlayer;
 	
 	public override void _Ready() {
 		_scoreLabel = GetNode<Label>("ScoreLabel");
@@ -26,6 +27,7 @@ public partial class HandUI : Control {
 		_pushResultLabel = GetNode<Label>("PushResult");
 		_chipCountLabel = GetNode<Label>("%ChipCount");
 		_chipTexture = GetNode<TextureRect>("ChipTexture");
+	_sfxPlayer = GetNode<AudioStreamPlayer>("SFX");
 		
 		_winResultLabel.Hide();
 		_lossResultLabel.Hide();
@@ -80,6 +82,7 @@ public partial class HandUI : Control {
 			var scoreDealerAdjusted = !faceDown ? Hand.GetValue() : Hand.GetValue() - card.GetValue();
 			_scoreLabel.Text = scoreDealerAdjusted.ToString();
 			_scoreLabel.Show();
+			_sfxPlayer.Play();
 			return;
 		}
 	}

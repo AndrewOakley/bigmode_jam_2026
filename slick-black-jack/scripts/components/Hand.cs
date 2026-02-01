@@ -16,20 +16,31 @@ namespace SlickBlackJack.Components {
         Push,
         PlayerBlackjack
     }
-    
+
     public partial class Hand : RefCounted {
-        [Signal] public delegate void CardAddedEventHandler(Card card, bool faceDown = false);
-        [Signal] public delegate void FlipDealerCardEventHandler();
-        [Signal] public delegate void HandChangedEventHandler();
-        [Signal] public delegate void HandStoodEventHandler();
-        [Signal] public delegate void CardRemovedEventHandler();
-        [Signal] public delegate void ChipsChangedEventHandler(int newChips);
-        
+        [Signal]
+        public delegate void CardAddedEventHandler(Card card, bool faceDown = false);
+
+        [Signal]
+        public delegate void FlipDealerCardEventHandler();
+
+        [Signal]
+        public delegate void HandChangedEventHandler();
+
+        [Signal]
+        public delegate void HandStoodEventHandler();
+
+        [Signal]
+        public delegate void CardRemovedEventHandler();
+
+        [Signal]
+        public delegate void ChipsChangedEventHandler(int newChips);
+
         public HandStatus Status { get; set; }
         public HandResult Result { get; set; }
         private List<Card> _cards;
-        
         private int _chips;
+
         public int Chips {
             get => _chips;
             set {
@@ -38,7 +49,7 @@ namespace SlickBlackJack.Components {
             }
         }
 
-        public Hand(int chips = 0) {
+    public Hand(int chips = 0) {
             _cards = new List<Card>();
             Status = HandStatus.Empty;
             
@@ -51,6 +62,7 @@ namespace SlickBlackJack.Components {
         }
         
         public void AddCard(Card card, bool faceDown = false, bool forceBlackjack = false, bool forceSplitCards = false) {
+            
             if (forceBlackjack && card.GetValue() != 10) {
                 card = new Card(card.Suit, Rank.Ace);
             }

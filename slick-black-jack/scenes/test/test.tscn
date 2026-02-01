@@ -78,7 +78,7 @@ metadata/_edit_lock_ = true
 
 [node name="backgroundMusic" type="AudioStreamPlayer" parent="."]
 stream = SubResource("AudioStreamPlaylist_bg4ew")
-volume_db = -34.537
+volume_db = -28.121
 autoplay = true
 
 [node name="musicIntensity" type="AudioStreamPlayer" parent="backgroundMusic"]

@@ -1,9 +1,15 @@
-[gd_scene load_steps=7 format=3 uid="uid://c2nwtq6fu1vo6"]
+[gd_scene load_steps=14 format=3 uid="uid://c2nwtq6fu1vo6"]
 
 [ext_resource type="Script" uid="uid://dba4oiiukcnt5" path="res://scenes/hand/HandUI.cs" id="1_5s1xj"]
 [ext_resource type="FontFile" uid="uid://cq3yt1gs4m3ka" path="res://assets/fonts/ARCADECLASSIC.TTF" id="2_4tt56"]
 [ext_resource type="PackedScene" uid="uid://b6u7iaay5cqmu" path="res://scenes/card/card_ui.tscn" id="2_jefut"]
-[ext_resource type="Texture2D" uid="uid://du2axj7pviydp" path="res://assets/sprites/chips_resized.png" id="4_4tt56"]
+[ext_resource type="Texture2D" uid="uid://dqnfnjscub272" path="res://assets/sprites/chips-small.png" id="4_4tt56"]
+[ext_resource type="AudioStream" uid="uid://gp1kl33yuq5k" path="res://assets/sfx/deal1.wav" id="5_ub7ud"]
+[ext_resource type="AudioStream" uid="uid://meq0mksubkv7" path="res://assets/sfx/deal2.wav" id="6_n5ph1"]
+[ext_resource type="AudioStream" uid="uid://bo0ayp14cc4ka" path="res://assets/sfx/deal3.wav" id="7_nb54d"]
+[ext_resource type="AudioStream" uid="uid://0f8b7mbuw0y8" path="res://assets/sfx/deal4.wav" id="8_cdwew"]
+[ext_resource type="AudioStream" uid="uid://sdokrlih48mj" path="res://assets/sfx/deal5.wav" id="9_vw23w"]
+[ext_resource type="AudioStream" uid="uid://bqys0rqbldyal" path="res://assets/sfx/deal6.wav" id="10_baoht"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_lh0ee"]
 font = ExtResource("2_4tt56")
@@ -12,7 +18,16 @@ font_color = Color(0.8745098, 0.91764706, 0.89411765, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lh0ee"]
 atlas = ExtResource("4_4tt56")
-region = Rect2(0, 8, 16, 16)
+region = Rect2(6, 6, 19, 18)
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_3j3rd"]
+streams_count = 6
+stream_0/stream = ExtResource("5_ub7ud")
+stream_1/stream = ExtResource("6_n5ph1")
+stream_2/stream = ExtResource("7_nb54d")
+stream_3/stream = ExtResource("8_cdwew")
+stream_4/stream = ExtResource("9_vw23w")
+stream_5/stream = ExtResource("10_baoht")
 
 [node name="Hand" type="VBoxContainer"]
 custom_minimum_size = Vector2(328, 74)
@@ -114,8 +129,8 @@ stretch_mode = 4
 
 [node name="Control" type="Control" parent="ChipTexture"]
 anchors_preset = 0
-offset_left = -3.0
-offset_right = 37.0
+offset_left = 1.0
+offset_right = 41.0
 offset_bottom = 40.0
 
 [node name="ChipCount" type="Label" parent="ChipTexture/Control"]
@@ -135,3 +150,7 @@ vertical_alignment = 1
 
 [node name="DealerPointTo" type="Marker2D" parent="."]
 position = Vector2(163, 17)
+
+[node name="SFX" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamRandomizer_3j3rd")
+volume_db = -17.457
