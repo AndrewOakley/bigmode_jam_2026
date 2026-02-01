@@ -1,0 +1,65 @@
+[gd_scene load_steps=9 format=3 uid="uid://48bu4tpvh518"]
+
+[ext_resource type="Texture2D" uid="uid://bso173od1rpfq" path="res://assets/sprites/meter/bar.png" id="1_5qweo"]
+[ext_resource type="Script" uid="uid://m07vfvkhfu18" path="res://scenes/cheat_meter/CheatMeter.cs" id="1_gevfh"]
+[ext_resource type="Texture2D" uid="uid://don0wi875oxp5" path="res://assets/sprites/meter/orange.png" id="2_gevfh"]
+[ext_resource type="Texture2D" uid="uid://b64mtppwekbjg" path="res://assets/sprites/meter/green.png" id="3_haxba"]
+[ext_resource type="Texture2D" uid="uid://byolrimrpu73q" path="res://assets/sprites/meter/line.png" id="4_3r4du"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wfuij"]
+size = Vector2(32, 14)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wr165"]
+size = Vector2(9, 14)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_824cb"]
+size = Vector2(5, 36.375)
+
+[node name="CheatMeter" type="Node2D"]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_gevfh")
+_speed = 200.0
+
+[node name="Bar" type="Sprite2D" parent="."]
+position = Vector2(181, 56)
+texture = ExtResource("1_5qweo")
+
+[node name="Target" type="Node2D" parent="."]
+position = Vector2(182, 56)
+
+[node name="Orange" type="Area2D" parent="Target"]
+unique_name_in_owner = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Target/Orange"]
+scale = Vector2(1.25, 1)
+texture = ExtResource("2_gevfh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Target/Orange"]
+shape = SubResource("RectangleShape2D_wfuij")
+
+[node name="Green" type="Area2D" parent="Target"]
+unique_name_in_owner = true
+collision_layer = 2
+
+[node name="Sprite2D2" type="Sprite2D" parent="Target/Green"]
+texture = ExtResource("3_haxba")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Target/Green"]
+shape = SubResource("RectangleShape2D_wr165")
+
+[node name="Line" type="Area2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-9, 2)
+collision_layer = 0
+collision_mask = 3
+
+[node name="Sprite2D" type="Sprite2D" parent="Line"]
+position = Vector2(117.5, 51)
+texture = ExtResource("4_3r4du")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Line"]
+position = Vector2(116, 54.8125)
+shape = SubResource("RectangleShape2D_824cb")
+
+[node name="FeedbackMarker" type="Marker2D" parent="."]
+position = Vector2(204, 26)

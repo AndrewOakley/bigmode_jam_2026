@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://c3ksnt0ea2ray"]
+[gd_scene load_steps=18 format=3 uid="uid://c3ksnt0ea2ray"]
 
 [ext_resource type="Script" uid="uid://cpk63f74thfsv" path="res://scenes/test/Test.cs" id="1_m7npr"]
 [ext_resource type="PackedScene" uid="uid://bvli2013m2a38" path="res://scenes/black_jack_table.tscn" id="2_da6vm"]
@@ -14,6 +14,7 @@
 [ext_resource type="AudioStream" uid="uid://bmnkegaba6voi" path="res://assets/music/highHeat.ogg" id="12_x4ubh"]
 [ext_resource type="AudioStream" uid="uid://od41ciesowgg" path="res://assets/music/LOOP(detective) 60bpm_Wandering In The Streets.ogg" id="13_x4ubh"]
 [ext_resource type="AudioStream" uid="uid://8hl3uwwwj7nv" path="res://assets/music/diamon heist.wav" id="14_xm0ii"]
+[ext_resource type="PackedScene" uid="uid://48bu4tpvh518" path="res://scenes/cheat_meter/cheat_meter.tscn" id="15_xm0ii"]
 
 [sub_resource type="AudioStreamPlaylist" id="AudioStreamPlaylist_bg4ew"]
 shuffle = true
@@ -82,3 +83,6 @@ autoplay = true
 
 [node name="musicIntensity" type="AudioStreamPlayer" parent="backgroundMusic"]
 stream = SubResource("AudioStreamInteractive_xm0ii")
+
+[node name="CheatMeter" parent="." instance=ExtResource("15_xm0ii")]
+position = Vector2(233, 180)
