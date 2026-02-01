@@ -14,6 +14,7 @@ public partial class Test : Node {
         _gameUi.DoubleDown += OnDoubleDownPressed;
         
         _table.StartNewRound();
+        _table.RoundEnded += RoundEnded;
      }
     
     private void OnHitPressed() {
@@ -31,5 +32,16 @@ public partial class Test : Node {
     private void OnSplitPressed() {
         GD.Print("Split...");
         _table.PlayerSplit();
+    }
+    
+    private void RoundEnded() {
+        GD.Print("Round ended!");
+        RoundEndedHelper();
+    }
+    
+    public async void RoundEndedHelper() {
+        GD.Print("Round ended!");
+        await ToSignal(GetTree().CreateTimer(1.0f), SceneTreeTimer.SignalName.Timeout);
+        _table.StartNewRound();
     }
 }

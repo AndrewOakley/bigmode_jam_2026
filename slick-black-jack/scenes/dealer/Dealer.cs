@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 using SlickBlackJack.Components;
 
 public partial class Dealer : Node2D {
@@ -9,7 +10,7 @@ public partial class Dealer : Node2D {
     public Hand Hand { get; private set; } = new Hand();
     
     private PackedScene _handScene = GD.Load<PackedScene>("res://scenes/hand/HandUI.tscn");
-
+    
     public override void _Ready() {
         DealerFinger ??= GetNode<Marker2D>("DealerFinger");
         _handContainer ??= GetNode<Control>("HandContainer");
@@ -20,7 +21,8 @@ public partial class Dealer : Node2D {
             child.QueueFree();
         }
         Hand.Clear();
-        
+
+        Hand = new Hand();
         var handUi = _handScene.Instantiate<HandUI>();
         handUi.SetHand(Hand, true);
         _handContainer.AddChild(handUi);

@@ -46,7 +46,12 @@ public partial class BlackjackTable : Node {
         _dealer ??= GetNode<Dealer>("Dealer");
         
         _game = new BlackjackGame(_dealer, _players, NumberOfDecks);
+        _game.RoundEnded += OnRoundEnded;
         GD.Print($"Blackjack Table initialized with {NumberOfPlayers} players");
+    }
+
+    public void OnRoundEnded() {
+        EmitSignal(SignalName.RoundEnded);
     }
 
     /// <summary>
@@ -57,14 +62,6 @@ public partial class BlackjackTable : Node {
         EmitSignal(SignalName.RoundStarted);
 
         PrintGameState();
-
-        // If round ended immediately (blackjacks), emit the signal
-        if (_game.State == GameState.RoundOver) {
-            EmitSignal(SignalName.RoundEnded);
-        } else {
-            // Emit signal for first player's turn
-            EmitSignal(SignalName.PlayerTurnStarted, _game.CurrentPlayerIndex);
-        }
     }
 
     /// <summary>

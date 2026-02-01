@@ -20,6 +20,8 @@ namespace SlickBlackJack.Components {
     }
 
     public partial class BlackjackGame : RefCounted {
+        [Signal] public delegate void RoundEndedEventHandler();
+        
         public Deck Deck { get; private set; }
         public List<Player> Players { get; private set; }
         public GameState State { get; private set; }
@@ -54,7 +56,7 @@ namespace SlickBlackJack.Components {
         /// <summary>
         /// Starts a new round of blackjack
         /// </summary>
-        public async void StartNewRound() {
+        public async Task StartNewRound() {
             // Check if deck needs reshuffling (less than 25% remaining)
             if (Deck.CardsRemaining < (_numberOfDecks * 52) / 4) {
                 Deck.Reset(_numberOfDecks);
@@ -108,7 +110,7 @@ namespace SlickBlackJack.Components {
 
             if (allPlayersFinished) {
                 State = GameState.RoundOver;
-                PlayDealerTurn(); // TODO: fix this hacky way of showing dealers hand on blackjack
+                await PlayDealerTurn(); // TODO: fix this hacky way of showing dealers hand on blackjack
             } else {
                 State = GameState.PlayerTurn;
                 // Skip to first player who hasn't finished
@@ -271,7 +273,7 @@ namespace SlickBlackJack.Components {
             if (CurrentPlayerIndex >= NumberOfPlayers) {
                 // All players finished, dealer's turn
                 State = GameState.DealerTurn;
-                PlayDealerTurn();
+                await PlayDealerTurn();
                 return;
             }
             
@@ -287,7 +289,7 @@ namespace SlickBlackJack.Components {
         /// <summary>
         /// Dealer plays according to standard rules: hit on 16 or less, stand on 17 or more
         /// </summary>
-        private async void PlayDealerTurn() {
+        private async Task PlayDealerTurn() {
             await Task.Delay(TimeSpan.FromMilliseconds(1000));
             Dealer.Hand.FlipOverDealerCard();
             
@@ -297,6 +299,8 @@ namespace SlickBlackJack.Components {
             }
 
             DetermineWinner();
+
+            EmitSignal(SignalName.RoundEnded);
         }
 
         /// <summary>

@@ -31,7 +31,7 @@ public partial class Player : Node2D {
 
     public Hand GetCurrentHand() {
         if (CurrentHandIndex >= Hands.Count) {
-            GD.PushWarning($"Player {Name} has no active hands left to play.");
+            GD.PrintErr($"Player {Name} has no active hands left to play.");
             return null;
         }
         
