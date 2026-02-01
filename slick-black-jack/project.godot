@@ -28,6 +28,7 @@ project/assembly_name="slick_black_jack"
 [global_group]
 
 main_player=""
+npc_player=""
 
 [rendering]
 

@@ -421,9 +421,10 @@ animations = [{
 [node name="Player" groups=["main_player"] instance=ExtResource("1_oq1x1")]
 Name = "jack"
 
-[node name="Hands" parent="." index="0"]
-offset_left = -87.0
-offset_right = 370.0
+[node name="Hands" parent="." index="0" groups=["main_player"]]
+offset_left = -147.0
+offset_right = 310.0
+offset_bottom = 38.70656
 
 [node name="Hand2" parent="Hands" index="1"]
 visible = false
