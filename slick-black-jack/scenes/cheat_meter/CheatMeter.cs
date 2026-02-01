@@ -23,7 +23,7 @@ public partial class CheatMeter : Node2D {
 
         // Create feedback label
         _feedbackLabel = new Label();
-        _feedbackLabel.GlobalPosition = _feedbackMarker.GlobalPosition;
+        _feedbackLabel.Position = _feedbackMarker.Position;
         _feedbackLabel.Modulate = new Color(1, 1, 1, 0);
         AddChild(_feedbackLabel);
 
