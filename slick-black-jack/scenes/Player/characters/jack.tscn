@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://ca3mq4iyvkm1v"]
+[gd_scene load_steps=55 format=3 uid="uid://ca3mq4iyvkm1v"]
 
 [ext_resource type="PackedScene" uid="uid://cljhd4qk0x3gi" path="res://scenes/Player/player.tscn" id="1_oq1x1"]
 [ext_resource type="Texture2D" uid="uid://pfdtxe58coer" path="res://assets/sprites/characters/baldGuy/jackarmsplit.png" id="2_5deju"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://cy6wvmii4o5a7" path="res://assets/sprites/characters/baldGuy/head.png" id="3_5deju"]
 [ext_resource type="Texture2D" uid="uid://r5gpog8kyr2i" path="res://assets/sprites/characters/baldGuy/jackpoint.png" id="3_rrmke"]
 [ext_resource type="Texture2D" uid="uid://c5ins36q7bje5" path="res://assets/sprites/characters/baldGuy/jackstand.png" id="4_ehain"]
+[ext_resource type="Texture2D" uid="uid://bhjuhgvvsodr8" path="res://assets/sprites/characters/baldGuy/baldGuyPhone.png" id="7_igmgj"]
 
 [sub_resource type="Animation" id="Animation_igmgj"]
 length = 0.001
@@ -68,10 +69,10 @@ tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.73333335, 1.7333335, 1.9143051),
+"times": PackedFloat32Array(0, 0.76666665, 1.7, 1.9143051),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(-5.999996, 47), Vector2(32.999996, 23.999996), Vector2(32.999996, 23.999996), Vector2(-5.999996, 47)]
+"values": [Vector2(-5.999996, 47), Vector2(2.9999986, 34), Vector2(2.9999986, 34), Vector2(-5.999996, 47)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -132,10 +133,10 @@ tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.9001, 1.5333333, 1.8143051),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.8690598, 0.96666664, 1.5333333, 1.8143051),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(-5.999996, 47), Vector2(34, 33), Vector2(34, 33), Vector2(-5.999996, 47)]
+"values": [Vector2(-5.999996, 47), Vector2(3, 36), Vector2(3, 36), Vector2(3, 36), Vector2(-5.999996, 47)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -184,10 +185,10 @@ tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.6, 1.6666669, 1.9712179),
+"times": PackedFloat32Array(0, 0.5, 1.4495515, 1.9712179),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(-5.999996, 47), Vector2(36, 0), Vector2(36, 0), Vector2(-5.999996, 47)]
+"values": [Vector2(-5.999996, 47), Vector2(6, 8), Vector2(6, 8), Vector2(-5.999996, 47)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -418,6 +419,119 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_x00a8"]
+atlas = ExtResource("7_igmgj")
+region = Rect2(0, 0, 74, 130)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o22ha"]
+atlas = ExtResource("7_igmgj")
+region = Rect2(74, 0, 74, 130)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_acdoh"]
+atlas = ExtResource("7_igmgj")
+region = Rect2(148, 0, 74, 130)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gcluf"]
+atlas = ExtResource("7_igmgj")
+region = Rect2(222, 0, 74, 130)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ydhhy"]
+atlas = ExtResource("7_igmgj")
+region = Rect2(296, 0, 74, 130)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wnrdx"]
+atlas = ExtResource("7_igmgj")
+region = Rect2(370, 0, 74, 130)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5tksh"]
+atlas = ExtResource("7_igmgj")
+region = Rect2(444, 0, 74, 130)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hx0ya"]
+atlas = ExtResource("7_igmgj")
+region = Rect2(518, 0, 74, 130)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_230mf"]
+atlas = ExtResource("7_igmgj")
+region = Rect2(592, 0, 74, 130)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6xu0g"]
+atlas = ExtResource("7_igmgj")
+region = Rect2(666, 0, 74, 130)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wr3jv"]
+atlas = ExtResource("7_igmgj")
+region = Rect2(740, 0, 74, 130)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gj64v"]
+atlas = ExtResource("7_igmgj")
+region = Rect2(814, 0, 74, 130)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vepri"]
+atlas = ExtResource("7_igmgj")
+region = Rect2(888, 0, 74, 130)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6wkt4"]
+atlas = ExtResource("7_igmgj")
+region = Rect2(962, 0, 74, 130)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vefiw"]
+atlas = ExtResource("7_igmgj")
+region = Rect2(1036, 0, 74, 130)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_mkiae"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x00a8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o22ha")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_acdoh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gcluf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ydhhy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wnrdx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5tksh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hx0ya")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_230mf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6xu0g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wr3jv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gj64v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vepri")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6wkt4")
+}, {
+"duration": 1000.0,
+"texture": SubResource("AtlasTexture_vefiw")
+}],
+"loop": false,
+"name": &"default",
+"speed": 14.0
+}]
+
 [node name="Player" groups=["main_player"] instance=ExtResource("1_oq1x1")]
 Name = "jack"
 
@@ -425,9 +539,6 @@ Name = "jack"
 offset_left = -147.0
 offset_right = 310.0
 offset_bottom = 38.70656
-
-[node name="Hand2" parent="Hands" index="1"]
-visible = false
 
 [node name="hand" type="Sprite2D" parent="." index="1"]
 modulate = Color(1, 1, 1, 0)
@@ -451,3 +562,11 @@ position = Vector2(3, 0)
 sprite_frames = SubResource("SpriteFrames_o22ha")
 frame_progress = 0.8818938
 metadata/_edit_lock_ = true
+
+[node name="phone" type="AnimatedSprite2D" parent="." index="4"]
+visible = false
+position = Vector2(4, 0)
+sprite_frames = SubResource("SpriteFrames_mkiae")
+autoplay = "default"
+frame = 14
+frame_progress = 0.09998021
