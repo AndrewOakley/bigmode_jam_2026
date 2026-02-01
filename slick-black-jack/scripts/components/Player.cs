@@ -13,14 +13,24 @@ public enum PlayerMove {
 
 public partial class Player : Node2D {
     [Signal] public delegate void CurrentHandChangedEventHandler(int index);
-    
+    [Signal] public delegate void ChipsChangedEventHandler(int newChips);
+
     [Export] public Container HandsUIContainer { get; set; }
     [Export] public string Name { get; set; }
     [Export] public bool IsNpc { get; set; } = true;
     [Export] public int Heat { get; set; } = 0;
-    
+
     public List<Hand> Hands { get; set; } = []; // holds the list of all hands (needed for splitting)
-    public int Chips { get; set; } = 1000;
+
+    private int _chips = 1000;
+    public int Chips {
+        get => _chips;
+        set {
+            _chips = value;
+            EmitSignal(SignalName.ChipsChanged, _chips);
+        }
+    }
+
     public int CurrentHandIndex { get; set; } = 0;
     
     private PackedScene _handScene = GD.Load<PackedScene>("res://scenes/hand/HandUI.tscn");
