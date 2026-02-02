@@ -182,6 +182,7 @@ offset_left = 193.0
 offset_top = 329.0
 offset_right = 245.0
 offset_bottom = 354.0
+focus_mode = 0
 theme_override_fonts/font = ExtResource("1_8rf5x")
 text = "Stand"
 
@@ -194,16 +195,19 @@ offset_bottom = 355.0
 
 [node name="Hit" type="Button" parent="HBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 theme_override_fonts/font = ExtResource("1_8rf5x")
 text = "Hit"
 
 [node name="Split" type="Button" parent="HBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 theme_override_fonts/font = ExtResource("1_8rf5x")
 text = "Split"
 
 [node name="DoubleDown" type="Button" parent="HBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 theme_override_fonts/font = ExtResource("1_8rf5x")
 text = "Double DOwn"
 
