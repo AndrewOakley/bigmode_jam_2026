@@ -21,8 +21,13 @@ public partial class Player : Node2D {
     [Export] public bool IsNpc { get; set; } = true;
     [Export] public int Heat { get; set; } = 0;
     [Export] public bool PlayWinSfx { get; set; } = false;
+    [Export] private CheatMeter _cheatMeter;
+    
     public List<Hand> Hands { get; set; } = []; // holds the list of all hands (needed for splitting)
     public int PlayerBet { get; set; } = 10;
+
+    private const int _swapHitSpeed = 300;
+    private const int _swapHitRequired = 2;
 
     private AudioStreamPlayer _winSfx;
     [Export] private AnimationPlayer _handAnimations;
@@ -49,11 +54,18 @@ public partial class Player : Node2D {
     public override void _Ready() {
         GD.Print("Player ready!");
         _winSfx = GetNode<AudioStreamPlayer>("WinSFX");
+        _cheatMeter?.Hide();
         
         Utils.CheatStarted += OnCheatStarted;
         Utils.CardSelected += OnCardSelected;
         Utils.NpcCardSelectStart += OnNpcCardSelectStart;
         Utils.UserSwappedCard += OnUserSwappedCard;
+        
+        if (_cheatMeter != null) {
+            _cheatMeter.PerfectHit += OnPerfectHit;
+            _cheatMeter.OkHit += OnOkHit;
+            _cheatMeter.Miss += OnMiss;
+        }
     }
     
     // ALWAYS DO THIS IF CALLING SIGNALS FROM UTILS
@@ -66,6 +78,11 @@ public partial class Player : Node2D {
     }
     
     private void OnCheatStarted() {
+        if (_cheatingState != CheatingStates.None) {
+            GD.PrintErr($"Player {_cheatingState} already cheating!");
+            return;
+        };
+        
         if (IsNpc) return;
         
         SetHandsSelectable(true);
@@ -73,6 +90,7 @@ public partial class Player : Node2D {
     }
 
     private Card _userSwapCard;
+    private Card _npcSwapCard;
     private void OnCardSelected(Card card) {
         if (CheatingStates.Cheating == _cheatingState) {
             _userSwapCard = card;
@@ -83,11 +101,38 @@ public partial class Player : Node2D {
             _cheatingState = CheatingStates.CardSwap;
         } 
         else if (CheatingStates.CardSwap == _cheatingState) {
-            GD.Print($"Player swapped {_userSwapCard} for {card}");
-            Card.Swap(_userSwapCard, card);
-            _cheatingState = CheatingStates.None;
-            Utils.EmitUserSwappedCard();
+            Utils.EmitStopAllCardsSelectable();
+            _npcSwapCard = card;
+            _cheatMeter.StartMeter(_swapHitSpeed);
         }
+    }
+
+    public void SuccessfulSwap() {
+        _cheatMeter.StopMeter();
+        Card.Swap(_userSwapCard, _npcSwapCard);
+        _userSwapCard = null;
+        _npcSwapCard = null;
+        _cheatingState = CheatingStates.None;
+        Utils.EmitUserSwappedCard();
+    }
+    
+    private void OnPerfectHit(int hitCount) {
+        OnHit(hitCount);
+    }
+    
+    private void OnOkHit(int hitCount) {
+        OnHit(hitCount);
+    }
+    
+    private void OnHit(int hitCount) {
+        if (_cheatingState == CheatingStates.CardSwap && hitCount == _swapHitRequired) {
+            SuccessfulSwap();
+        }
+    }
+    
+    private void OnMiss() {
+        _cheatingState = CheatingStates.None;
+        _cheatMeter.Hide();
     }
 
     private void OnNpcCardSelectStart() {

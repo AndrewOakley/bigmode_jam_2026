@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://ca3mq4iyvkm1v"]
+[gd_scene load_steps=56 format=3 uid="uid://ca3mq4iyvkm1v"]
 
 [ext_resource type="PackedScene" uid="uid://cljhd4qk0x3gi" path="res://scenes/Player/player.tscn" id="1_oq1x1"]
 [ext_resource type="Texture2D" uid="uid://pfdtxe58coer" path="res://assets/sprites/characters/baldGuy/jackarmsplit.png" id="2_5deju"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://r5gpog8kyr2i" path="res://assets/sprites/characters/baldGuy/jackpoint.png" id="3_rrmke"]
 [ext_resource type="Texture2D" uid="uid://c5ins36q7bje5" path="res://assets/sprites/characters/baldGuy/jackstand.png" id="4_ehain"]
 [ext_resource type="Texture2D" uid="uid://bhjuhgvvsodr8" path="res://assets/sprites/characters/baldGuy/baldGuyPhone.png" id="7_igmgj"]
+[ext_resource type="PackedScene" uid="uid://48bu4tpvh518" path="res://scenes/cheat_meter/cheat_meter.tscn" id="8_hdmlt"]
 
 [sub_resource type="Animation" id="Animation_igmgj"]
 length = 0.001
@@ -531,17 +532,19 @@ animations = [{
 "speed": 14.0
 }]
 
-[node name="Player" node_paths=PackedStringArray("_handAnimations") groups=["main_player"] instance=ExtResource("1_oq1x1")]
+[node name="Player" node_paths=PackedStringArray("_cheatMeter", "_handAnimations") groups=["main_player"] instance=ExtResource("1_oq1x1")]
 z_index = 1000
 z_as_relative = false
 Name = "jack"
 PlayWinSfx = true
+_cheatMeter = NodePath("CheatMeter")
 _handAnimations = NodePath("hand/handAnimations")
 
 [node name="Hands" parent="." index="0" groups=["main_player"]]
-offset_left = -147.0
-offset_right = 310.0
-offset_bottom = 38.70656
+offset_left = -141.0
+offset_top = -35.293
+offset_right = 316.0
+offset_bottom = 45.707
 
 [node name="hand" type="Sprite2D" parent="." index="1"]
 modulate = Color(1, 1, 1, 0)
@@ -579,3 +582,7 @@ frame_progress = 0.09998021
 
 [node name="WinSFX" parent="." index="5"]
 volume_db = -16.619
+
+[node name="CheatMeter" parent="." index="6" instance=ExtResource("8_hdmlt")]
+position = Vector2(146, -91)
+rotation = 1.5707964

@@ -22,4 +22,9 @@ public partial class Utils : Node {
     public static event UserSwappedCardEventHandler UserSwappedCard;
     
     public static void EmitUserSwappedCard() => UserSwappedCard?.Invoke();
+    
+    public delegate void StopAllCardsSelectableEventHandler();
+    public static event StopAllCardsSelectableEventHandler StopAllCardsSelectable;
+    
+    public static void EmitStopAllCardsSelectable() => StopAllCardsSelectable?.Invoke();
 }

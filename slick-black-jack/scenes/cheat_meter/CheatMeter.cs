@@ -2,6 +2,10 @@ using Godot;
 using System;
 
 public partial class CheatMeter : Node2D {
+    [Signal] public delegate void PerfectHitEventHandler(int hitCount);
+    [Signal] public delegate void OkHitEventHandler(int hitCount);
+    [Signal] public delegate void MissEventHandler();
+    
     private Area2D _orangeArea;
     private Area2D _greenArea;
     private Area2D _line;
@@ -13,6 +17,9 @@ public partial class CheatMeter : Node2D {
     private float _direction = 1f;
     [Export] private float _speed = 100f;
     private const float RANGE = 150f;
+
+    public bool IsActive = false; 
+    public int HitCount = 0;
 
     public override void _Ready() {
         _orangeArea ??= GetNode<Area2D>("%Orange");
@@ -33,8 +40,32 @@ public partial class CheatMeter : Node2D {
 
         _startX = _line.Position.X;
     }
+    
+    public void Reset() {
+        IsActive = false;
+        _direction = 1;
+        _line.Position = new Vector2(_startX, _line.Position.Y);
+        _feedbackLabel.Text = "";
+        _feedbackLabel.Modulate = new Color(1, 1, 1, 0);
+        _feedbackLabel.Show();
+        HitCount = 0;
+    }
+    
+    public void StartMeter(int speed = 100) {
+        Reset();
+        Show();
+        IsActive = true;
+    }
+    
+    public void StopMeter() {
+        Hide();
+        IsActive = false;
+        Reset();
+    }
 
     public override void _PhysicsProcess(double delta) {
+        if (!IsActive) return;
+        
         base._PhysicsProcess(delta);
 
         // Move the line
@@ -59,14 +90,16 @@ public partial class CheatMeter : Node2D {
         bool onOrange = _line.HasOverlappingAreas() && _line.GetOverlappingAreas().Contains(_orangeArea);
 
         if (onGreen) {
-            GD.Print("green");
             ShowFeedback("Nice!");
+            HitCount++;
+            EmitSignal(SignalName.PerfectHit, HitCount);
         } else if (onOrange) {
-            GD.Print("orange");
             ShowFeedback("Ok");
+            HitCount++;
+            EmitSignal(SignalName.OkHit, HitCount);
         } else {
-            GD.Print("neither");
             ShowFeedback("Bad");
+            EmitSignal(SignalName.Miss);
         }
     }
 

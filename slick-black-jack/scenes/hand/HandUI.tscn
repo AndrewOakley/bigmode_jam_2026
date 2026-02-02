@@ -30,7 +30,7 @@ stream_4/stream = ExtResource("9_vw23w")
 stream_5/stream = ExtResource("10_baoht")
 
 [node name="Hand" type="VBoxContainer"]
-custom_minimum_size = Vector2(328, 74)
+custom_minimum_size = Vector2(328, 81)
 offset_left = 192.0
 offset_top = -16.0
 offset_right = 520.0

@@ -28,11 +28,22 @@ public partial class CardUI : TextureRect {
 		Hide();
 		var atlasTexture = (AtlasTexture)Texture.Duplicate();
 		Texture = atlasTexture;
+		Utils.StopAllCardsSelectable += OnStopAllCardsSelectable;
 		
 		if (_test) {
 			Card = new Card(Suit.Hearts, Rank.Ace);
 			Show();
 		} 
+	}
+	    
+	// ALWAYS DO THIS IF CALLING SIGNALS FROM UTILS
+	protected override void Dispose(bool disposing) {
+		Utils.StopAllCardsSelectable -= OnStopAllCardsSelectable;
+		base.Dispose(disposing);
+	}
+	
+	private void OnStopAllCardsSelectable() {
+		SetCardSelectable(false);
 	}
 	
 	public void SetCard(Card card, bool faceDown = false) {

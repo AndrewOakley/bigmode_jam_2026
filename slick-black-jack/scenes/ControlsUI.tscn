@@ -207,8 +207,9 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8rf5x")
 text = "Double DOwn"
 
-[node name="DoubleDown2" type="Button" parent="HBoxContainer"]
+[node name="Cheat" type="Button" parent="HBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 theme_override_fonts/font = ExtResource("1_8rf5x")
 text = "Cheat"
 
@@ -217,4 +218,4 @@ text = "Cheat"
 [connection signal="pressed" from="HBoxContainer/Hit" to="." method="OnHitPressed"]
 [connection signal="pressed" from="HBoxContainer/Split" to="." method="OnSplitPressed"]
 [connection signal="pressed" from="HBoxContainer/DoubleDown" to="." method="OnDoubleDownPressed"]
-[connection signal="pressed" from="HBoxContainer/DoubleDown2" to="." method="OnCheatPressed"]
+[connection signal="pressed" from="HBoxContainer/Cheat" to="." method="OnCheatPressed"]
