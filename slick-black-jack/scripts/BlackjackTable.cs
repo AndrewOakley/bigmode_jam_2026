@@ -80,7 +80,7 @@ public partial class BlackjackTable : Node {
         PrintGameState();
     }
     
-    public void PlayerDoubleDown() {
+    public async Task PlayerDoubleDown() {
         if (_game.State != GameState.PlayerTurn) {
             GD.PrintErr("Cannot double down - not player's turn");
             return;
@@ -91,7 +91,7 @@ public partial class BlackjackTable : Node {
         }
 
         int playerIndex = _game.CurrentPlayerIndex;
-        _game.DoubleDown();
+        await _game.DoubleDown();
         EmitSignal(SignalName.DoubleDown, playerIndex);
 
         PrintGameState();

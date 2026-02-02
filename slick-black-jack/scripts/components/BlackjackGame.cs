@@ -34,8 +34,8 @@ namespace SlickBlackJack.Components {
         private const int InitalChipCount = 1000;
         
         // FOR DEBUGGING
-        private bool ForcePlayerBlackjack = false;
-        private bool ForcePlayerSplitCards = true;
+        private bool ForcePlayerBlackjack = true;
+        private bool ForcePlayerSplitCards = false;
         
         public BlackjackGame(Dealer dealer, List<Player> players, int numberOfDecks = 1) {
             Dealer = dealer;
@@ -75,7 +75,7 @@ namespace SlickBlackJack.Components {
             // First card to each player, then dealer, then second card to each player, then dealer
             for (var i = 0; i < NumberOfPlayers; i++) {
                 await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
-                var forceBlackjack = ForcePlayerBlackjack && !Players[i].IsNpc;
+                var forceBlackjack = ForcePlayerBlackjack;
                 Players[i].InitialDeal(Deck.DrawCard(), forceBlackjack, ForcePlayerSplitCards);
             }
             
@@ -83,7 +83,7 @@ namespace SlickBlackJack.Components {
             Dealer.AddCard(Deck.DrawCard());
             for (var i = 0; i < NumberOfPlayers; i++) {
                 await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
-                var forceBlackjack = ForcePlayerBlackjack && !Players[i].IsNpc;
+                var forceBlackjack = ForcePlayerBlackjack;
                 Players[i].InitialDeal(Deck.DrawCard(), forceBlackjack, ForcePlayerSplitCards);
             }
             
@@ -112,7 +112,12 @@ namespace SlickBlackJack.Components {
         private async Task PlayNpcTurn() {
             var currentPlayer = Players[CurrentPlayerIndex];
             if (CurrentPlayerIndex >= NumberOfPlayers || !currentPlayer.IsNpc) return;
-            
+
+            if (!currentPlayer.HasActiveHand()) {
+                MoveToNextPlayer();
+                return;
+            }
+
             while (currentPlayer.HasActiveHand()) {
                 await Task.Delay(TimeSpan.FromMilliseconds(1000));
                 if (currentPlayer.GetCurrentHand() == null) {
@@ -124,7 +129,7 @@ namespace SlickBlackJack.Components {
 
                 switch (npcMove) {
                     case PlayerMove.Hit:
-                        Hit();
+                        await Hit();
                         break;
                     case PlayerMove.Stand:
                         await Stand();
@@ -134,10 +139,10 @@ namespace SlickBlackJack.Components {
                         break;
                     case PlayerMove.DoubleDown:
                         if (CanDoubleDown()) {
-                            DoubleDown();
+                            await DoubleDown();
                         } else {
                             GD.PrintErr("NPC cannot double down");
-                            Hit();
+                            await Hit();
                         }
                         break;
                     default:
@@ -150,17 +155,17 @@ namespace SlickBlackJack.Components {
         /// <summary>
         /// Current player hits (takes another card)
         /// </summary>
-        public bool Hit() {
+        public async Task<bool> Hit(bool noAnimation = false) {
             if (State != GameState.PlayerTurn) {
                 GD.PrintErr("Cannot hit - not player's turn");
                 return false;
             }
 
             var currentPlayer = Players[CurrentPlayerIndex];
-            var done = currentPlayer.HitCurrentHand(Deck.DrawCard());
+            var done = await currentPlayer.HitCurrentHand(Deck.DrawCard(), noAnimation);
             
             if (done) {
-                MoveToNextPlayer();
+                await MoveToNextPlayer();
             }
 
             return done;
@@ -181,7 +186,7 @@ namespace SlickBlackJack.Components {
         /// <summary>
         /// Current player hits (takes another card)
         /// </summary>
-        public async void DoubleDown() {
+        public async Task DoubleDown() {
             if (State != GameState.PlayerTurn) {
                 GD.PrintErr("Cannot double down - not player's turn");
             }
@@ -189,12 +194,12 @@ namespace SlickBlackJack.Components {
             GD.Print($"{Players[CurrentPlayerIndex].Name} doubled down");
 
             var currentPlayer = Players[CurrentPlayerIndex];
-            var done = currentPlayer.DoubleDownCurrentHand(Deck.DrawCard());
+            var done = await currentPlayer.DoubleDownCurrentHand(Deck.DrawCard());
             if (done) {
                 MoveToNextPlayer();
             }
             else {
-                await Stand();
+                await Stand(true);
             }
 
         }
@@ -217,7 +222,7 @@ namespace SlickBlackJack.Components {
                 return false;
             }
             
-            var success = currentPlayer.SplitHand();
+            var success = await currentPlayer.SplitHand();
             if (!success) {
                 GD.PrintErr("Failed to split hand");
                 return false;
@@ -227,7 +232,7 @@ namespace SlickBlackJack.Components {
             await Task.Delay(TimeSpan.FromMilliseconds(100));
             await Dealer.DealerPointToHand(Players[CurrentPlayerIndex].GetCurrentHandUI());
             await Task.Delay(TimeSpan.FromMilliseconds(500));
-            Hit();
+            await Hit(true);
 
             return true;
         }
@@ -235,13 +240,13 @@ namespace SlickBlackJack.Components {
         /// <summary>
         /// Current player stands (ends their turn)
         /// </summary>
-        public async Task Stand() {
+        public async Task Stand(bool noAnimation = false) {
             if (State != GameState.PlayerTurn) {
                 GD.PrintErr("Cannot stand - not player's turn");
                 return;
             }
 
-            Players[CurrentPlayerIndex].StandCurrentHand();
+            await Players[CurrentPlayerIndex].StandCurrentHand(noAnimation);
             await MoveToNextPlayer();
         }
 
@@ -259,7 +264,7 @@ namespace SlickBlackJack.Components {
             }
 
             if (CurrentPlayerIndex >= NumberOfPlayers) {
-                // All players finished, dealer's turn
+                // All players finished, dealer's turn 
                 State = GameState.DealerTurn;
                 await PlayDealerTurn();
                 return;
@@ -268,7 +273,7 @@ namespace SlickBlackJack.Components {
             await Dealer.DealerPointToHand(Players[CurrentPlayerIndex].GetCurrentHandUI());
             while (Players[CurrentPlayerIndex].GetCurrentHand().CardCount < 2) {
                 await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
-                Hit();
+                await Hit(true);
             }
 
             await PlayNpcTurn();

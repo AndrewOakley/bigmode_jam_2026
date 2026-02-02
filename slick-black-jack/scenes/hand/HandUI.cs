@@ -27,7 +27,7 @@ public partial class HandUI : Control {
 		_pushResultLabel = GetNode<Label>("PushResult");
 		_chipCountLabel = GetNode<Label>("%ChipCount");
 		_chipTexture = GetNode<TextureRect>("ChipTexture");
-	_sfxPlayer = GetNode<AudioStreamPlayer>("DealSFX");
+		_sfxPlayer = GetNode<AudioStreamPlayer>("DealSFX");
 		
 		_winResultLabel.Hide();
 		_lossResultLabel.Hide();

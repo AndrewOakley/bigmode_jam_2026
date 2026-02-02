@@ -61,7 +61,7 @@ tracks/3/keys = {
 
 [sub_resource type="Animation" id="Animation_rrmke"]
 resource_name = "hit"
-length = 2.0
+length = 0.8
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -69,7 +69,7 @@ tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5, 1.0333334, 1.2476385),
+"times": PackedFloat32Array(0, 0.275, 0.5683334, 0.68620116),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [Vector2(-5.999996, 47), Vector2(2.9999986, 34), Vector2(2.9999986, 34), Vector2(-5.999996, 47)]
@@ -81,7 +81,7 @@ tracks/1/path = NodePath(".:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.16666669, 0.4666667, 1.0802224, 1.2),
+"times": PackedFloat32Array(0.091666676, 0.2566667, 0.5941223, 0.66),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -105,7 +105,7 @@ tracks/3/path = NodePath(".:rotation")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.43333334),
+"times": PackedFloat32Array(0, 0.23833334),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [-1.9851662, -1.9851662]
@@ -117,7 +117,7 @@ tracks/4/path = NodePath(".:skew")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0.4666667, 0.73333335, 0.83333325, 1.0666667, 1.1333333, 1.4333335),
+"times": PackedFloat32Array(0.2566667, 0.40333334, 0.4583333, 0.5866667, 0.62333333, 0.7883335),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 0,
 "values": [0.0, 0.31198707, 0.0, 0.31198707, 0.0, 0.0]
@@ -125,7 +125,6 @@ tracks/4/keys = {
 
 [sub_resource type="Animation" id="Animation_ehain"]
 resource_name = "split"
-length = 2.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -133,7 +132,7 @@ tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.6357265, 0.73333335, 1.1333333, 1.4143051),
+"times": PackedFloat32Array(0, 0.34964958, 0.40333334, 0.62333333, 0.7778678),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
 "values": [Vector2(-5.999996, 47), Vector2(3, 36), Vector2(3, 36), Vector2(3, 36), Vector2(-5.999996, 47)]
@@ -145,7 +144,7 @@ tracks/1/path = NodePath(".:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.20000005, 0.70000005, 1.1468889, 1.2666668),
+"times": PackedFloat32Array(0.11000003, 0.38500002, 0.63078886, 0.6966667),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -177,7 +176,7 @@ tracks/3/keys = {
 
 [sub_resource type="Animation" id="Animation_hdmlt"]
 resource_name = "stand"
-length = 2.0
+length = 1.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -185,7 +184,7 @@ tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5, 1.4495515, 1.9712179),
+"times": PackedFloat32Array(0, 0.275, 0.7972533, 1.0841699),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [Vector2(-5.999996, 47), Vector2(6, 8), Vector2(6, 8), Vector2(-5.999996, 47)]
@@ -197,7 +196,7 @@ tracks/1/path = NodePath(".:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.43333334, 0.73333335, 1.5333333, 1.819778),
+"times": PackedFloat32Array(0.23833334, 0.40333334, 0.84333336, 1.0008779),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -221,7 +220,7 @@ tracks/3/path = NodePath(".:rotation")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.71205604, 0.93333334, 1.5666667),
+"times": PackedFloat32Array(0, 0.39163083, 0.5133333, 0.86166674),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [-1.9851662, -1.9851662, -1.2149888, -1.2149888]
@@ -532,10 +531,12 @@ animations = [{
 "speed": 14.0
 }]
 
-[node name="Player" groups=["main_player"] instance=ExtResource("1_oq1x1")]
+[node name="Player" node_paths=PackedStringArray("_handAnimations") groups=["main_player"] instance=ExtResource("1_oq1x1")]
+z_index = 1000
+z_as_relative = false
 Name = "jack"
 PlayWinSfx = true
-PlayArmAnimations = true
+_handAnimations = NodePath("hand/handAnimations")
 
 [node name="Hands" parent="." index="0" groups=["main_player"]]
 offset_left = -147.0
@@ -544,6 +545,7 @@ offset_bottom = 38.70656
 
 [node name="hand" type="Sprite2D" parent="." index="1"]
 modulate = Color(1, 1, 1, 0)
+z_index = 100
 position = Vector2(36, 0)
 rotation = -1.9851662
 texture = ExtResource("2_5deju")
@@ -555,11 +557,13 @@ libraries = {
 }
 
 [node name="body" parent="." index="2"]
+z_index = 101
 position = Vector2(4, 0)
 sprite_frames = SubResource("SpriteFrames_x00a8")
 metadata/_edit_lock_ = true
 
 [node name="head" parent="." index="3"]
+z_index = 102
 position = Vector2(3, 0)
 sprite_frames = SubResource("SpriteFrames_o22ha")
 frame_progress = 0.8818938

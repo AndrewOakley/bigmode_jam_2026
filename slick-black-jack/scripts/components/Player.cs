@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using SlickBlackJack.Components;
 
 
@@ -24,7 +25,7 @@ public partial class Player : Node2D {
     public int PlayerBet { get; set; } = 10;
 
     private AudioStreamPlayer _winSfx;
-    private AnimationPlayer _handAnimations;
+    [Export] private AnimationPlayer _handAnimations;
     private int _chips = 1000;
     public int Chips {
         get => _chips;
@@ -41,7 +42,6 @@ public partial class Player : Node2D {
     public override void _Ready() {
         GD.Print("Player ready!");
         _winSfx = GetNode<AudioStreamPlayer>("WinSFX");
-        _handAnimations = GetNode<AnimationPlayer>("hand/handAnimations");
     }
 
     public Hand GetCurrentHand() {
@@ -102,7 +102,7 @@ public partial class Player : Node2D {
         }
     }
 
-    public bool SplitHand() {
+    public async Task<bool> SplitHand() {
         // TODO: need to check if player has enough chips to split
         var currentHand = GetCurrentHand();
 
@@ -116,6 +116,11 @@ public partial class Player : Node2D {
             return false;
         }
 
+        if (_handAnimations != null) {
+            _handAnimations.Play("split");
+            await ToSignal(_handAnimations, "animation_finished");
+        }
+
         var chipsForHand = Math.Min(currentHand.Chips, Chips);
         var newHand = new Hand(chipsForHand);
         
@@ -126,12 +131,11 @@ public partial class Player : Node2D {
         
         var card = currentHand.RemoveCard(0);
         newHand.AddCard(card);
-        _handAnimations?.Play("split");
 
         return true;
     }
 
-    public bool DoubleDownCurrentHand(Card card) {
+    public async Task<bool> DoubleDownCurrentHand(Card card) {
         var currentHand = GetCurrentHand();
 
         if (!currentHand.CanDoubleDown() && Chips > 0) return false;
@@ -141,7 +145,7 @@ public partial class Player : Node2D {
         
         Chips -= chipsForHand;
 
-        return HitCurrentHand(card);
+        return await HitCurrentHand(card);
     }
 
     public void DetermineHandResults(int dealerValue) {
@@ -150,23 +154,28 @@ public partial class Player : Node2D {
             var handUi = GetHandUIByIndex(i);
             
             var playerValue = hand.GetValue();
-            if (playerValue > 21) {
+            
+            if (hand.IsBlackjack() && dealerValue != 21) {
+                hand.Result = HandResult.PlayerBlackjack;
+            }
+            else if (playerValue > 21) {
                 hand.Result = HandResult.DealerWin;
             }
             else if (dealerValue > 21) {
                 hand.Result = HandResult.PlayerWin;
             }
-            else if (playerValue > dealerValue) {
-                hand.Result = HandResult.PlayerWin;
-            }
             else if (playerValue < dealerValue) {
                 hand.Result = HandResult.DealerWin;
             }
-            else if (hand.IsBlackjack() && dealerValue != 21) {
-                hand.Result = HandResult.PlayerBlackjack;
+            else if (playerValue > dealerValue) {
+                hand.Result = HandResult.PlayerWin;
+            }
+            else if (playerValue == dealerValue) {
+                hand.Result = HandResult.Push;
             }
             else {
-                hand.Result = HandResult.Push;
+                GD.PrintErr($"Invalid hand result for hand {hand}");
+                hand.Result = HandResult.PlayerWin;
             }
             
             
@@ -189,19 +198,16 @@ public partial class Player : Node2D {
     }
 
     // Returns true if hand was busted
-    public bool HitCurrentHand(Card card) {
+    public async Task<bool> HitCurrentHand(Card card, bool noAnimation = false) {
+        if (_handAnimations != null && !noAnimation) {
+            _handAnimations.Play("hit");
+            await ToSignal(_handAnimations, "animation_finished");
+        }
+        
         Hand activeHand = GetCurrentHand();
-        _handAnimations?.Play("hit");
         activeHand.AddCard(card);
-        
-        if (activeHand.IsBusted()) {
-            activeHand.Result = HandResult.DealerWin;
-        }
 
-        if (activeHand.IsBlackjack()) {
-            activeHand.Result = HandResult.PlayerBlackjack;
-        }
-        
+        // hand is done
         if (activeHand.GetValue() >= 21) {
             activeHand.Status = HandStatus.Done;
             CurrentHandIndex++;
@@ -216,12 +222,16 @@ public partial class Player : Node2D {
         return GetCurrentHand().CanDoubleDown();
     }
 
-    public void StandCurrentHand() {
+    public async Task StandCurrentHand(bool noAnimation = false) {
+        if (_handAnimations != null && !noAnimation) {
+            _handAnimations.Play("stand");
+            await ToSignal(_handAnimations, "animation_finished");
+        }
+        
         Hand activeHand = GetCurrentHand();
         activeHand.Stand();
         CurrentHandIndex++;
         EmitSignal(SignalName.CurrentHandChanged, CurrentHandIndex);
-        _handAnimations?.Play("stand");
     }
     
     public bool HasActiveHand() {

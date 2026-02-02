@@ -45,7 +45,7 @@ scale = Vector2(0.57886183, 0.57886183)
 texture = ExtResource("4_x4ubh")
 
 [node name="Dealer" parent="BlackJackTable" instance=ExtResource("5_5unt0")]
-position = Vector2(63, 9)
+position = Vector2(63, 4)
 
 [node name="Players" type="Node" parent="BlackJackTable"]
 
