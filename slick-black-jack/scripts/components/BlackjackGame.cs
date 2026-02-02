@@ -34,7 +34,7 @@ namespace SlickBlackJack.Components {
         private const int InitalChipCount = 1000;
         
         // FOR DEBUGGING
-        private bool ForcePlayerBlackjack = true;
+        private bool ForcePlayerBlackjack = false;
         private bool ForcePlayerSplitCards = false;
         
         public BlackjackGame(Dealer dealer, List<Player> players, int numberOfDecks = 1) {

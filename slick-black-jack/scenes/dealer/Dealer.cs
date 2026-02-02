@@ -16,6 +16,27 @@ public partial class Dealer : Node2D {
         DealerFinger ??= GetNode<Marker2D>("DealerFinger");
         _handContainer ??= GetNode<Control>("HandContainer");
         _fingerOrigin ??= GetNode<Marker2D>("FingerOrigin");
+        
+        Utils.NpcCardSelectStart += OnNpcCardSelectStart;
+        Utils.UserSwappedCard += OnUserSwappedCards;
+    }
+    
+        
+    // ALWAYS DO THIS IF CALLING SIGNALS FROM UTILS
+    protected override void Dispose(bool disposing) {
+        Utils.NpcCardSelectStart -= OnNpcCardSelectStart;
+        Utils.UserSwappedCard -= OnUserSwappedCards;
+        base.Dispose(disposing);
+    }
+    
+    private void OnNpcCardSelectStart() {
+        var upCardUI = GetUpCardUI();
+        upCardUI.SetCardSelectable(true);
+    }
+    
+    private void OnUserSwappedCards() {
+        var upCardUI = GetUpCardUI();
+        upCardUI.SetCardSelectable(false);
     }
 
     public void StartRound() {
@@ -51,5 +72,12 @@ public partial class Dealer : Node2D {
     
     public Card GetUpCard() {
         return Hand.GetCards()[0];
+    }
+    
+    public CardUI GetUpCardUI() {
+        var handUIs = _handContainer.GetChildren();
+        var handUI = handUIs[0] as HandUI;
+        
+        return handUI.GetUpCardUi();
     }
 }

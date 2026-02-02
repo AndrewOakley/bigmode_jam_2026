@@ -25,6 +25,7 @@ offset_right = 296.0
 offset_bottom = 58.70656
 rotation = 1.5707964
 pivot_offset = Vector2(228.02325, 35.31669)
+mouse_filter = 2
 theme_override_constants/separation = -285
 alignment = 1
 

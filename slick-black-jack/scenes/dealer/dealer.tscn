@@ -84,16 +84,16 @@ script = ExtResource("1_lhbsm")
 
 [node name="HandContainer" type="BoxContainer" parent="."]
 offset_left = 161.0
-offset_top = 44.0
+offset_top = 50.0
 offset_right = 489.0
-offset_bottom = 118.0
+offset_bottom = 124.0
 alignment = 1
 
 [node name="DealerHand" parent="HandContainer" instance=ExtResource("2_atwe4")]
 layout_mode = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="ChipTexture" parent="HandContainer/DealerHand" index="5"]
+[node name="MarginContainer" parent="HandContainer/DealerHand" index="5"]
 visible = false
 
 [node name="body" type="AnimatedSprite2D" parent="."]

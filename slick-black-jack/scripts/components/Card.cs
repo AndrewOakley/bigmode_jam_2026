@@ -25,6 +25,8 @@ namespace SlickBlackJack.Components {
 	}
 
 	public partial class Card : RefCounted {
+		[Signal] public delegate void CardSwappedEventHandler(Card card);
+		
 		public Suit Suit { get; private set; }
 		public Rank Rank { get; private set; }
 
@@ -50,6 +52,24 @@ namespace SlickBlackJack.Components {
 
 		public override string ToString() {
 			return $"{Rank} of {Suit}";
+		}
+
+		public static void Swap(Card cardA, Card cardB) {
+			var tempSuit = cardA.Suit;
+			var tempRank = cardA.Rank;
+			
+			cardA.Suit = cardB.Suit;
+			cardA.Rank = cardB.Rank;
+			
+			cardB.Suit = tempSuit;
+			cardB.Rank = tempRank;
+			
+			cardA.EmitCardSwapped();
+			cardB.EmitCardSwapped();
+		}
+		
+		public void EmitCardSwapped() {
+			EmitSignal(SignalName.CardSwapped, this);
 		}
 	}
 }

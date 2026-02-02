@@ -39,11 +39,77 @@ public partial class Player : Node2D {
     
     private PackedScene _handScene = GD.Load<PackedScene>("res://scenes/hand/HandUI.tscn");
 
+    enum CheatingStates {
+        None,
+        Cheating,
+        CardSwap,
+    }
+    private CheatingStates _cheatingState = CheatingStates.None; 
+    
     public override void _Ready() {
         GD.Print("Player ready!");
         _winSfx = GetNode<AudioStreamPlayer>("WinSFX");
+        
+        Utils.CheatStarted += OnCheatStarted;
+        Utils.CardSelected += OnCardSelected;
+        Utils.NpcCardSelectStart += OnNpcCardSelectStart;
+        Utils.UserSwappedCard += OnUserSwappedCard;
+    }
+    
+    // ALWAYS DO THIS IF CALLING SIGNALS FROM UTILS
+    protected override void Dispose(bool disposing) {
+        Utils.CheatStarted -= OnCheatStarted;
+        Utils.CardSelected -= OnCardSelected;
+        Utils.NpcCardSelectStart -= OnNpcCardSelectStart;
+        Utils.UserSwappedCard -= OnUserSwappedCard;
+        base.Dispose(disposing);
+    }
+    
+    private void OnCheatStarted() {
+        if (IsNpc) return;
+        
+        SetHandsSelectable(true);
+        _cheatingState = CheatingStates.Cheating;
     }
 
+    private Card _userSwapCard;
+    private void OnCardSelected(Card card) {
+        if (CheatingStates.Cheating == _cheatingState) {
+            _userSwapCard = card;
+            
+            GD.Print($"Player {_cheatingState} selected card {card}");
+            SetHandsSelectable(false);
+            Utils.EmitNpcCardSelectStart();
+            _cheatingState = CheatingStates.CardSwap;
+        } 
+        else if (CheatingStates.CardSwap == _cheatingState) {
+            GD.Print($"Player swapped {_userSwapCard} for {card}");
+            Card.Swap(_userSwapCard, card);
+            _cheatingState = CheatingStates.None;
+            Utils.EmitUserSwappedCard();
+        }
+    }
+
+    private void OnNpcCardSelectStart() {
+        if (!IsNpc) return;
+
+        SetHandsSelectable(true);
+    }
+    
+    private void OnUserSwappedCard() {
+        if (!IsNpc) return;
+        
+        SetHandsSelectable(false);
+    }
+    
+    private void SetHandsSelectable(bool selectable) {
+        foreach (var node in HandsUIContainer.GetChildren()) {
+            if (node is HandUI handUi) {
+                handUi.SetHandSelectable(selectable);
+            }
+        }
+    }
+    
     public Hand GetCurrentHand() {
         if (CurrentHandIndex >= Hands.Count) {
             GD.PrintErr($"Player {Name} has no active hands left to play.");

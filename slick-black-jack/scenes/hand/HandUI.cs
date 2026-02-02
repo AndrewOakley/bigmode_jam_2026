@@ -26,7 +26,7 @@ public partial class HandUI : Control {
 		_lossResultLabel = GetNode<Label>("LossResult");
 		_pushResultLabel = GetNode<Label>("PushResult");
 		_chipCountLabel = GetNode<Label>("%ChipCount");
-		_chipTexture = GetNode<TextureRect>("ChipTexture");
+		_chipTexture = GetNode<TextureRect>("%ChipTexture");
 		_sfxPlayer = GetNode<AudioStreamPlayer>("DealSFX");
 		
 		_winResultLabel.Hide();
@@ -38,14 +38,20 @@ public partial class HandUI : Control {
 		foreach (var child in _cardsContainer.GetChildren()) {
 			if (child is CardUI cardUi) {
 				_cardUIs.Add(cardUi);
+				cardUi.CardChanged += OnCardChanged;
 			}
-			
 		}
 
 		_scoreLabel.Hide();
 
 		if (Hand != null) {
 			OnChipsChanged(Hand.Chips);
+		}
+	}
+
+	public void SetHandSelectable(bool selectable) {
+		foreach (var cardUi in _cardUIs) {
+			cardUi.SetCardSelectable(selectable);
 		}
 	}
 	
@@ -69,6 +75,10 @@ public partial class HandUI : Control {
 		if (isDealer) {
 			Hand.FlipDealerCard += OnFlipDealerCard;
 		}
+	}
+	
+	public CardUI GetUpCardUi() {
+		return _cardUIs[1];
 	}
 
 	private void OnCardAdded(Card card, bool faceDown = false) {
@@ -118,6 +128,20 @@ public partial class HandUI : Control {
 		_scoreLabel.Text = Hand.GetValue().ToString();
 	}
 	
+	private void OnCardChanged(Card card, bool faceDown) {
+		var handCards = Hand.GetCards();
+		// place a card in next available slot
+		for (var i = 0; i < _cardUIs.Count; i++) {
+			if (_cardUIs[i].Card != null) continue;
+			
+			// TODO: fix this hacky way of hiding the dealers hand count
+			var scoreDealerAdjusted = !faceDown ? Hand.GetValue() : Hand.GetValue() - card.GetValue();
+			_scoreLabel.Text = scoreDealerAdjusted.ToString();
+			_scoreLabel.Show();
+			return;
+		}
+	}
+
 	public void ShowResult(HandResult result) {
 		switch (result) {
 			case HandResult.None:

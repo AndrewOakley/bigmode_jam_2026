@@ -60,6 +60,10 @@ public partial class GameUI : Control {
 		GetTree().ReloadCurrentScene();
 	}
 	
+	public void OnCheatPressed() {
+		Utils.EmitCheatStarted();
+	}
+	
 	private void UpdatePlayerChipCount(int chipCount) {
 		_playerChipCountLabel.Text = "Current: $" + chipCount.ToString();
 	}
