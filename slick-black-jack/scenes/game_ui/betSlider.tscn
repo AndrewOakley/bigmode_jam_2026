@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://b8q4dlpf06h11"]
+
+[ext_resource type="Script" uid="uid://c2bpljk363rty" path="res://scenes/game_ui/BetSlider.cs" id="1_q8gin"]
+[ext_resource type="Texture2D" uid="uid://7yc71eyf5rvk" path="res://assets/sprites/meter/loadingBar.png" id="2_onubo"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_q8gin"]
+radius = 7.0
+height = 80.0
+
+[node name="BetSlider" type="Control"]
+custom_minimum_size = Vector2(78, 12)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_q8gin")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(39, 6)
+texture = ExtResource("2_onubo")
+hframes = 67
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(39, 6)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_q8gin")
+
+[connection signal="ValueChanged" from="." to="." method="ValueChanged"]

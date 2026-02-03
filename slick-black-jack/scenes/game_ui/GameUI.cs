@@ -14,6 +14,11 @@ public partial class GameUI : Control {
 	private Label _npcOneChipsLabel;
 	private Label _npcTwoChipsLabel;
 	private Label _handTimerLabel;
+	private Label _betAmountLabel;
+	private Label _minBetLabel;
+	private Label _maxBetLabel;
+	private BetSlider _betSlider;
+	
 
 	private Player _mainPlayer;
 	private Player _npcOne;
@@ -28,6 +33,12 @@ public partial class GameUI : Control {
 		_npcTwoChipsLabel = GetNode<Label>("%NpcTwoChipCount");
 		_handTimerLabel = GetNode<Label>("%HandTimer");
 		_handTimerLabel.Hide();
+
+		_betAmountLabel = GetNode<Label>("VBoxContainer/Panel/MarginContainer2/VBoxContainer/VBoxContainer/Label4");
+		_minBetLabel = GetNode<Label>("VBoxContainer/Panel/MarginContainer2/VBoxContainer/VBoxContainer/HBoxContainer/MinBet");
+		_maxBetLabel = GetNode<Label>("VBoxContainer/Panel/MarginContainer2/VBoxContainer/VBoxContainer/HBoxContainer/MaxBet");
+		_betSlider = GetNode<BetSlider>("VBoxContainer/Panel/MarginContainer2/VBoxContainer/VBoxContainer/HBoxContainer/BetSlider");
+		_betSlider.ValueChanged += OnBetValueChanged;
 
 		_handTimer = new Timer();
 		_handTimer.WaitTime = 1.0;
@@ -45,6 +56,10 @@ public partial class GameUI : Control {
 				_mainPlayer.PlayerTurnEnded += OnMainTurnEnded;
 			}
 		}
+
+		_betSlider.MaxValue = _mainPlayer.Chips - _mainPlayer.PlayerBet;
+		_maxBetLabel.Text = "$" + (_mainPlayer.Chips - _mainPlayer.PlayerBet).ToString();
+		_betSlider.Value = _mainPlayer.PlayerBet;
 		
 		var npcs = GetTree().GetNodesInGroup("npc_player");
 		if (npcs.Count < 2) {
@@ -58,6 +73,11 @@ public partial class GameUI : Control {
 		_npcTwo.ChipsChanged += UpdateNpcTwoChipCount;
 		
 		Utils.StopTurnTimer += OnStopTurnTimer;
+	}
+
+	private void OnBetValueChanged(int value) {
+		_mainPlayer.PlayerBet = value;
+		_betAmountLabel.Text = $"Bet Amount: ${value}";
 	}
 	
 	// ALWAYS DO THIS IF CALLING SIGNALS FROM UTILS

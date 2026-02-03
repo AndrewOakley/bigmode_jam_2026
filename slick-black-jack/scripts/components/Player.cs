@@ -93,7 +93,10 @@ public partial class Player : Node2D {
 
         var betInput = GetNode<LineEdit>("/root/Node/GameUI/VBoxContainer/Panel/MarginContainer2/VBoxContainer/BetAmount");
         
-        betInput.TextChanged += OnBetAmountTextChanged;
+        if (!IsNpc)
+        {
+            betInput.TextChanged += OnBetAmountTextChanged;
+        }
     }
     
     private void OnBetAmountTextChanged(string newText)
