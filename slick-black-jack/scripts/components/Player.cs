@@ -66,6 +66,19 @@ public partial class Player : Node2D {
             _cheatMeter.OkHit += OnOkHit;
             _cheatMeter.Miss += OnMiss;
         }
+
+        var betInput = GetNode<LineEdit>("/root/Node/GameUI/VBoxContainer/Panel/MarginContainer2/VBoxContainer/BetAmount");
+        
+        GD.Print("bet input:", betInput);
+        betInput.TextChanged += OnBetAmountTextChanged;
+    }
+    
+    private void OnBetAmountTextChanged(string newText)
+    {
+        GD.Print("bet amount:", newText);
+        if (int.TryParse(newText, out int betAmount)) {
+            PlayerBet = betAmount;
+        }
     }
     
     // ALWAYS DO THIS IF CALLING SIGNALS FROM UTILS
