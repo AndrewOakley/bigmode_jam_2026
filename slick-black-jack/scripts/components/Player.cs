@@ -181,7 +181,7 @@ public partial class Player : Node2D {
     private void StopCheat() {
         _cheatingState = CheatingStates.None;
         Utils.EmitStopAllCardsSelectable();
-        _cheatMeter?.Hide();
+        _cheatMeter?.StopMeter();
     }
 
     private void OnNpcCardSelectStart() {
