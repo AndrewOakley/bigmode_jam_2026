@@ -33,6 +33,7 @@ project/assembly_name="slick_black_jack"
 
 main_player=""
 npc_player=""
+player=""
 
 [input]
 

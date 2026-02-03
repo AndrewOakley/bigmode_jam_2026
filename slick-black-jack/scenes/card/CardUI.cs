@@ -86,8 +86,8 @@ public partial class CardUI : TextureRect {
 		
 		// on click emit click from global Utils
 		if (@event.IsActionPressed("click")) {
-			GD.Print("Card selected", Card);
 			AcceptEvent();
+			GD.Print("Card selected", Card);
 			// wait one frame then emit
 			EmitCardSelected();
 		}
@@ -95,6 +95,7 @@ public partial class CardUI : TextureRect {
 
 	// trick to ensure mouse clicks dont bleed over to next gui input
 	private async Task EmitCardSelected() {
+		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 		Utils.EmitCardSelected(Card);
 	}

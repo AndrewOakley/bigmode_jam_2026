@@ -105,11 +105,12 @@ autoplay = "default"
 frame_progress = 0.89561033
 
 [node name="head" type="AnimatedSprite2D" parent="."]
-position = Vector2(325, 54)
+position = Vector2(326.84055, 42.304382)
 rotation = 1.5707964
 sprite_frames = SubResource("SpriteFrames_1ofdx")
 autoplay = "default"
 frame_progress = 0.05689106
+offset = Vector2(11.695618, 1.8405457)
 
 [node name="DealerFinger" type="Marker2D" parent="."]
 position = Vector2(408, 126)

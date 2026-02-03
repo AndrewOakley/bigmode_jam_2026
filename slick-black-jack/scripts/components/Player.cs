@@ -25,6 +25,7 @@ public partial class Player : Node2D {
     [Export] public int Heat { get; set; } = 0;
     [Export] public bool PlayWinSfx { get; set; } = false;
     [Export] private CheatMeter _cheatMeter;
+    public Marker2D PlayerPositionMarker { get; set; }
     
     public List<Hand> Hands { get; set; } = []; // holds the list of all hands (needed for splitting)
     public int PlayerBet { get; set; } = 10;
@@ -76,6 +77,7 @@ public partial class Player : Node2D {
     public override void _Ready() {
         GD.Print("Player ready!");
         _winSfx = GetNode<AudioStreamPlayer>("WinSFX");
+        PlayerPositionMarker = GetNode<Marker2D>("%PlayerPosition");
         _cheatMeter?.Hide();
         
         Utils.CheatStarted += OnCheatStarted;
@@ -169,6 +171,7 @@ public partial class Player : Node2D {
     }
     
     private void OnMiss() {
+        GD.Print($"Player {_cheatingState} missed!");
         StopCheat();
     }
 

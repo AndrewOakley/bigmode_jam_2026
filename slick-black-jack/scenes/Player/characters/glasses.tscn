@@ -174,7 +174,7 @@ animations = [{
 "speed": 1.0
 }]
 
-[node name="Player" groups=["npc_player"] instance=ExtResource("1_emri4")]
+[node name="Player" groups=["npc_player", "player"] instance=ExtResource("1_emri4")]
 Name = "glasses"
 IsNpc = true
 

@@ -532,7 +532,7 @@ animations = [{
 "speed": 14.0
 }]
 
-[node name="Player" node_paths=PackedStringArray("_cheatMeter", "_handAnimations") groups=["main_player"] instance=ExtResource("1_oq1x1")]
+[node name="Player" node_paths=PackedStringArray("_cheatMeter", "_handAnimations") groups=["main_player", "player"] instance=ExtResource("1_oq1x1")]
 z_index = 1000
 z_as_relative = false
 Name = "jack"

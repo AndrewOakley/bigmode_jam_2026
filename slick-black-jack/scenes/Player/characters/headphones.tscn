@@ -160,7 +160,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Player" groups=["npc_player"] instance=ExtResource("1_l650y")]
+[node name="Player" groups=["npc_player", "player"] instance=ExtResource("1_l650y")]
 Name = "headphones"
 IsNpc = true
 
