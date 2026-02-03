@@ -317,7 +317,7 @@ public partial class Player : Node2D {
             Chips += hand.Chips * 2;
         }
         else if (hand.Result == HandResult.PlayerBlackjack) {
-            Chips += hand.Chips + (int)(PlayerBet * (3.0 / 2.0));
+            Chips += hand.Chips + (int)(hand.Chips * (3.0 / 2.0));
         }
     }
 
