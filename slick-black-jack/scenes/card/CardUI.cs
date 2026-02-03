@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 using SlickBlackJack.Components;
 
 public partial class CardUI : TextureRect {
@@ -87,8 +88,15 @@ public partial class CardUI : TextureRect {
 		if (@event.IsActionPressed("click")) {
 			GD.Print("Card selected", Card);
 			AcceptEvent();
-			Utils.EmitCardSelected(Card);
+			// wait one frame then emit
+			EmitCardSelected();
 		}
+	}
+
+	// trick to ensure mouse clicks dont bleed over to next gui input
+	private async Task EmitCardSelected() {
+		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+		Utils.EmitCardSelected(Card);
 	}
 	
 	public void SetCardFaceUp() {

@@ -1,29 +1,48 @@
 using Godot;
 using System;
+using SlickBlackJack.Components;
 
 public partial class GameUI : Control {
 	[Signal] public delegate void HitEventHandler();
 	[Signal] public delegate void SplitEventHandler();
 	[Signal] public delegate void StandEventHandler();
 	[Signal] public delegate void DoubleDownEventHandler();
+	
+	[Export] private bool _enableTimer = true;
 
 	private Label _playerChipCountLabel;
 	private Label _npcOneChipsLabel;
 	private Label _npcTwoChipsLabel;
+	private Label _handTimerLabel;
 
+	private Player _mainPlayer;
 	private Player _npcOne;
 	private Player _npcTwo;
+
+	private Timer _handTimer;
+	private int _timeRemaining;
 	
 	public override void _Ready() {
 		_playerChipCountLabel = GetNode<Label>("%PlayerChipCount");
 		_npcOneChipsLabel = GetNode<Label>("%NpcOneChipCount");
 		_npcTwoChipsLabel = GetNode<Label>("%NpcTwoChipCount");
+		_handTimerLabel = GetNode<Label>("%HandTimer");
+		_handTimerLabel.Hide();
 
-		var players = GetTree().GetNodesInGroup("main_player");
-		foreach (var player in players) {
+		_handTimer = new Timer();
+		_handTimer.WaitTime = 1.0;
+		_handTimer.OneShot = false;
+		_handTimer.Timeout += OnTimerTick;
+		AddChild(_handTimer);
+
+		var mainPlayers = GetTree().GetNodesInGroup("main_player");
+		foreach (var player in mainPlayers) {
 			if (player is Player mainPlayer) {
-				mainPlayer.ChipsChanged += UpdatePlayerChipCount;
-				UpdatePlayerChipCount(mainPlayer.Chips);
+				_mainPlayer = mainPlayer;
+				_mainPlayer.ChipsChanged += UpdatePlayerChipCount;
+				UpdatePlayerChipCount(_mainPlayer.Chips);
+				_mainPlayer.HandStarted += OnMainHandStarted;
+				_mainPlayer.PlayerTurnEnded += OnMainTurnEnded;
 			}
 		}
 		
@@ -37,6 +56,18 @@ public partial class GameUI : Control {
 		
 		_npcOne.ChipsChanged += UpdateNpcOneChipCount;
 		_npcTwo.ChipsChanged += UpdateNpcTwoChipCount;
+		
+		Utils.StopTurnTimer += OnStopTurnTimer;
+	}
+	
+	// ALWAYS DO THIS IF CALLING SIGNALS FROM UTILS
+	protected override void Dispose(bool disposing) {
+		Utils.StopTurnTimer -= OnStopTurnTimer;
+		base.Dispose(disposing);
+	}
+
+	private void OnStopTurnTimer() {
+		StopTimer();
 	}
 
 	public void OnHitPressed() {
@@ -64,6 +95,11 @@ public partial class GameUI : Control {
 		Utils.EmitCheatStarted();
 	}
 	
+	public void StopTimer() {
+		_handTimer.Stop();
+		_handTimerLabel.Hide();
+	}
+	
 	private void UpdatePlayerChipCount(int chipCount) {
 		_playerChipCountLabel.Text = "Current: $" + chipCount.ToString();
 	}
@@ -74,6 +110,35 @@ public partial class GameUI : Control {
 	
 	private void UpdateNpcTwoChipCount(int chipCount) {
 		UpdateNpcChipCount(1, chipCount);
+	}
+	
+	private void OnMainHandStarted(Hand hand) {
+		if (!_enableTimer) return;
+		
+		StopTimer();
+
+		_handTimerLabel.Show();
+		_timeRemaining = 10;
+		_handTimerLabel.Text = _timeRemaining.ToString();
+		_handTimer.Start();
+	}
+
+	private void OnTimerTick() {
+		_timeRemaining--;
+		_handTimerLabel.Text = _timeRemaining.ToString();
+
+		if (_timeRemaining <= 0 && !_handTimer.IsStopped()) {
+			StopTimer();
+			_handTimerLabel.Hide();
+			Utils.EmitTurnTimerExpired();
+			GD.Print("Turn timer expired");
+		}
+	}
+	
+	private void OnMainTurnEnded() {
+		if (!_enableTimer) return;
+		
+		StopTimer();
 	}
 	
 	private void UpdateNpcChipCount(int npcIndex, int chipCount) {

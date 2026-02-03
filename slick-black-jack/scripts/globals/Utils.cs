@@ -27,4 +27,14 @@ public partial class Utils : Node {
     public static event StopAllCardsSelectableEventHandler StopAllCardsSelectable;
     
     public static void EmitStopAllCardsSelectable() => StopAllCardsSelectable?.Invoke();
+    
+    public delegate void TurnTimerExpiredEventHandler();
+    public static event TurnTimerExpiredEventHandler TurnTimerExpired;
+    
+    public static void EmitTurnTimerExpired() => TurnTimerExpired?.Invoke();
+    
+    public delegate void StopTurnTimerEventHandler();
+    public static event StopTurnTimerEventHandler StopTurnTimer;
+    
+    public static void EmitStopTurnTimer() => StopTurnTimer?.Invoke();
 }

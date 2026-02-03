@@ -48,6 +48,19 @@ public partial class BlackjackTable : Node {
         _game = new BlackjackGame(_dealer, _players, NumberOfDecks);
         _game.RoundEnded += OnRoundEnded;
         GD.Print($"Blackjack Table initialized with {NumberOfPlayers} players");
+        
+        Utils.TurnTimerExpired += OnTurnTimerExpired;
+    }
+    
+    // ALWAYS DO THIS IF CALLING SIGNALS FROM UTILS
+    protected override void Dispose(bool disposing) {
+        Utils.TurnTimerExpired -= OnTurnTimerExpired;
+        base.Dispose(disposing);
+    }
+
+    
+    public void OnTurnTimerExpired() {
+        PlayerStand();
     }
 
     public void OnRoundEnded() {
@@ -137,6 +150,8 @@ public partial class BlackjackTable : Node {
     /// Current player stands (ends their turn)
     /// </summary>
     public async void PlayerStand() {
+        Utils.EmitStopTurnTimer();
+        
         if (_game.State != GameState.PlayerTurn) {
             GD.PrintErr("Cannot stand - not player's turn");
             return;

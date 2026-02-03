@@ -35,7 +35,7 @@ namespace SlickBlackJack.Components {
         
         // FOR DEBUGGING
         private bool ForcePlayerBlackjack = false;
-        private bool ForcePlayerSplitCards = false;
+        private bool ForcePlayerSplitCards = true;
         
         public BlackjackGame(Dealer dealer, List<Player> players, int numberOfDecks = 1) {
             Dealer = dealer;
@@ -57,11 +57,7 @@ namespace SlickBlackJack.Components {
         /// Starts a new round of blackjack
         /// </summary>
         public async Task StartNewRound() {
-            // Check if deck needs reshuffling (less than 25% remaining)
-            if (Deck.CardsRemaining < (_numberOfDecks * 52) / 4) {
-                Deck.Reset(_numberOfDecks);
-                GD.Print("Deck reshuffled");
-            }
+            Deck.Reset(_numberOfDecks);
 
             // Clear all player hands
             foreach (var player in Players) {
@@ -101,12 +97,7 @@ namespace SlickBlackJack.Components {
 
             State = GameState.PlayerTurn;
             // Skip to first player who hasn't finished
-            while (CurrentPlayerIndex < NumberOfPlayers && Players[CurrentPlayerIndex].GetCurrentHand().Result != HandResult.None) {
-                CurrentPlayerIndex++;
-            }
-            
-            await Dealer.DealerPointToHand(Players[CurrentPlayerIndex].GetCurrentHandUI());
-            await PlayNpcTurn();
+            await MoveToNextPlayer();
         }
 
         private async Task PlayNpcTurn() {
@@ -228,7 +219,6 @@ namespace SlickBlackJack.Components {
                 return false;
             }
             
-            
             await Task.Delay(TimeSpan.FromMilliseconds(100));
             await Dealer.DealerPointToHand(Players[CurrentPlayerIndex].GetCurrentHandUI());
             await Task.Delay(TimeSpan.FromMilliseconds(500));
@@ -254,7 +244,8 @@ namespace SlickBlackJack.Components {
         /// Moves to the next player or starts dealer turn if all players are done
         /// </summary>
         private async Task MoveToNextPlayer() {
-            if (!Players[CurrentPlayerIndex].HasActiveHand()) {
+            if (CurrentPlayerIndex < NumberOfPlayers && !Players[CurrentPlayerIndex].HasActiveHand()) {
+                Players[CurrentPlayerIndex].IsTurn = false;
                 CurrentPlayerIndex++;
 
                 // Skip players who already finished (blackjack/bust)
@@ -271,11 +262,13 @@ namespace SlickBlackJack.Components {
             }
             
             await Dealer.DealerPointToHand(Players[CurrentPlayerIndex].GetCurrentHandUI());
-            while (Players[CurrentPlayerIndex].GetCurrentHand().CardCount < 2) {
+            Players[CurrentPlayerIndex].IsTurn = true;
+            Players[CurrentPlayerIndex].EmitHandStarted();
+            while (CurrentPlayerIndex < NumberOfPlayers && Players[CurrentPlayerIndex].GetCurrentHand().CardCount < 2) {
                 await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
                 await Hit(true);
             }
-
+            
             await PlayNpcTurn();
         }
 

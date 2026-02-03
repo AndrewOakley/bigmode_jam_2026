@@ -15,6 +15,9 @@ public enum PlayerMove {
 public partial class Player : Node2D {
     [Signal] public delegate void CurrentHandChangedEventHandler(int index);
     [Signal] public delegate void ChipsChangedEventHandler(int newChips);
+    [Signal] public delegate void PlayerTurnStartedEventHandler();
+    [Signal] public delegate void PlayerTurnEndedEventHandler();
+    [Signal] public delegate void HandStartedEventHandler(Hand hand);
 
     [Export] public Container HandsUIContainer { get; set; }
     [Export] public string Name { get; set; }
@@ -26,8 +29,27 @@ public partial class Player : Node2D {
     public List<Hand> Hands { get; set; } = []; // holds the list of all hands (needed for splitting)
     public int PlayerBet { get; set; } = 10;
 
-    private const int _swapHitSpeed = 300;
+    private const int SwapHitSpeed = 300;
     private const int _swapHitRequired = 2;
+
+    private bool _isTurn = false;
+    public bool IsTurn {
+        get => _isTurn;
+        set {
+            if (_isTurn == value) return;
+
+            // always stop cheat if player is changing turns
+            StopCheat();
+
+            _isTurn = value;
+
+            if (_isTurn) {
+                EmitSignal(SignalName.PlayerTurnStarted);
+            } else {
+                EmitSignal(SignalName.PlayerTurnEnded);
+            }
+        }
+    }
 
     private AudioStreamPlayer _winSfx;
     [Export] private AnimationPlayer _handAnimations;
@@ -88,6 +110,11 @@ public partial class Player : Node2D {
         SetHandsSelectable(true);
         _cheatingState = CheatingStates.Cheating;
     }
+    
+    public async Task TurnTimeOut() {
+        StopCheat();
+        await StandCurrentHand();
+    }
 
     private Card _userSwapCard;
     private Card _npcSwapCard;
@@ -103,7 +130,7 @@ public partial class Player : Node2D {
         else if (CheatingStates.CardSwap == _cheatingState) {
             Utils.EmitStopAllCardsSelectable();
             _npcSwapCard = card;
-            _cheatMeter.StartMeter(_swapHitSpeed);
+            _cheatMeter.StartMeter(SwapHitSpeed);
         }
     }
 
@@ -131,8 +158,13 @@ public partial class Player : Node2D {
     }
     
     private void OnMiss() {
+        StopCheat();
+    }
+
+    private void StopCheat() {
         _cheatingState = CheatingStates.None;
-        _cheatMeter.Hide();
+        Utils.EmitStopAllCardsSelectable();
+        _cheatMeter?.Hide();
     }
 
     private void OnNpcCardSelectStart() {
@@ -162,6 +194,10 @@ public partial class Player : Node2D {
         }
         
         return Hands[CurrentHandIndex];
+    }
+
+    public void EmitHandStarted() {
+        EmitSignal(SignalName.HandStarted, GetCurrentHand());
     }
     
     // HandsUI is reverse of Hands, need to get the reversed value index
@@ -213,7 +249,33 @@ public partial class Player : Node2D {
         }
     }
 
+    // BLACK JACk MOVES ------------------------------------------------------------
+    // Returns true if hand was busted
+    public async Task<bool> HitCurrentHand(Card card, bool noAnimation = false) {
+        StopCheat();
+        
+        if (_handAnimations != null && !noAnimation) {
+            _handAnimations.Play("hit");
+            await ToSignal(_handAnimations, "animation_finished");
+        }
+        
+        Hand activeHand = GetCurrentHand();
+        activeHand.AddCard(card);
+
+        // hand is done
+        if (activeHand.GetValue() >= 21) {
+            activeHand.Status = HandStatus.Done;
+            CurrentHandIndex++;
+            EmitSignal(SignalName.CurrentHandChanged, CurrentHandIndex);
+            return true;
+        }
+
+        return false;
+    }
+    
     public async Task<bool> SplitHand() {
+        StopCheat();
+        
         // TODO: need to check if player has enough chips to split
         var currentHand = GetCurrentHand();
 
@@ -226,6 +288,8 @@ public partial class Player : Node2D {
             GD.PrintErr($"invalid attempt to split {Name} hand {currentHand}");
             return false;
         }
+        
+        EmitHandStarted();
 
         if (_handAnimations != null) {
             _handAnimations.Play("split");
@@ -247,6 +311,8 @@ public partial class Player : Node2D {
     }
 
     public async Task<bool> DoubleDownCurrentHand(Card card) {
+        StopCheat();
+        
         var currentHand = GetCurrentHand();
 
         if (!currentHand.CanDoubleDown() && Chips > 0) return false;
@@ -258,6 +324,20 @@ public partial class Player : Node2D {
 
         return await HitCurrentHand(card);
     }
+    
+    public async Task StandCurrentHand(bool noAnimation = false) {
+        StopCheat();
+        if (_handAnimations != null && !noAnimation) {
+            _handAnimations.Play("stand");
+            await ToSignal(_handAnimations, "animation_finished");
+        }
+        
+        Hand activeHand = GetCurrentHand();
+        activeHand.Stand();
+        CurrentHandIndex++;
+        EmitSignal(SignalName.CurrentHandChanged, CurrentHandIndex);
+    }
+    // End Black jack moves ----------------------------------------------------------------------------------------
 
     public void DetermineHandResults(int dealerValue) {
         for (var i = 0; i < Hands.Count; i++) {
@@ -308,41 +388,8 @@ public partial class Player : Node2D {
         }
     }
 
-    // Returns true if hand was busted
-    public async Task<bool> HitCurrentHand(Card card, bool noAnimation = false) {
-        if (_handAnimations != null && !noAnimation) {
-            _handAnimations.Play("hit");
-            await ToSignal(_handAnimations, "animation_finished");
-        }
-        
-        Hand activeHand = GetCurrentHand();
-        activeHand.AddCard(card);
-
-        // hand is done
-        if (activeHand.GetValue() >= 21) {
-            activeHand.Status = HandStatus.Done;
-            CurrentHandIndex++;
-            EmitSignal(SignalName.CurrentHandChanged, CurrentHandIndex);
-            return true;
-        }
-
-        return false;
-    }
-
     public bool CanDoubleDown() {
         return GetCurrentHand().CanDoubleDown();
-    }
-
-    public async Task StandCurrentHand(bool noAnimation = false) {
-        if (_handAnimations != null && !noAnimation) {
-            _handAnimations.Play("stand");
-            await ToSignal(_handAnimations, "animation_finished");
-        }
-        
-        Hand activeHand = GetCurrentHand();
-        activeHand.Stand();
-        CurrentHandIndex++;
-        EmitSignal(SignalName.CurrentHandChanged, CurrentHandIndex);
     }
     
     public bool HasActiveHand() {

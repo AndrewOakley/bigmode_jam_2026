@@ -52,8 +52,9 @@ public partial class CheatMeter : Node2D {
     }
     
     public void StartMeter(int speed = 100) {
+        _speed = speed;
         Reset();
-        Show();
+        Show(); 
         IsActive = true;
     }
     
@@ -80,7 +81,7 @@ public partial class CheatMeter : Node2D {
         }
 
         // Check for space input
-        if (Input.IsActionJustPressed("ui_accept")) {
+        if (Input.IsActionJustPressed("ui_accept") || Input.IsActionJustPressed("click")) {
             CheckLinePosition();
         }
     }
