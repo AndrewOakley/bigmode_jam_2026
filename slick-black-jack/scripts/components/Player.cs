@@ -88,6 +88,17 @@ public partial class Player : Node2D {
             _cheatMeter.OkHit += OnOkHit;
             _cheatMeter.Miss += OnMiss;
         }
+
+        var betInput = GetNode<LineEdit>("/root/Node/GameUI/VBoxContainer/Panel/MarginContainer2/VBoxContainer/BetAmount");
+        
+        betInput.TextChanged += OnBetAmountTextChanged;
+    }
+    
+    private void OnBetAmountTextChanged(string newText)
+    {
+        if (int.TryParse(newText, out int betAmount)) {
+            PlayerBet = betAmount;
+        }
     }
     
     // ALWAYS DO THIS IF CALLING SIGNALS FROM UTILS
@@ -384,7 +395,7 @@ public partial class Player : Node2D {
             Chips += hand.Chips * 2;
         }
         else if (hand.Result == HandResult.PlayerBlackjack) {
-            Chips += hand.Chips + (int)(PlayerBet * (3.0 / 2.0));
+            Chips += hand.Chips + (int)(hand.Chips * (3.0 / 2.0));
         }
     }
 
