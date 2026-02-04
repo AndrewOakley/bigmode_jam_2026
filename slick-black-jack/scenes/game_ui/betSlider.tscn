@@ -5,19 +5,19 @@
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_q8gin"]
 radius = 11.000001
-height = 134.0
+height = 124.0
 
 [node name="BetSlider" type="Control" groups=["betSlider"]]
 custom_minimum_size = Vector2(78, 12)
 layout_mode = 3
 anchors_preset = 0
-offset_right = 128.0
+offset_right = 124.0
 offset_bottom = 22.0
 script = ExtResource("1_q8gin")
 
 [node name="Sprite2D" type="Sprite2D" parent="." groups=["betSlider"]]
-position = Vector2(67, 11)
-scale = Vector2(1.6249999, 1.6249999)
+position = Vector2(62, 11)
+scale = Vector2(1.5500001, 1.6249999)
 texture = ExtResource("2_onubo")
 hframes = 67
 
@@ -25,7 +25,7 @@ hframes = 67
 position = Vector2(39, 6)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" groups=["betSlider"]]
-position = Vector2(28, 5)
+position = Vector2(23, 5)
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_q8gin")
 

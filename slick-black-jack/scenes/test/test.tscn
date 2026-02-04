@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://c3ksnt0ea2ray"]
+[gd_scene load_steps=16 format=3 uid="uid://c3ksnt0ea2ray"]
 
 [ext_resource type="Script" uid="uid://cpk63f74thfsv" path="res://scenes/test/Test.cs" id="1_m7npr"]
 [ext_resource type="PackedScene" uid="uid://bvli2013m2a38" path="res://scenes/black_jack_table.tscn" id="2_da6vm"]
@@ -20,10 +20,6 @@ stream_count = 3
 stream_0 = ExtResource("14_xm0ii")
 stream_1 = ExtResource("10_xi5sv")
 stream_2 = ExtResource("13_x4ubh")
-
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_x4ubh"]
-streams_count = 1
-stream_0/stream = ExtResource("14_x4ubh")
 
 [node name="Node" type="Node" node_paths=PackedStringArray("_table")]
 script = ExtResource("1_m7npr")
@@ -67,7 +63,7 @@ metadata/_edit_lock_ = true
 
 [node name="CheatMeter" parent="." instance=ExtResource("15_xm0ii")]
 visible = false
-position = Vector2(264, 152)
+position = Vector2(-23, 38)
 
 [node name="audio" type="Container" parent="."]
 offset_right = 40.0
@@ -79,6 +75,7 @@ volume_db = -31.479
 autoplay = true
 
 [node name="backgroundNoise" type="AudioStreamPlayer" parent="audio"]
-stream = SubResource("AudioStreamRandomizer_x4ubh")
-volume_db = -39.105
+stream = ExtResource("14_x4ubh")
+volume_db = -38.734
 autoplay = true
+playback_type = 1

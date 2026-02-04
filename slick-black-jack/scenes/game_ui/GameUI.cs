@@ -10,6 +10,7 @@ public partial class GameUI : Control {
 	
 	[Export] private bool _enableTimer = true;
 	[Export] private int _timeLimit = 15;
+	[Export] public int BetStep = 10; 
 	
 	private Label _playerChipCountLabel;
 	private Label _npcOneChipsLabel;
@@ -35,10 +36,10 @@ public partial class GameUI : Control {
 		_handTimerLabel = GetNode<Label>("%HandTimer");
 		_handTimerLabel.Hide();
 
-		_betAmountLabel = GetNode<Label>("BettingContainer/BettingInput/BetAmount");
-		_minBetLabel = GetNode<Label>("BettingContainer/BettingInput/BetBar/MinBet");
-		_maxBetLabel = GetNode<Label>("BettingContainer/BettingInput/BetBar/MinBet");
-		_betSlider = GetNode<BetSlider>("BettingContainer/BettingInput/BetBar/BetSlider");
+		_betAmountLabel = GetNode<Label>("ActionsContainer/GameActions/BetAmount");
+		_minBetLabel = GetNode<Label>("ActionsContainer/GameActions/BetBar/MinBet");
+		_maxBetLabel = GetNode<Label>("ActionsContainer/GameActions/BetBar/MaxBet");
+		_betSlider = GetNode<BetSlider>("ActionsContainer/GameActions/BetBar/BetSlider");
 		_betSlider.ValueChanged += OnBetValueChanged;
 
 		_placeBetButton = GetNode<Button>("%PlaceBet");
@@ -80,23 +81,31 @@ public partial class GameUI : Control {
 	}
 
 	private void OnChipsChanged(int chips) {
-		GD.Print("CHIPS:", chips);
 		var maxBet = Mathf.Clamp(chips, 0, _mainPlayer.Chips);
-		var minBet = Mathf.Clamp(chips, 0, 10);
+		var minBet = Mathf.Clamp(chips, 0, BetStep);
 		
-		_maxBetLabel.Text = "$"  + maxBet.ToString();
 		_betSlider.MaxValue = maxBet;
 		_betSlider.MinValue = minBet;
-		_betSlider.Value = _mainPlayer.PlayerBet;
-		_minBetLabel.Text = "$" + minBet.ToString();
+		_maxBetLabel.Text = "$"  + maxBet.ToString("N0");
+		_minBetLabel.Text = "$" + minBet.ToString("N0");
 		
+		_betSlider.Value = Math.Min(RoundBet(_mainPlayer.PlayerBet, minBet, maxBet), maxBet);
 		_mainPlayer.PlayerBet = Mathf.Clamp(_mainPlayer.PlayerBet, minBet, maxBet);
+		
 		OnBetValueChanged(_mainPlayer.PlayerBet);
+	}
+
+	private int RoundBet(int bet, int minBet, int maxBet) {
+		int rounded = (int)(Math.Floor(bet / (float)BetStep) * BetStep);
+		return Math.Clamp(rounded, minBet, maxBet);
 	}
 	
 	private void OnBetValueChanged(int value) {
-		_mainPlayer.PlayerBet = value;
-		_betAmountLabel.Text = $"Bet Amount: ${value}";
+		var maxBet = Mathf.Clamp(value, 0, _mainPlayer.Chips);
+		var minBet = Mathf.Clamp(value, 0, BetStep);
+		_mainPlayer.PlayerBet = Math.Min(RoundBet(value, minBet, maxBet),
+			_betSlider.MaxValue);
+		_betAmountLabel.Text = $"CURRENT BET:\n${_mainPlayer.PlayerBet:N0}";
 	}
 	
 	// ALWAYS DO THIS IF CALLING SIGNALS FROM UTILS
@@ -115,7 +124,7 @@ public partial class GameUI : Control {
 	}
 	
 	private void OnPlaceBetPressed() {
-		Utils.EmitPlayerbetSubmitted(_betSlider.Value);
+		Utils.EmitPlayerbetSubmitted(_mainPlayer.PlayerBet);
 		_placeBetButton.Hide();
 	}
 
@@ -150,7 +159,7 @@ public partial class GameUI : Control {
 	}
 	
 	private void UpdatePlayerChipCount(int chipCount) {
-		_playerChipCountLabel.Text = "Current: $" + chipCount.ToString();
+		_playerChipCountLabel.Text = "$" + chipCount.ToString("N0");
 	}
 
 	private void UpdateNpcOneChipCount(int chipCount) {

@@ -75,7 +75,6 @@ public partial class Player : Node2D {
     private CheatingStates _cheatingState = CheatingStates.None; 
     
     public override void _Ready() {
-        GD.Print("Player ready!");
         _winSfx = GetNode<AudioStreamPlayer>("WinSFX");
         PlayerPositionMarker = GetNode<Marker2D>("%PlayerPosition");
         _cheatMeter?.Hide();

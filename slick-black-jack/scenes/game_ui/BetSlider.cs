@@ -30,7 +30,6 @@ public partial class BetSlider : Control {
 		Step = (MaxValue - MinValue) / _totalFrames;
 		_currentValue = MinValue;
 		UpdateFrame();
-		GD.Print("BetSlider ready, Size:", Size);
 	}
 
 	public override void _GuiInput(InputEvent @event) {
