@@ -58,8 +58,8 @@ position = Vector2(205.00002, 241.00002)
 rotation = -0.64692277
 
 [node name="GameUI" parent="." instance=ExtResource("10_saoeg")]
-metadata/_edit_group_ = true
-metadata/_edit_lock_ = true
+offset_left = -1.0
+offset_right = -1.0
 
 [node name="CheatMeter" parent="." instance=ExtResource("15_xm0ii")]
 visible = false
