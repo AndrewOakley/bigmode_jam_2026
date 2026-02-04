@@ -1,30 +1,44 @@
-[gd_scene load_steps=14 format=3 uid="uid://bsoodols5srp3"]
+[gd_scene load_steps=22 format=3 uid="uid://bsoodols5srp3"]
 
 [ext_resource type="Script" uid="uid://bll4aq7db2eej" path="res://scenes/game_ui/GameUI.cs" id="1_2jtrj"]
 [ext_resource type="FontFile" uid="uid://cq3yt1gs4m3ka" path="res://assets/fonts/ARCADECLASSIC.TTF" id="1_8rf5x"]
 [ext_resource type="Texture2D" uid="uid://bg3usjwjbx1o0" path="res://assets/items/ace.png" id="2_asvp3"]
 [ext_resource type="FontFile" uid="uid://ufuswpnuuugo" path="res://assets/fonts/ByteBounce.ttf" id="2_mrh3v"]
+[ext_resource type="Texture2D" uid="uid://hq6ct03caso3" path="res://assets/tablePattern.png" id="2_r4xku"]
 [ext_resource type="Texture2D" uid="uid://ccrqhagk5pi21" path="res://assets/items/phone.png" id="3_2jtrj"]
+[ext_resource type="Texture2D" uid="uid://2rmrjc2eg0va" path="res://assets/sprites/textures/uiborder.png" id="3_nelv4"]
 [ext_resource type="PackedScene" uid="uid://b8q4dlpf06h11" path="res://scenes/game_ui/betSlider.tscn" id="3_sg8it"]
 [ext_resource type="Texture2D" uid="uid://cs4kpitoxjsc6" path="res://assets/items/whiskey.png" id="4_mrh3v"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_nelv4"]
+texture = ExtResource("2_r4xku")
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vghou"]
+texture = ExtResource("3_nelv4")
 
 [sub_resource type="LabelSettings" id="LabelSettings_8rf5x"]
 line_spacing = -6.41
 font = ExtResource("2_mrh3v")
-font_size = 18
+font_size = 20
+
+[sub_resource type="LabelSettings" id="LabelSettings_p7dk6"]
+font = ExtResource("2_mrh3v")
+
+[sub_resource type="LabelSettings" id="LabelSettings_r8ob0"]
+font = ExtResource("2_mrh3v")
 
 [sub_resource type="Theme" id="Theme_mrh3v"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8rf5x"]
-bg_color = Color(0.44991636, 0.6588591, 0.49743408, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.31061712, 0.31061712, 0.3106171, 1)
+[sub_resource type="LabelSettings" id="LabelSettings_nelv4"]
+font = ExtResource("2_mrh3v")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sg8it"]
-bg_color = Color(0.3793692, 0.64329046, 0.73507607, 1)
+[sub_resource type="LabelSettings" id="LabelSettings_vghou"]
+font = ExtResource("2_mrh3v")
+
+[sub_resource type="LabelSettings" id="LabelSettings_h1nqx"]
+font = ExtResource("2_mrh3v")
 
 [sub_resource type="LabelSettings" id="LabelSettings_r4xku"]
 line_spacing = -5.355
@@ -35,74 +49,187 @@ font_size = 14
 atlas = ExtResource("4_mrh3v")
 region = Rect2(0, 9, 16, 23)
 
+[sub_resource type="LabelSettings" id="LabelSettings_sg8it"]
+font = ExtResource("2_mrh3v")
+
 [node name="GameUI" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 2.0
-offset_bottom = 2.0
+offset_left = -2.0
+offset_right = -2.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_2jtrj")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="Panel" type="Panel" parent="."]
 layout_mode = 0
-offset_left = 5.0
-offset_right = 144.0
-offset_bottom = 50.0
+offset_left = 9.0
+offset_top = 8.0
+offset_right = 150.0
+offset_bottom = 351.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_nelv4")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 0
+[node name="Panel2" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 156.0
+offset_bottom = 357.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_vghou")
 
-[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer"]
+[node name="npcChips" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 84.0
+offset_right = 145.0
+offset_bottom = 155.0
+theme_override_constants/separation = 4
+
+[node name="Label3" type="Label" parent="npcChips"]
 layout_mode = 2
-text = "Goal: $1,000,000"
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = "Table Chips"
 label_settings = SubResource("LabelSettings_8rf5x")
+horizontal_alignment = 1
 
-[node name="PlayerChipCount" type="Label" parent="VBoxContainer/VBoxContainer"]
+[node name="NpcOneChipCount" type="Label" parent="npcChips"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8rf5x")
+theme_override_font_sizes/font_size = 12
+text = "Glasses"
+label_settings = SubResource("LabelSettings_p7dk6")
+
+[node name="NpcTwoChipCount" type="Label" parent="npcChips"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8rf5x")
+theme_override_font_sizes/font_size = 12
+text = "headphones: 22,000"
+label_settings = SubResource("LabelSettings_r8ob0")
+
+[node name="RoundInfo" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 286.0
+offset_top = 2.0
+offset_right = 495.0
+offset_bottom = 52.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="RoundInfo"]
+layout_mode = 2
+theme_override_constants/separation = 7
+
+[node name="PlayerChipCount" type="Label" parent="RoundInfo/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme = SubResource("Theme_mrh3v")
 theme_override_colors/font_color = Color(0, 1, 0, 1)
 text = "Current: $25,543"
-label_settings = SubResource("LabelSettings_8rf5x")
+label_settings = SubResource("LabelSettings_nelv4")
 
-[node name="Panel" type="Panel" parent="VBoxContainer"]
-custom_minimum_size = Vector2(170, 150)
+[node name="GoalAmount" type="Label" parent="RoundInfo/HBoxContainer"]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_8rf5x")
+text = "/ Goal: $1,000,000"
+label_settings = SubResource("LabelSettings_vghou")
 
-[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/Panel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Panel/MarginContainer2"]
+[node name="HandTimer" type="Label" parent="RoundInfo"]
+unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_fonts/font = ExtResource("2_mrh3v")
+theme_override_font_sizes/font_size = 30
+text = "10"
+label_settings = SubResource("LabelSettings_h1nqx")
+horizontal_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Panel/MarginContainer2/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 4
-alignment = 1
+[node name="Items" type="MarginContainer" parent="."]
+layout_mode = 0
+offset_left = 37.0
+offset_top = 24.0
+offset_right = 117.0
+offset_bottom = 51.0
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Panel/MarginContainer2/VBoxContainer/VBoxContainer"]
+[node name="VBoxContainer2" type="HBoxContainer" parent="Items"]
 layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Ace" type="HBoxContainer" parent="Items/VBoxContainer2"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Items/VBoxContainer2/Ace"]
+layout_mode = 2
+texture = ExtResource("2_asvp3")
+
+[node name="Label5" type="Label" parent="Items/VBoxContainer2/Ace"]
+visible = false
+layout_mode = 2
+text = "Ace in the hole (2)"
+label_settings = SubResource("LabelSettings_r4xku")
+
+[node name="Phone" type="HBoxContainer" parent="Items/VBoxContainer2"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Items/VBoxContainer2/Phone"]
+layout_mode = 2
+texture = ExtResource("3_2jtrj")
+
+[node name="Label6" type="Label" parent="Items/VBoxContainer2/Phone"]
+visible = false
+layout_mode = 2
+text = "I know a guy (3)"
+label_settings = SubResource("LabelSettings_r4xku")
+
+[node name="Whiskey" type="HBoxContainer" parent="Items/VBoxContainer2"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Items/VBoxContainer2/Whiskey"]
+layout_mode = 2
+texture = SubResource("AtlasTexture_2jtrj")
+
+[node name="Label7" type="Label" parent="Items/VBoxContainer2/Whiskey"]
+visible = false
+layout_mode = 2
+text = "Clumsy Stranger (1)"
+label_settings = SubResource("LabelSettings_r4xku")
+
+[node name="BettingContainer" type="MarginContainer" parent="."]
+layout_mode = 0
+offset_left = 9.0
+offset_top = 168.0
+offset_right = 152.0
+offset_bottom = 236.0
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 4
+
+[node name="BettingInput" type="VBoxContainer" parent="BettingContainer"]
+layout_mode = 2
+size_flags_vertical = 8
 theme_override_constants/separation = 6
 alignment = 1
 
-[node name="MinBet" type="Label" parent="VBoxContainer/Panel/MarginContainer2/VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="BetAmount" type="Label" parent="BettingContainer/BettingInput"]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Bet Amount: $40"
+label_settings = SubResource("LabelSettings_sg8it")
+horizontal_alignment = 1
+
+[node name="BetBar" type="HBoxContainer" parent="BettingContainer/BettingInput"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="MinBet" type="Label" parent="BettingContainer/BettingInput/BetBar"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -112,10 +239,13 @@ theme_override_font_sizes/font_size = 16
 text = "$10"
 label_settings = SubResource("LabelSettings_8rf5x")
 
-[node name="BetSlider" parent="VBoxContainer/Panel/MarginContainer2/VBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource("3_sg8it")]
+[node name="BetSlider" parent="BettingContainer/BettingInput/BetBar" instance=ExtResource("3_sg8it")]
+custom_minimum_size = Vector2(132, 22)
 layout_mode = 2
+size_flags_horizontal = 3
 
-[node name="MaxBet" type="Label" parent="VBoxContainer/Panel/MarginContainer2/VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="MaxBet" type="Label" parent="BettingContainer/BettingInput/BetBar"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -125,150 +255,62 @@ theme_override_font_sizes/font_size = 16
 text = "$10,000"
 label_settings = SubResource("LabelSettings_8rf5x")
 
-[node name="Label4" type="Label" parent="VBoxContainer/Panel/MarginContainer2/VBoxContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-text = "Bet Amount: $40"
-label_settings = SubResource("LabelSettings_8rf5x")
-
-[node name="Label3" type="Label" parent="VBoxContainer/Panel/MarginContainer2/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-text = "Table Chips"
-label_settings = SubResource("LabelSettings_8rf5x")
-
-[node name="NpcOneChipCount" type="Label" parent="VBoxContainer/Panel/MarginContainer2/VBoxContainer"]
+[node name="PlaceBet" type="Button" parent="BettingContainer/BettingInput"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_fonts/font = ExtResource("1_8rf5x")
-theme_override_font_sizes/font_size = 12
-text = "glasses:"
-
-[node name="NpcTwoChipCount" type="Label" parent="VBoxContainer/Panel/MarginContainer2/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_fonts/font = ExtResource("1_8rf5x")
-theme_override_font_sizes/font_size = 12
-text = "headphones: 22,000"
-
-[node name="Panel2" type="Panel" parent="VBoxContainer"]
-custom_minimum_size = Vector2(168, 101)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_sg8it")
-
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Panel2"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/Panel2/MarginContainer"]
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Panel2/MarginContainer/VBoxContainer2"]
-layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Panel2/MarginContainer/VBoxContainer2/HBoxContainer"]
-layout_mode = 2
-texture = ExtResource("2_asvp3")
-
-[node name="Label5" type="Label" parent="VBoxContainer/Panel2/MarginContainer/VBoxContainer2/HBoxContainer"]
-layout_mode = 2
-text = "Ace in the hole (2)"
-label_settings = SubResource("LabelSettings_r4xku")
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/Panel2/MarginContainer/VBoxContainer2"]
-layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Panel2/MarginContainer/VBoxContainer2/HBoxContainer2"]
-layout_mode = 2
-texture = ExtResource("3_2jtrj")
-
-[node name="Label6" type="Label" parent="VBoxContainer/Panel2/MarginContainer/VBoxContainer2/HBoxContainer2"]
-layout_mode = 2
-text = "I know a guy (3)"
-label_settings = SubResource("LabelSettings_r4xku")
-
-[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/Panel2/MarginContainer/VBoxContainer2"]
-layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Panel2/MarginContainer/VBoxContainer2/HBoxContainer3"]
-layout_mode = 2
-texture = SubResource("AtlasTexture_2jtrj")
-
-[node name="Label7" type="Label" parent="VBoxContainer/Panel2/MarginContainer/VBoxContainer2/HBoxContainer3"]
-layout_mode = 2
-text = "Clumsy Stranger (1)"
-label_settings = SubResource("LabelSettings_r4xku")
-
-[node name="Stand" type="Button" parent="."]
-layout_mode = 0
-offset_left = 193.0
-offset_top = 329.0
-offset_right = 245.0
-offset_bottom = 354.0
 focus_mode = 0
-theme_override_fonts/font = ExtResource("1_8rf5x")
-text = "Stand"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-layout_mode = 0
-offset_left = 278.0
-offset_top = 330.0
-offset_right = 526.0
-offset_bottom = 355.0
-
-[node name="Hit" type="Button" parent="HBoxContainer"]
-layout_mode = 2
-focus_mode = 0
-theme_override_fonts/font = ExtResource("1_8rf5x")
-text = "Hit"
-
-[node name="Split" type="Button" parent="HBoxContainer"]
-layout_mode = 2
-focus_mode = 0
-theme_override_fonts/font = ExtResource("1_8rf5x")
-text = "Split"
-
-[node name="DoubleDown" type="Button" parent="HBoxContainer"]
-layout_mode = 2
-focus_mode = 0
-theme_override_fonts/font = ExtResource("1_8rf5x")
-text = "Double DOwn"
-
-[node name="Cheat" type="Button" parent="HBoxContainer"]
-layout_mode = 2
-focus_mode = 0
-theme_override_fonts/font = ExtResource("1_8rf5x")
-text = "Cheat"
-
-[node name="PlaceBet" type="Button" parent="HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
+theme_override_fonts/font = ExtResource("2_mrh3v")
+theme_override_font_sizes/font_size = 16
 text = "Place bet"
 
-[node name="HandTimer" type="Label" parent="."]
-unique_name_in_owner = true
+[node name="ActionsContainer" type="MarginContainer" parent="."]
 layout_mode = 0
-offset_left = 575.0
-offset_top = 10.0
-offset_right = 615.0
-offset_bottom = 33.0
-theme_override_fonts/font = ExtResource("2_mrh3v")
-theme_override_font_sizes/font_size = 30
-text = "10"
+offset_left = 9.0
+offset_top = 232.0
+offset_right = 150.0
+offset_bottom = 351.0
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 
-[connection signal="pressed" from="Stand" to="." method="OnStandPressed"]
-[connection signal="pressed" from="HBoxContainer/Hit" to="." method="OnHitPressed"]
-[connection signal="pressed" from="HBoxContainer/Split" to="." method="OnSplitPressed"]
-[connection signal="pressed" from="HBoxContainer/DoubleDown" to="." method="OnDoubleDownPressed"]
-[connection signal="pressed" from="HBoxContainer/Cheat" to="." method="OnCheatPressed"]
-[connection signal="pressed" from="HBoxContainer/PlaceBet" to="." method="OnPlaceBetPressed"]
+[node name="GameActions" type="VBoxContainer" parent="ActionsContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="Stand" type="Button" parent="ActionsContainer/GameActions"]
+layout_mode = 2
+focus_mode = 0
+theme_override_fonts/font = ExtResource("2_mrh3v")
+text = "Stand"
+
+[node name="Cheat" type="Button" parent="ActionsContainer/GameActions"]
+layout_mode = 2
+focus_mode = 0
+theme_override_fonts/font = ExtResource("2_mrh3v")
+text = "Cheat"
+
+[node name="Hit" type="Button" parent="ActionsContainer/GameActions"]
+layout_mode = 2
+focus_mode = 0
+theme_override_fonts/font = ExtResource("2_mrh3v")
+text = "Hit"
+
+[node name="Split" type="Button" parent="ActionsContainer/GameActions"]
+layout_mode = 2
+focus_mode = 0
+theme_override_fonts/font = ExtResource("2_mrh3v")
+text = "Split"
+
+[node name="DoubleDown" type="Button" parent="ActionsContainer/GameActions"]
+layout_mode = 2
+focus_mode = 0
+theme_override_fonts/font = ExtResource("2_mrh3v")
+text = "Double DOwn"
+
+[connection signal="pressed" from="BettingContainer/BettingInput/PlaceBet" to="." method="OnPlaceBetPressed"]
+[connection signal="pressed" from="ActionsContainer/GameActions/Stand" to="." method="OnStandPressed"]
+[connection signal="pressed" from="ActionsContainer/GameActions/Cheat" to="." method="OnCheatPressed"]
+[connection signal="pressed" from="ActionsContainer/GameActions/Hit" to="." method="OnHitPressed"]
+[connection signal="pressed" from="ActionsContainer/GameActions/Split" to="." method="OnSplitPressed"]
+[connection signal="pressed" from="ActionsContainer/GameActions/DoubleDown" to="." method="OnDoubleDownPressed"]

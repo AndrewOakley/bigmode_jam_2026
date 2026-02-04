@@ -4,24 +4,28 @@
 [ext_resource type="Texture2D" uid="uid://7yc71eyf5rvk" path="res://assets/sprites/meter/loadingBar.png" id="2_onubo"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_q8gin"]
-radius = 7.0
-height = 80.0
+radius = 11.000001
+height = 134.0
 
-[node name="BetSlider" type="Control"]
+[node name="BetSlider" type="Control" groups=["betSlider"]]
 custom_minimum_size = Vector2(78, 12)
 layout_mode = 3
 anchors_preset = 0
+offset_right = 128.0
+offset_bottom = 22.0
 script = ExtResource("1_q8gin")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(39, 6)
+[node name="Sprite2D" type="Sprite2D" parent="." groups=["betSlider"]]
+position = Vector2(67, 11)
+scale = Vector2(1.6249999, 1.6249999)
 texture = ExtResource("2_onubo")
 hframes = 67
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="Area2D" type="Area2D" parent="." groups=["betSlider"]]
 position = Vector2(39, 6)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" groups=["betSlider"]]
+position = Vector2(28, 5)
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_q8gin")
 

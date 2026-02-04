@@ -35,10 +35,10 @@ public partial class GameUI : Control {
 		_handTimerLabel = GetNode<Label>("%HandTimer");
 		_handTimerLabel.Hide();
 
-		_betAmountLabel = GetNode<Label>("VBoxContainer/Panel/MarginContainer2/VBoxContainer/VBoxContainer/Label4");
-		_minBetLabel = GetNode<Label>("VBoxContainer/Panel/MarginContainer2/VBoxContainer/VBoxContainer/HBoxContainer/MinBet");
-		_maxBetLabel = GetNode<Label>("VBoxContainer/Panel/MarginContainer2/VBoxContainer/VBoxContainer/HBoxContainer/MaxBet");
-		_betSlider = GetNode<BetSlider>("VBoxContainer/Panel/MarginContainer2/VBoxContainer/VBoxContainer/HBoxContainer/BetSlider");
+		_betAmountLabel = GetNode<Label>("BettingContainer/BettingInput/BetAmount");
+		_minBetLabel = GetNode<Label>("BettingContainer/BettingInput/BetBar/MinBet");
+		_maxBetLabel = GetNode<Label>("BettingContainer/BettingInput/BetBar/MinBet");
+		_betSlider = GetNode<BetSlider>("BettingContainer/BettingInput/BetBar/BetSlider");
 		_betSlider.ValueChanged += OnBetValueChanged;
 
 		_placeBetButton = GetNode<Button>("%PlaceBet");
@@ -61,10 +61,6 @@ public partial class GameUI : Control {
 			}
 		}
 
-		_betSlider.MaxValue = _mainPlayer.Chips - _mainPlayer.PlayerBet;
-		_maxBetLabel.Text = "$" + (_mainPlayer.Chips - _mainPlayer.PlayerBet).ToString();
-		_betSlider.Value = _mainPlayer.PlayerBet;
-		
 		var npcs = GetTree().GetNodesInGroup("npc_player");
 		if (npcs.Count < 2) {
 			throw new Exception("Expected at least 2 NPC players in scene");
@@ -75,11 +71,29 @@ public partial class GameUI : Control {
 		
 		_npcOne.ChipsChanged += UpdateNpcOneChipCount;
 		_npcTwo.ChipsChanged += UpdateNpcTwoChipCount;
+		_mainPlayer.ChipsChanged += OnChipsChanged;
+		
+		OnChipsChanged(_mainPlayer.Chips);
 		
 		Utils.StopTurnTimer += OnStopTurnTimer;
 		Utils.BettingStarted += OnBettingStarted;
 	}
 
+	private void OnChipsChanged(int chips) {
+		GD.Print("CHIPS:", chips);
+		var maxBet = Mathf.Clamp(chips, 0, _mainPlayer.Chips);
+		var minBet = Mathf.Clamp(chips, 0, 10);
+		
+		_maxBetLabel.Text = "$"  + maxBet.ToString();
+		_betSlider.MaxValue = maxBet;
+		_betSlider.MinValue = minBet;
+		_betSlider.Value = _mainPlayer.PlayerBet;
+		_minBetLabel.Text = "$" + minBet.ToString();
+		
+		_mainPlayer.PlayerBet = Mathf.Clamp(_mainPlayer.PlayerBet, minBet, maxBet);
+		OnBetValueChanged(_mainPlayer.PlayerBet);
+	}
+	
 	private void OnBetValueChanged(int value) {
 		_mainPlayer.PlayerBet = value;
 		_betAmountLabel.Text = $"Bet Amount: ${value}";

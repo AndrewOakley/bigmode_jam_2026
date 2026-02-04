@@ -74,7 +74,8 @@ public partial class BlackjackTable : Node {
     }
 
     private void OnPlayerbetSubmitted(int mainPlayerBet) {
-        StartNewRound(mainPlayerBet);
+        if (mainPlayerBet > 0)
+            StartNewRound(mainPlayerBet);
     }
     
     /// <summary>

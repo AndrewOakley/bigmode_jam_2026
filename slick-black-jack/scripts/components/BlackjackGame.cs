@@ -63,7 +63,7 @@ namespace SlickBlackJack.Components {
             foreach (var player in Players) {
                 player.StartRound(mainPlayerBet);
             }
-
+            
             Dealer.StartRound();
             CurrentPlayerIndex = 0;
 

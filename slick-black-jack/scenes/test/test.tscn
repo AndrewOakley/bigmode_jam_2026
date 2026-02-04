@@ -40,25 +40,25 @@ texture = ExtResource("2_x4ubh")
 
 [node name="Table" type="Sprite2D" parent="BlackJackTable"]
 z_index = -1
-position = Vector2(398, 174.00002)
+position = Vector2(400, 197.00002)
 scale = Vector2(0.57886183, 0.57886183)
 texture = ExtResource("4_x4ubh")
 
 [node name="Dealer" parent="BlackJackTable" instance=ExtResource("5_5unt0")]
-position = Vector2(63, 4)
+position = Vector2(65, 27)
 
 [node name="Players" type="Node" parent="BlackJackTable"]
 
 [node name="glasses" parent="BlackJackTable/Players" instance=ExtResource("8_5unt0")]
-position = Vector2(577, 207)
+position = Vector2(579, 230)
 rotation = -2.5321772
 
 [node name="jack" parent="BlackJackTable/Players" instance=ExtResource("6_2ns80")]
-position = Vector2(385, 299)
+position = Vector2(387, 322)
 rotation = -1.5707964
 
 [node name="headphones" parent="BlackJackTable/Players" instance=ExtResource("7_5unt0")]
-position = Vector2(203.00002, 218.00002)
+position = Vector2(205.00002, 241.00002)
 rotation = -0.64692277
 
 [node name="GameUI" parent="." instance=ExtResource("10_saoeg")]
