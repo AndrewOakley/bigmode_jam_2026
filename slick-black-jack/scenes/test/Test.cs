@@ -14,11 +14,6 @@ public partial class Test : Node {
         _gameUi.DoubleDown += OnDoubleDownPressed;
         _table.RoundEnded += RoundEnded;
 
-        StartRoundAfterDelay();
-    }
-    
-    public async void StartRoundAfterDelay() {
-        await ToSignal(GetTree().CreateTimer(1.0f), SceneTreeTimer.SignalName.Timeout);
         _table.OpenForBets();
     }
     

@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://cljhd4qk0x3gi"]
+[gd_scene load_steps=8 format=3 uid="uid://cljhd4qk0x3gi"]
 
 [ext_resource type="Script" uid="uid://bc2dypdqsitc3" path="res://scripts/components/Player.cs" id="1_1kbk7"]
 [ext_resource type="PackedScene" uid="uid://c2nwtq6fu1vo6" path="res://scenes/hand/HandUI.tscn" id="2_c4h5g"]
 [ext_resource type="AudioStream" uid="uid://c0xlqtogwude1" path="res://assets/sfx/win1.wav" id="3_uiqp4"]
 [ext_resource type="AudioStream" uid="uid://4ntwgacxebs5" path="res://assets/sfx/win2.wav" id="4_hvfru"]
 [ext_resource type="AudioStream" uid="uid://ci7qi1radign7" path="res://assets/sfx/win3.wav" id="5_a06cl"]
+[ext_resource type="Texture2D" uid="uid://b6h0g7iertrqw" path="res://assets/sprites/eye.png" id="6_hvfru"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_dl1wr"]
 streams_count = 3
@@ -47,3 +48,9 @@ volume_db = -10.305
 
 [node name="PlayerPosition" type="Marker2D" parent="."]
 unique_name_in_owner = true
+
+[node name="eye" type="Sprite2D" parent="."]
+z_index = 4096
+position = Vector2(-18, 43)
+scale = Vector2(0.092715845, 0.092715845)
+texture = ExtResource("6_hvfru")

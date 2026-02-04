@@ -290,6 +290,11 @@ namespace SlickBlackJack.Components {
             await Task.Delay(TimeSpan.FromMilliseconds(1000));
 
             EmitSignal(SignalName.RoundEnded);
+            
+            foreach (var player in Players) {
+                player.EndRound();
+            }
+            Dealer.ResetRound();
         }
 
         /// <summary>

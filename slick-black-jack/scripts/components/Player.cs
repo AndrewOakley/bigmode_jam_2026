@@ -26,12 +26,15 @@ public partial class Player : Node2D {
     [Export] public bool PlayWinSfx { get; set; } = false;
     [Export] private CheatMeter _cheatMeter;
     public Marker2D PlayerPositionMarker { get; set; }
+    private Sprite2D _eyeSprite;
     
     public List<Hand> Hands { get; set; } = []; // holds the list of all hands (needed for splitting)
     public int PlayerBet { get; set; } = 10;
 
     private const int SwapHitSpeed = 300;
     private const int _swapHitRequired = 2;
+    
+    public bool IsDealerWatching { get; set; } = false;
 
     private bool _isTurn = false;
     public bool IsTurn {
@@ -75,8 +78,11 @@ public partial class Player : Node2D {
     private CheatingStates _cheatingState = CheatingStates.None; 
     
     public override void _Ready() {
+        ClearHand();
         _winSfx = GetNode<AudioStreamPlayer>("WinSFX");
         PlayerPositionMarker = GetNode<Marker2D>("%PlayerPosition");
+        _eyeSprite = GetNode<Sprite2D>("eye");
+        _eyeSprite.Hide();
         _cheatMeter?.Hide();
         
         Utils.CheatStarted += OnCheatStarted;
@@ -89,12 +95,26 @@ public partial class Player : Node2D {
             _cheatMeter.OkHit += OnOkHit;
             _cheatMeter.Miss += OnMiss;
         }
-        //
-        // var betInput = GetNode<LineEdit>("/root/Node/GameUI/VBoxContainer/Panel/MarginContainer2/VBoxContainer/BetAmount");
-        //
-        // if (!IsNpc) {
-        //     betInput.TextChanged += OnBetAmountTextChanged;
-        // }
+    }
+
+    public void SetIsDealerWatching(bool isWatching) {
+        IsDealerWatching = isWatching;
+        GD.Print($"Dealer is watching: {Name}");
+
+        if (IsDealerWatching) {
+            _eyeSprite.Show();
+        } else {
+            _eyeSprite.Hide();
+        }
+
+        if (IsDealerWatching && _cheatingState != CheatingStates.None) {
+            PlayerCaughtCheating();
+        }
+    }
+
+    public void PlayerCaughtCheating() {
+        GD.Print("Player caught cheating");
+        StopCheat();
     }
     
     private void OnBetAmountTextChanged(string newText)
@@ -120,6 +140,11 @@ public partial class Player : Node2D {
         };
         
         if (IsNpc) return;
+
+        if (IsDealerWatching) {
+            PlayerCaughtCheating();
+            return;
+        }
         
         SetHandsSelectable(true);
         _cheatingState = CheatingStates.Cheating;
@@ -234,18 +259,24 @@ public partial class Player : Node2D {
         return HandsUIContainer.GetChild(uiIndex) as HandUI;
     }
 
+    public void EndRound() {
+        ClearHand();
+    }
+
+    private void ClearHand() {
+        Hands.Clear();
+        CurrentHandIndex = 0;
+        foreach (var handUi in HandsUIContainer.GetChildren()) {
+            handUi.QueueFree();
+        }
+    }
+
     public void StartRound(int mainPlayerBet = 0) {
         if (IsNpc) {
             PlayerBet = 20;
         }
         else {
             PlayerBet = mainPlayerBet;
-        }
-        
-        Hands.Clear();
-        CurrentHandIndex = 0;
-        foreach (var handUi in HandsUIContainer.GetChildren()) {
-            handUi.QueueFree();
         }
         
         var hand = new Hand(PlayerBet);
@@ -268,6 +299,12 @@ public partial class Player : Node2D {
 
         if (Hands[0].IsBlackjack()) {
             Hands[0].Status = HandStatus.Done;
+        }
+    }
+    
+    public override void _PhysicsProcess(double delta) {
+        if (Input.IsActionJustPressed("escape") && _cheatingState != CheatingStates.None) {
+            StopCheat();
         }
     }
 

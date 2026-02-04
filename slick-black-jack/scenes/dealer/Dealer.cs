@@ -12,7 +12,8 @@ public partial class Dealer : Node2D {
     private List<Player> _players = [];
     private Timer _lookTimer;
     private bool _isRoundActive = false;
-
+    private float _originalRotation = 0.0f;
+    
     public Hand Hand { get; private set; } = new Hand();
     
     private PackedScene _handScene = GD.Load<PackedScene>("res://scenes/hand/HandUI.tscn");
@@ -22,7 +23,12 @@ public partial class Dealer : Node2D {
         _handContainer ??= GetNode<Control>("HandContainer");
         _fingerOrigin ??= GetNode<Marker2D>("FingerOrigin");
         _headSprite ??= GetNode<AnimatedSprite2D>("head");
+        
+        _originalRotation = _headSprite.Rotation;
+        
         DealerFinger.Hide();
+
+        ResetRound();
 
         Utils.NpcCardSelectStart += OnNpcCardSelectStart;
         Utils.UserSwappedCard += OnUserSwappedCards;
@@ -57,14 +63,25 @@ public partial class Dealer : Node2D {
         upCardUI.SetCardSelectable(false);
     }
 
-    public void StartRound() {
+    public void ResetRound() {
         foreach (var child in _handContainer.GetChildren()) {
             child.QueueFree();
         }
         Hand.Clear();
         DealerFinger.Hide();
         DealerFinger.GlobalPosition = _fingerOrigin.GlobalPosition;
+        
+        var tween = CreateTween();
+        tween.TweenProperty(_headSprite, "rotation", _originalRotation, 1.0)
+            .SetTrans(Tween.TransitionType.Cubic)
+            .SetEase(Tween.EaseType.InOut);
 
+        foreach (var player in _players) {
+            player.SetIsDealerWatching(false);
+        }
+    }
+
+    public void StartRound() {
         Hand = new Hand();
         var handUi = _handScene.Instantiate<HandUI>();
         handUi.SetHand(Hand, true);
@@ -109,11 +126,12 @@ public partial class Dealer : Node2D {
         _headSprite.LookAt(player.PlayerPositionMarker.GlobalPosition);
     }
 
+    Player _currentLookAtPlayer = null;
     private void StartRandomLook() {
         if (_players.Count == 0) return;
 
         // Set random interval between 1-3 seconds
-        var randomInterval = GD.RandRange(1.0, 3.0);
+        var randomInterval = GD.RandRange(2.0, 6.0);
         _lookTimer.WaitTime = randomInterval;
         _lookTimer.Start();
     }
@@ -121,16 +139,27 @@ public partial class Dealer : Node2D {
     private void OnLookTimerTimeout() {
         if (!_isRoundActive || _players.Count == 0) return;
 
+        if (_currentLookAtPlayer != null) {
+            _currentLookAtPlayer.SetIsDealerWatching(false);
+        }
+
         // Pick a random player
         var randomIndex = GD.RandRange(0, _players.Count - 1);
         var randomPlayer = _players[(int)randomIndex];
+        _currentLookAtPlayer = randomPlayer;
 
         // Tween to look at the player
-        var targetRotation = _headSprite.GlobalPosition.AngleToPoint(randomPlayer.PlayerPositionMarker.GlobalPosition);
+        var targetRotation = _headSprite.GlobalPosition.AngleToPoint(_currentLookAtPlayer.PlayerPositionMarker.GlobalPosition);
         var tween = CreateTween();
-        tween.TweenProperty(_headSprite, "rotation", targetRotation, 0.5).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.InOut);
+        tween.TweenProperty(_headSprite, "rotation", targetRotation, 1.5)
+            .SetTrans(Tween.TransitionType.Cubic)
+            .SetEase(Tween.EaseType.InOut);
+    
+        tween.Finished += OnTweenFinished;
+    }
 
-        // Start next random look
+    private void OnTweenFinished() {
+        _currentLookAtPlayer.SetIsDealerWatching(true);
         StartRandomLook();
     }
 }

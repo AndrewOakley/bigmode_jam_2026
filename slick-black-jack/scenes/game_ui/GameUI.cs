@@ -36,10 +36,10 @@ public partial class GameUI : Control {
 		_handTimerLabel = GetNode<Label>("%HandTimer");
 		_handTimerLabel.Hide();
 
-		_betAmountLabel = GetNode<Label>("ActionsContainer/GameActions/BetAmount");
-		_minBetLabel = GetNode<Label>("ActionsContainer/GameActions/BetBar/MinBet");
-		_maxBetLabel = GetNode<Label>("ActionsContainer/GameActions/BetBar/MaxBet");
-		_betSlider = GetNode<BetSlider>("ActionsContainer/GameActions/BetBar/BetSlider");
+		_betAmountLabel = GetNode<Label>("%BetAmount");
+		_minBetLabel = GetNode<Label>("%MinBet");
+		_maxBetLabel = GetNode<Label>("%MaxBet");
+		_betSlider = GetNode<BetSlider>("%BetSlider");
 		_betSlider.ValueChanged += OnBetValueChanged;
 
 		_placeBetButton = GetNode<Button>("%PlaceBet");
