@@ -90,13 +90,12 @@ public partial class Player : Node2D {
             _cheatMeter.OkHit += OnOkHit;
             _cheatMeter.Miss += OnMiss;
         }
-
-        var betInput = GetNode<LineEdit>("/root/Node/GameUI/VBoxContainer/Panel/MarginContainer2/VBoxContainer/BetAmount");
-        
-        if (!IsNpc)
-        {
-            betInput.TextChanged += OnBetAmountTextChanged;
-        }
+        //
+        // var betInput = GetNode<LineEdit>("/root/Node/GameUI/VBoxContainer/Panel/MarginContainer2/VBoxContainer/BetAmount");
+        //
+        // if (!IsNpc) {
+        //     betInput.TextChanged += OnBetAmountTextChanged;
+        // }
     }
     
     private void OnBetAmountTextChanged(string newText)
@@ -236,7 +235,14 @@ public partial class Player : Node2D {
         return HandsUIContainer.GetChild(uiIndex) as HandUI;
     }
 
-    public void StartRound() {
+    public void StartRound(int mainPlayerBet = 0) {
+        if (IsNpc) {
+            PlayerBet = 20;
+        }
+        else {
+            PlayerBet = mainPlayerBet;
+        }
+        
         Hands.Clear();
         CurrentHandIndex = 0;
         foreach (var handUi in HandsUIContainer.GetChildren()) {

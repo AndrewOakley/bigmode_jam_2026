@@ -9,7 +9,8 @@ public partial class GameUI : Control {
 	[Signal] public delegate void DoubleDownEventHandler();
 	
 	[Export] private bool _enableTimer = true;
-
+	[Export] private int _timeLimit = 15;
+	
 	private Label _playerChipCountLabel;
 	private Label _npcOneChipsLabel;
 	private Label _npcTwoChipsLabel;
@@ -18,7 +19,7 @@ public partial class GameUI : Control {
 	private Label _minBetLabel;
 	private Label _maxBetLabel;
 	private BetSlider _betSlider;
-	
+	private Button _placeBetButton;
 
 	private Player _mainPlayer;
 	private Player _npcOne;
@@ -39,6 +40,9 @@ public partial class GameUI : Control {
 		_maxBetLabel = GetNode<Label>("VBoxContainer/Panel/MarginContainer2/VBoxContainer/VBoxContainer/HBoxContainer/MaxBet");
 		_betSlider = GetNode<BetSlider>("VBoxContainer/Panel/MarginContainer2/VBoxContainer/VBoxContainer/HBoxContainer/BetSlider");
 		_betSlider.ValueChanged += OnBetValueChanged;
+
+		_placeBetButton = GetNode<Button>("%PlaceBet");
+		_placeBetButton.Hide();
 
 		_handTimer = new Timer();
 		_handTimer.WaitTime = 1.0;
@@ -73,6 +77,7 @@ public partial class GameUI : Control {
 		_npcTwo.ChipsChanged += UpdateNpcTwoChipCount;
 		
 		Utils.StopTurnTimer += OnStopTurnTimer;
+		Utils.BettingStarted += OnBettingStarted;
 	}
 
 	private void OnBetValueChanged(int value) {
@@ -83,11 +88,21 @@ public partial class GameUI : Control {
 	// ALWAYS DO THIS IF CALLING SIGNALS FROM UTILS
 	protected override void Dispose(bool disposing) {
 		Utils.StopTurnTimer -= OnStopTurnTimer;
+		Utils.BettingStarted -= OnBettingStarted;
 		base.Dispose(disposing);
 	}
 
 	private void OnStopTurnTimer() {
 		StopTimer();
+	}
+	
+	private void OnBettingStarted() {
+		_placeBetButton.Show();
+	}
+	
+	private void OnPlaceBetPressed() {
+		Utils.EmitPlayerbetSubmitted(_betSlider.Value);
+		_placeBetButton.Hide();
 	}
 
 	public void OnHitPressed() {
@@ -138,7 +153,7 @@ public partial class GameUI : Control {
 		StopTimer();
 
 		_handTimerLabel.Show();
-		_timeRemaining = 10;
+		_timeRemaining = _timeLimit;
 		_handTimerLabel.Text = _timeRemaining.ToString();
 		_handTimer.Start();
 	}

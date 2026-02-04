@@ -22,6 +22,7 @@ public partial class Dealer : Node2D {
         _handContainer ??= GetNode<Control>("HandContainer");
         _fingerOrigin ??= GetNode<Marker2D>("FingerOrigin");
         _headSprite ??= GetNode<AnimatedSprite2D>("head");
+        DealerFinger.Hide();
 
         Utils.NpcCardSelectStart += OnNpcCardSelectStart;
         Utils.UserSwappedCard += OnUserSwappedCards;

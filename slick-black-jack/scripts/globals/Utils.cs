@@ -37,4 +37,15 @@ public partial class Utils : Node {
     public static event StopTurnTimerEventHandler StopTurnTimer;
     
     public static void EmitStopTurnTimer() => StopTurnTimer?.Invoke();
+    
+
+    public delegate void PlayerbetSubmittedEventHandler(int bet);
+    public static event PlayerbetSubmittedEventHandler PlayerbetSubmitted;
+    
+    public static void EmitPlayerbetSubmitted(int bet) => PlayerbetSubmitted?.Invoke(bet);
+    
+    public delegate void BettingStartedEventHandler();
+    public static event BettingStartedEventHandler BettingStarted;
+    
+    public static void EmitBettingStarted() => BettingStarted?.Invoke();
 }

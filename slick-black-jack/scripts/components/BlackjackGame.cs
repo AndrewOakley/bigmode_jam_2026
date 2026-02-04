@@ -56,12 +56,12 @@ namespace SlickBlackJack.Components {
         /// <summary>
         /// Starts a new round of blackjack
         /// </summary>
-        public async Task StartNewRound() {
+        public async Task StartNewRound(int mainPlayerBet = 0) {
             Deck.Reset(_numberOfDecks);
 
             // Clear all player hands
             foreach (var player in Players) {
-                player.StartRound();
+                player.StartRound(mainPlayerBet);
             }
 
             Dealer.StartRound();

@@ -34,7 +34,6 @@ public partial class BetSlider : Control {
 	}
 
 	public override void _GuiInput(InputEvent @event) {
-		GD.Print("got input:", @event);
 		if (@event is InputEventMouseButton mouseButton) {
 			if (mouseButton.ButtonIndex == MouseButton.Left) {
 				_isDragging = mouseButton.Pressed;
@@ -53,7 +52,6 @@ public partial class BetSlider : Control {
 		float percentage = Mathf.Clamp(mousePos.X / Size.X, 0f, 1f);
 		percentage = Mathf.Round(percentage * 100f) / 100f;
 		int rawValue = (int)Mathf.Round(Mathf.Lerp(MinValue, MaxValue, percentage));
-		GD.Print("dragging");
 
 		Value = rawValue;
 	}

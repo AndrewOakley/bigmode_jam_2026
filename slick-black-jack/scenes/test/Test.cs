@@ -13,10 +13,23 @@ public partial class Test : Node {
         _gameUi.Split += OnSplitPressed;
         _gameUi.DoubleDown += OnDoubleDownPressed;
         _table.RoundEnded += RoundEnded;
-        
-        _table.StartNewRound();
-     }
+
+        StartRoundAfterDelay();
+    }
     
+    public async void StartRoundAfterDelay() {
+        await ToSignal(GetTree().CreateTimer(1.0f), SceneTreeTimer.SignalName.Timeout);
+        _table.OpenForBets();
+    }
+    
+    // after all assets loaded, start new round
+    // private void _OnGameUiReady() {
+    //     _gameUi.Hit += OnHitPressed;
+    //     _gameUi.Stand += OnStandPressed;
+    //     _gameUi.Split += OnSplitPressed;
+    //     _gameUi.DoubleDown += OnDoubleDownPressed;
+    // }
+    //
     private void OnHitPressed() {
         _table.PlayerHit();
     }
@@ -42,6 +55,6 @@ public partial class Test : Node {
     public async void RoundEndedHelper() {
         GD.Print("Round ended!");
         await ToSignal(GetTree().CreateTimer(1.0f), SceneTreeTimer.SignalName.Timeout);
-        _table.StartNewRound();
+        _table.OpenForBets();
     }
 }

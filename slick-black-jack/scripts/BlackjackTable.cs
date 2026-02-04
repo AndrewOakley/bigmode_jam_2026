@@ -50,11 +50,13 @@ public partial class BlackjackTable : Node {
         GD.Print($"Blackjack Table initialized with {NumberOfPlayers} players");
         
         Utils.TurnTimerExpired += OnTurnTimerExpired;
+        Utils.PlayerbetSubmitted += OnPlayerbetSubmitted;
     }
     
     // ALWAYS DO THIS IF CALLING SIGNALS FROM UTILS
     protected override void Dispose(bool disposing) {
         Utils.TurnTimerExpired -= OnTurnTimerExpired;
+        Utils.PlayerbetSubmitted -= OnPlayerbetSubmitted;
         base.Dispose(disposing);
     }
 
@@ -67,11 +69,19 @@ public partial class BlackjackTable : Node {
         EmitSignal(SignalName.RoundEnded);
     }
 
+    public void OpenForBets() {
+        Utils.EmitBettingStarted();
+    }
+
+    private void OnPlayerbetSubmitted(int mainPlayerBet) {
+        StartNewRound(mainPlayerBet);
+    }
+    
     /// <summary>
     /// Starts a new round of blackjack
     /// </summary>
-    public async void StartNewRound() {
-        await _game.StartNewRound();
+    public async void StartNewRound(int mainPlayerBet) {
+        await _game.StartNewRound(mainPlayerBet);
         EmitSignal(SignalName.RoundStarted);
 
         PrintGameState();
