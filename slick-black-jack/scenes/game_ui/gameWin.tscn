@@ -1,54 +1,53 @@
-[gd_scene load_steps=12 format=3 uid="uid://cskp0ilbn83eq"]
+[gd_scene load_steps=12 format=3 uid="uid://585l7gxextrx"]
 
-[ext_resource type="FontFile" uid="uid://ufuswpnuuugo" path="res://assets/fonts/ByteBounce.ttf" id="1_x2txh"]
-[ext_resource type="Texture2D" uid="uid://b3oiyxonb16ri" path="res://assets/sprites/textures/button.png" id="2_xc76p"]
-[ext_resource type="Texture2D" uid="uid://s1q6ucl1dnhr" path="res://assets/sprites/textures/buttonPressed.png" id="3_yr6ub"]
-[ext_resource type="AudioStream" uid="uid://svpyso12jy6u" path="res://assets/music/LOOP(upbeat) 190bpm_Too Many Coffees.ogg" id="4_xc76p"]
+[ext_resource type="FontFile" uid="uid://ufuswpnuuugo" path="res://assets/fonts/ByteBounce.ttf" id="1_37gkv"]
+[ext_resource type="Texture2D" uid="uid://b3oiyxonb16ri" path="res://assets/sprites/textures/button.png" id="2_exh17"]
+[ext_resource type="Texture2D" uid="uid://s1q6ucl1dnhr" path="res://assets/sprites/textures/buttonPressed.png" id="3_gtklt"]
+[ext_resource type="AudioStream" uid="uid://svpyso12jy6u" path="res://assets/music/LOOP(upbeat) 190bpm_Too Many Coffees.ogg" id="4_exh17"]
+[ext_resource type="AudioStream" uid="uid://ci7qi1radign7" path="res://assets/sfx/win3.wav" id="5_gtklt"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_sqm8k"]
-font = ExtResource("1_x2txh")
+font = ExtResource("1_37gkv")
 font_size = 52
 shadow_color = Color(0, 0, 0, 0.321)
 
 [sub_resource type="LabelSettings" id="LabelSettings_x2txh"]
-font = ExtResource("1_x2txh")
+font = ExtResource("1_37gkv")
 font_size = 20
 font_color = Color(0.83033526, 0.83033514, 0.830335, 1)
 
-[sub_resource type="LabelSettings" id="LabelSettings_xc76p"]
-font = ExtResource("1_x2txh")
-font_size = 30
-shadow_size = 4
-shadow_color = Color(0, 0, 0, 0.27600002)
-
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_k8i2s"]
-texture = ExtResource("2_xc76p")
+content_margin_left = 0.0
+content_margin_top = 6.0
+content_margin_right = 0.0
+content_margin_bottom = 8.0
+texture = ExtResource("2_exh17")
 modulate_color = Color(0.86912584, 0.9999998, 0.85528064, 1)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_x2txh"]
-texture = ExtResource("3_yr6ub")
+texture = ExtResource("3_gtklt")
 modulate_color = Color(0.7659107, 0.9999998, 0.7397034, 1)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xc76p"]
-texture = ExtResource("2_xc76p")
+texture = ExtResource("2_exh17")
 modulate_color = Color(1, 0.83394074, 0.80598885, 1)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_yr6ub"]
-texture = ExtResource("3_yr6ub")
+texture = ExtResource("3_gtklt")
 modulate_color = Color(1, 0.7148098, 0.669466, 1)
 
 [node name="Node2D" type="Node2D"]
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-offset_left = 1.0
-offset_right = 513.0
+offset_left = -1.0
+offset_right = 374.0
 offset_bottom = 122.0
 size_flags_vertical = 0
 theme_override_constants/separation = 7
 
 [node name="Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
-text = "SEMESTER OVER"
+text = "CONGRATS!"
 label_settings = SubResource("LabelSettings_sqm8k")
 horizontal_alignment = 1
 uppercase = true
@@ -56,16 +55,10 @@ uppercase = true
 [node name="Label2" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 0
-text = "That divorce is definitely going through"
+text = "Your kid can go to college and you might just win back your wife (currently separated)"
 label_settings = SubResource("LabelSettings_x2txh")
 horizontal_alignment = 1
-
-[node name="Label3" type="Label" parent="VBoxContainer"]
-layout_mode = 2
-text = "CLOSEST TO BEING A GOOD DAD: $10,655"
-label_settings = SubResource("LabelSettings_xc76p")
-horizontal_alignment = 1
-uppercase = true
+autowrap_mode = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -76,22 +69,24 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.31764707, 0.31764707, 0.34901962, 1)
 theme_override_colors/font_hover_color = Color(0.29411766, 0.29411766, 0.29411766, 1)
-theme_override_fonts/font = ExtResource("1_x2txh")
+theme_override_fonts/font = ExtResource("1_37gkv")
 theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxTexture_k8i2s")
 theme_override_styles/hover = SubResource("StyleBoxTexture_x2txh")
-text = "REMORTGAGE THE HOUSE"
+text = "SEND THEM TO DOUBLE COLLEGE"
+autowrap_mode = 3
 
 [node name="Button2" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.31764707, 0.31764707, 0.34901962, 1)
 theme_override_colors/font_hover_color = Color(0.29411766, 0.29411766, 0.29411766, 1)
-theme_override_fonts/font = ExtResource("1_x2txh")
+theme_override_fonts/font = ExtResource("1_37gkv")
 theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxTexture_xc76p")
 theme_override_styles/hover = SubResource("StyleBoxTexture_yr6ub")
-text = "BACK TO THE MOTEL 6"
+text = "FOUR SEMESTERS IS ENOUGH"
+autowrap_mode = 3
 
 [node name="Label" type="Label" parent="."]
 offset_left = 1.0
@@ -100,5 +95,10 @@ offset_right = 41.0
 offset_bottom = 58.0
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("4_xc76p")
-volume_db = -28.276
+stream = ExtResource("4_exh17")
+volume_db = -20.13
+autoplay = true
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_gtklt")
+autoplay = true

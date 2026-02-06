@@ -61,14 +61,17 @@ position = Vector2(65, 27)
 [node name="glasses" parent="BlackJackTable/Players" instance=ExtResource("8_5unt0")]
 position = Vector2(579, 230)
 rotation = -2.5321772
+_chips = 1000
 
 [node name="jack" parent="BlackJackTable/Players" instance=ExtResource("6_2ns80")]
 position = Vector2(387, 322)
 rotation = -1.5707964
+_chips = 1000
 
 [node name="headphones" parent="BlackJackTable/Players" instance=ExtResource("7_5unt0")]
 position = Vector2(205.00002, 241.00002)
 rotation = -0.64692277
+_chips = 1000
 
 [node name="CheatMeter" parent="." instance=ExtResource("15_xm0ii")]
 visible = false
@@ -78,6 +81,7 @@ position = Vector2(-23, 38)
 offset_left = -1.0
 offset_right = -1.0
 _enableTimer = false
+_timeLimit = 30
 
 [node name="TextureRect" type="TextureRect" parent="."]
 visible = false
@@ -90,7 +94,7 @@ texture = SubResource("GradientTexture2D_bg4ew")
 
 [node name="GameOverUI" parent="TextureRect" instance=ExtResource("9_xm0ii")]
 z_index = 4096
-position = Vector2(192, 111)
+position = Vector2(72, 111)
 
 [node name="audio" type="Container" parent="."]
 offset_right = 40.0

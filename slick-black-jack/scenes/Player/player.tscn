@@ -18,6 +18,7 @@ script = ExtResource("1_1kbk7")
 HandsUIContainer = NodePath("Hands")
 Name = "andy"
 IsNpc = false
+_chips = 5000
 
 [node name="Hands" type="HBoxContainer" parent="." groups=["player"]]
 offset_left = -161.0

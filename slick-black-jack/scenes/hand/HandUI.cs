@@ -100,7 +100,7 @@ public partial class HandUI : Control {
 	private void OnChipsChanged(int chipCount) {
 		if (chipCount == 0 || _chipCountLabel == null || _chipTexture == null) return;
 		
-		_chipCountLabel.Text = $"{chipCount}";
+		_chipCountLabel.Text = chipCount.ToString("N0");
 		_chipCountLabel.Show();
 		_chipTexture.Show();
 	}

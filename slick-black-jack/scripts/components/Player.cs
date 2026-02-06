@@ -72,7 +72,7 @@ public partial class Player : Node2D {
 
     private AudioStreamPlayer _winSfx;
     [Export] private AnimationPlayer _handAnimations;
-    private int _chips = 1000;
+    [Export] private int _chips = 1000;
     public int Chips {
         get => _chips;
         set {

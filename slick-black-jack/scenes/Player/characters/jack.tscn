@@ -664,6 +664,7 @@ Name = "jack"
 PlayWinSfx = true
 _cheatMeter = NodePath("CheatMeter")
 _handAnimations = NodePath("hand/handAnimations")
+_chips = 5288
 
 [node name="Hands" parent="." index="0" groups=["main_player"]]
 offset_left = -141.0

@@ -22,6 +22,7 @@ public partial class GameUI : Control {
     private BetSlider _betSlider;
     private Button _placeBetButton;
     private HeatMeter _heatMeter;
+    private AudioStreamPlayer _chipSfx;
 
     private Player _mainPlayer;
     private Player _npcOne;
@@ -45,8 +46,9 @@ public partial class GameUI : Control {
 
         _placeBetButton = GetNode<Button>("%PlaceBet");
         _placeBetButton.Hide();
-        
+
         _heatMeter = GetNode<HeatMeter>("%HeatMeter");
+        _chipSfx = GetNode<AudioStreamPlayer>("chipsfx");
 
         _handTimer = new Timer();
         _handTimer.WaitTime = 1.0;
@@ -138,6 +140,7 @@ public partial class GameUI : Control {
     }
 
     private void OnPlaceBetPressed() {
+        _chipSfx.Play();
         Utils.EmitPlayerbetSubmitted(_mainPlayer.PlayerBet);
         _placeBetButton.Hide();
     }
@@ -173,7 +176,7 @@ public partial class GameUI : Control {
     }
 
     private void UpdatePlayerChipCount(int chipCount) {
-        _playerChipCountLabel.Text = "$" + chipCount.ToString("N0");
+        _playerChipCountLabel.Text = "Tuition Fund:\n $" + chipCount.ToString("N0");
     }
 
     private void UpdateNpcOneChipCount(int chipCount) {

@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://bsoodols5srp3"]
+[gd_scene load_steps=40 format=3 uid="uid://bsoodols5srp3"]
 
 [ext_resource type="Script" uid="uid://bll4aq7db2eej" path="res://scenes/game_ui/GameUI.cs" id="1_2jtrj"]
 [ext_resource type="FontFile" uid="uid://cq3yt1gs4m3ka" path="res://assets/fonts/ARCADECLASSIC.TTF" id="1_8rf5x"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://b3oiyxonb16ri" path="res://assets/sprites/textures/button.png" id="7_vghou"]
 [ext_resource type="Texture2D" uid="uid://s1q6ucl1dnhr" path="res://assets/sprites/textures/buttonPressed.png" id="8_h1nqx"]
 [ext_resource type="PackedScene" uid="uid://krmr1nc7whua" path="res://scenes/heat_meter/heat_meter.tscn" id="13_r8ob0"]
+[ext_resource type="AudioStream" uid="uid://ceyuqs01utn6t" path="res://assets/sfx/pushchips.wav" id="14_h46sw"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_nelv4"]
 texture = ExtResource("2_r4xku")
@@ -32,6 +33,21 @@ font = ExtResource("2_mrh3v")
 
 [sub_resource type="LabelSettings" id="LabelSettings_r8ob0"]
 font = ExtResource("2_mrh3v")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3qmfa"]
+content_margin_left = 0.0
+content_margin_top = 3.0
+content_margin_right = 0.0
+content_margin_bottom = 3.0
+texture = ExtResource("7_vghou")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8wx05"]
+content_margin_left = 0.0
+content_margin_top = 3.0
+content_margin_right = 0.0
+content_margin_bottom = 3.0
+texture = ExtResource("8_h1nqx")
+modulate_color = Color(0.6008681, 1, 0.5811878, 1)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_h1nqx"]
 content_margin_left = 0.0
@@ -103,20 +119,6 @@ font_size = 14
 [sub_resource type="AtlasTexture" id="AtlasTexture_2jtrj"]
 atlas = ExtResource("4_mrh3v")
 region = Rect2(0, 9, 16, 23)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3qmfa"]
-content_margin_left = 0.0
-content_margin_top = 3.0
-content_margin_right = 0.0
-content_margin_bottom = 3.0
-texture = ExtResource("7_vghou")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8wx05"]
-content_margin_left = 0.0
-content_margin_top = 3.0
-content_margin_right = 0.0
-content_margin_bottom = 3.0
-texture = ExtResource("8_h1nqx")
 
 [sub_resource type="LabelSettings" id="LabelSettings_vghou"]
 font = ExtResource("2_mrh3v")
@@ -199,19 +201,9 @@ theme_override_font_sizes/font_size = 12
 text = "headphones: 22,000"
 label_settings = SubResource("LabelSettings_r8ob0")
 
-[node name="HBoxContainer" type="VBoxContainer" parent="Panel/Panel2/MarginContainer/VBoxContainer"]
-layout_mode = 2
-alignment = 1
-
-[node name="Label" type="Label" parent="Panel/Panel2/MarginContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("2_mrh3v")
-text = "Heat"
-horizontal_alignment = 1
-
 [node name="ActionsContainer" type="MarginContainer" parent="Panel/Panel2/MarginContainer/VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 6
+size_flags_vertical = 10
 size_flags_stretch_ratio = 10.4
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
@@ -222,6 +214,16 @@ theme_override_constants/margin_bottom = 4
 custom_minimum_size = Vector2(0, 157)
 layout_mode = 2
 size_flags_vertical = 8
+
+[node name="Cheat" type="Button" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions"]
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.318843, 0.31881776, 0.34837988, 1)
+theme_override_colors/font_hover_color = Color(0.19215687, 0.19215687, 0.21176471, 1)
+theme_override_fonts/font = ExtResource("2_mrh3v")
+theme_override_styles/normal = SubResource("StyleBoxTexture_3qmfa")
+theme_override_styles/hover = SubResource("StyleBoxTexture_8wx05")
+text = "STEAL"
 
 [node name="Hit" type="Button" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions"]
 layout_mode = 2
@@ -271,9 +273,11 @@ unique_name_in_owner = true
 layout_mode = 2
 theme = SubResource("Theme_mrh3v")
 theme_override_colors/font_color = Color(0, 1, 0, 1)
-text = "Current: $25,543"
+text = "Tuition Fund:
+ $25,543"
 label_settings = SubResource("LabelSettings_nelv4")
 horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="BetBar" type="HBoxContainer" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions"]
 layout_mode = 2
@@ -336,6 +340,7 @@ theme_override_styles/hover = SubResource("StyleBoxTexture_7xvqy")
 text = "PLACE BET"
 
 [node name="Items" type="MarginContainer" parent="Panel/Panel2/MarginContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 10
 theme_override_constants/margin_left = 4
@@ -391,16 +396,6 @@ layout_mode = 2
 text = "Clumsy Stranger (1)"
 label_settings = SubResource("LabelSettings_r4xku")
 
-[node name="Cheat" type="Button" parent="Panel/Panel2/MarginContainer/VBoxContainer/Items/VBoxContainer"]
-layout_mode = 2
-focus_mode = 0
-theme_override_colors/font_color = Color(0.318843, 0.31881776, 0.34837988, 1)
-theme_override_colors/font_hover_color = Color(0.19215687, 0.19215687, 0.21176471, 1)
-theme_override_fonts/font = ExtResource("2_mrh3v")
-theme_override_styles/normal = SubResource("StyleBoxTexture_3qmfa")
-theme_override_styles/hover = SubResource("StyleBoxTexture_8wx05")
-text = "STEAL"
-
 [node name="RoundInfo" type="VBoxContainer" parent="."]
 layout_mode = 0
 offset_left = 286.0
@@ -419,6 +414,7 @@ label_settings = SubResource("LabelSettings_vghou")
 
 [node name="HandTimer" type="Label" parent="."]
 unique_name_in_owner = true
+visible = false
 layout_mode = 0
 offset_left = 339.0
 offset_top = 287.0
@@ -430,20 +426,39 @@ text = "10"
 label_settings = SubResource("LabelSettings_h1nqx")
 horizontal_alignment = 1
 
+[node name="HBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 82.0
+offset_right = 146.0
+offset_bottom = 93.0
+alignment = 1
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_mrh3v")
+text = "Heat"
+horizontal_alignment = 1
+
 [node name="HeatMeter" parent="." instance=ExtResource("13_r8ob0")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(122, 22)
 layout_mode = 0
 offset_left = 17.0
-offset_top = 74.00001
+offset_top = 97.00001
 offset_right = 139.0
-offset_bottom = 96.00001
+offset_bottom = 119.00001
 scale = Vector2(1.6222408, 1.6587222)
 size_flags_vertical = 3
 
+[node name="chipsfx" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("14_h46sw")
+volume_db = -11.739
+pitch_scale = 0.83
+
+[connection signal="pressed" from="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions/Cheat" to="." method="OnCheatPressed"]
 [connection signal="pressed" from="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions/Hit" to="." method="OnHitPressed"]
 [connection signal="pressed" from="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions/Split" to="." method="OnSplitPressed"]
 [connection signal="pressed" from="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions/DoubleDown" to="." method="OnDoubleDownPressed"]
 [connection signal="pressed" from="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions/Stand" to="." method="OnStandPressed"]
 [connection signal="pressed" from="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions/PlaceBet" to="." method="OnPlaceBetPressed"]
-[connection signal="pressed" from="Panel/Panel2/MarginContainer/VBoxContainer/Items/VBoxContainer/Cheat" to="." method="OnCheatPressed"]

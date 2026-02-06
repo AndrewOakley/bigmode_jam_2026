@@ -78,7 +78,7 @@ public partial class Test : Node {
 
         if (_mainPlayer != null && _mainPlayer.Chips <= 0) {
             var fattestStackLabel = _gameOverUi.GetNode<Label>("VBoxContainer/Label3");
-            fattestStackLabel.Text = $"FATTEST STACK: ${Utils.FattestStack:N0}";
+            fattestStackLabel.Text = $"CLOSEST TO BEING A GOOD DAD: ${Utils.FattestStack:N0}";
             _gameOverOverlay.Show();
             return;
         }
