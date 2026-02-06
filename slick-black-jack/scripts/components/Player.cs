@@ -470,7 +470,7 @@ public partial class Player : Node2D {
 
         var currentHand = GetCurrentHand();
 
-        if (!currentHand.CanDoubleDown() && Chips > 0) {
+        if (!currentHand.CanDoubleDown() || Chips  <= 0) {
             EmitSignal(SignalName.PlayerMoveFinished);
             return false;
         }
