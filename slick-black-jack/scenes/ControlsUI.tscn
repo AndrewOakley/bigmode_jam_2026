@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://bsoodols5srp3"]
+[gd_scene load_steps=39 format=3 uid="uid://bsoodols5srp3"]
 
 [ext_resource type="Script" uid="uid://bll4aq7db2eej" path="res://scenes/game_ui/GameUI.cs" id="1_2jtrj"]
 [ext_resource type="FontFile" uid="uid://cq3yt1gs4m3ka" path="res://assets/fonts/ARCADECLASSIC.TTF" id="1_8rf5x"]
@@ -42,6 +42,10 @@ texture = ExtResource("7_vghou")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_p7dk6"]
 texture = ExtResource("8_h1nqx")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_30exp"]
+texture = ExtResource("7_vghou")
+modulate_color = Color(0.24477637, 0.2447764, 0.24477637, 1)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_r8ob0"]
 content_margin_left = 0.0
@@ -195,6 +199,16 @@ theme_override_font_sizes/font_size = 12
 text = "headphones: 22,000"
 label_settings = SubResource("LabelSettings_r8ob0")
 
+[node name="HBoxContainer" type="VBoxContainer" parent="Panel/Panel2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="Panel/Panel2/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_mrh3v")
+text = "Heat"
+horizontal_alignment = 1
+
 [node name="ActionsContainer" type="MarginContainer" parent="Panel/Panel2/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 6
@@ -205,9 +219,9 @@ theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
 [node name="GameActions" type="VBoxContainer" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer"]
+custom_minimum_size = Vector2(0, 157)
 layout_mode = 2
 size_flags_vertical = 8
-alignment = 2
 
 [node name="Hit" type="Button" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions"]
 layout_mode = 2
@@ -218,6 +232,7 @@ theme_override_colors/font_hover_color = Color(0.19215687, 0.19215687, 0.2117647
 theme_override_fonts/font = ExtResource("2_mrh3v")
 theme_override_styles/normal = SubResource("StyleBoxTexture_h1nqx")
 theme_override_styles/hover = SubResource("StyleBoxTexture_p7dk6")
+theme_override_styles/disabled_mirrored = SubResource("StyleBoxTexture_30exp")
 text = "HIT"
 
 [node name="Split" type="Button" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions"]
@@ -282,7 +297,7 @@ label_settings = SubResource("LabelSettings_8rf5x")
 [node name="BetSlider" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions/BetBar" instance=ExtResource("3_sg8it")]
 unique_name_in_owner = true
 clip_contents = true
-custom_minimum_size = Vector2(124.34, 22.185)
+custom_minimum_size = Vector2(125, 22)
 layout_mode = 2
 size_flags_horizontal = 8
 
@@ -415,23 +430,16 @@ text = "10"
 label_settings = SubResource("LabelSettings_h1nqx")
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-layout_mode = 0
-offset_left = 526.0
-offset_top = 3.0
-offset_right = 566.0
-offset_bottom = 15.0
-
-[node name="Label" type="Label" parent="HBoxContainer"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("2_mrh3v")
-text = "Heat:"
-
-[node name="HeatMeter" parent="HBoxContainer" instance=ExtResource("13_r8ob0")]
+[node name="HeatMeter" parent="." instance=ExtResource("13_r8ob0")]
 unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 5
+custom_minimum_size = Vector2(122, 22)
+layout_mode = 0
+offset_left = 17.0
+offset_top = 74.00001
+offset_right = 139.0
+offset_bottom = 96.00001
+scale = Vector2(1.6222408, 1.6587222)
+size_flags_vertical = 3
 
 [connection signal="pressed" from="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions/Hit" to="." method="OnHitPressed"]
 [connection signal="pressed" from="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions/Split" to="." method="OnSplitPressed"]

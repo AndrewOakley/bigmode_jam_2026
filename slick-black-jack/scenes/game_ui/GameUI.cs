@@ -75,7 +75,9 @@ public partial class GameUI : Control {
         _npcTwo = npcs[1] as Player;
 
         _npcOne.ChipsChanged += UpdateNpcOneChipCount;
+        UpdateNpcOneChipCount(_npcOne.Chips);
         _npcTwo.ChipsChanged += UpdateNpcTwoChipCount;
+        UpdateNpcTwoChipCount(_npcTwo.Chips);
         _mainPlayer.ChipsChanged += OnChipsChanged;
 
         OnChipsChanged(_mainPlayer.Chips);

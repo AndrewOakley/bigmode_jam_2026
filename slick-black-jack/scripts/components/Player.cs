@@ -48,7 +48,7 @@ public partial class Player : Node2D {
     private const int OkHitHeat = 5;
     private const int MissHeat = 10;
     private const int CaughtCheatingHeat = 20;
-    private const int RoundEndHeatMinus = 5;
+    private const int RoundEndHeatMinus = 10;
     
     private bool _isTurn = false;
     public bool IsTurn {
@@ -352,7 +352,17 @@ public partial class Player : Node2D {
 
     public void StartRound(int mainPlayerBet = 0) {
         if (IsNpc) {
-            PlayerBet = 20;
+             RandomNumberGenerator _rng = new RandomNumberGenerator();
+            // Set to a random number between 2 percent and 20 percent of their chips
+            // Use exponential distribution for bet percentage (2% to 40%)
+            // Lower percentages are much more likely than higher ones
+            double randomValue = _rng.Randf(); // 0.0 to 1.0
+            double skewedValue = Math.Pow(randomValue, 3); // Cube it to heavily favor lower values
+            int betPercent = 2 + (int)(skewedValue * 38); // 2 + (0 to 38) = 2 to 40
+            double betPercentDouble = betPercent / 100.0;
+            int baseBet = (int)(Chips * betPercentDouble);
+            int roundedBet = (int)(Math.Ceiling(baseBet / 10.0) * 10);
+            PlayerBet = Math.Clamp(roundedBet, 10, Chips);
         }
         else {
             PlayerBet = mainPlayerBet;

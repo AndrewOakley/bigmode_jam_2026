@@ -35,25 +35,21 @@ scale_min = 1.5
 scale_max = 2.0
 color = Color(1, 0, 0.18039216, 1)
 
-[node name="HeatMeter" type="Control"]
-layout_mode = 3
-anchors_preset = 0
-script = ExtResource("1_gokc6")
-
-[node name="HeatBar" type="TextureProgressBar" parent="."]
+[node name="HeatBar" type="TextureProgressBar"]
 clip_children = 2
 material = SubResource("ShaderMaterial_gokc6")
-layout_mode = 0
 offset_right = 78.0
 offset_bottom = 12.0
+scale = Vector2(1.6, 1.6)
 value = 100.0
 texture_under = SubResource("AtlasTexture_gokc6")
 texture_progress = SubResource("AtlasTexture_yx01e")
 texture_progress_offset = Vector2(1, 1)
+script = ExtResource("1_gokc6")
 
-[node name="Fire" type="GPUParticles2D" parent="HeatBar"]
+[node name="Fire" type="GPUParticles2D" parent="."]
 position = Vector2(39, 9)
 scale = Vector2(1.0042366, 0.35402402)
 amount = 100
-lifetime = 0.3
+lifetime = 0.4
 process_material = SubResource("ParticleProcessMaterial_6x6tx")
