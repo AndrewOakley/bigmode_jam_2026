@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://bsoodols5srp3"]
+[gd_scene load_steps=38 format=3 uid="uid://bsoodols5srp3"]
 
 [ext_resource type="Script" uid="uid://bll4aq7db2eej" path="res://scenes/game_ui/GameUI.cs" id="1_2jtrj"]
 [ext_resource type="FontFile" uid="uid://cq3yt1gs4m3ka" path="res://assets/fonts/ARCADECLASSIC.TTF" id="1_8rf5x"]
@@ -12,6 +12,7 @@
 [ext_resource type="Theme" uid="uid://bitipvdngbifb" path="res://scenes/game_ui/themes/buttonTheme.tres" id="7_p7dk6"]
 [ext_resource type="Texture2D" uid="uid://b3oiyxonb16ri" path="res://assets/sprites/textures/button.png" id="7_vghou"]
 [ext_resource type="Texture2D" uid="uid://s1q6ucl1dnhr" path="res://assets/sprites/textures/buttonPressed.png" id="8_h1nqx"]
+[ext_resource type="PackedScene" uid="uid://krmr1nc7whua" path="res://scenes/heat_meter/heat_meter.tscn" id="13_r8ob0"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_nelv4"]
 texture = ExtResource("2_r4xku")
@@ -413,6 +414,24 @@ theme_override_font_sizes/font_size = 30
 text = "10"
 label_settings = SubResource("LabelSettings_h1nqx")
 horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 526.0
+offset_top = 3.0
+offset_right = 566.0
+offset_bottom = 15.0
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_mrh3v")
+text = "Heat:"
+
+[node name="HeatMeter" parent="HBoxContainer" instance=ExtResource("13_r8ob0")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 5
 
 [connection signal="pressed" from="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions/Hit" to="." method="OnHitPressed"]
 [connection signal="pressed" from="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions/Split" to="." method="OnSplitPressed"]

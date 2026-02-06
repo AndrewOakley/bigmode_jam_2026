@@ -18,11 +18,11 @@ public partial class Player : Node2D {
     [Signal] public delegate void PlayerTurnStartedEventHandler();
     [Signal] public delegate void PlayerTurnEndedEventHandler();
     [Signal] public delegate void HandStartedEventHandler(Hand hand);
+    [Signal] public delegate void HeatChangedEventHandler(int newHeat);
 
     [Export] public Container HandsUIContainer { get; set; }
     [Export] public string Name { get; set; }
     [Export] public bool IsNpc { get; set; } = true;
-    [Export] public int Heat { get; set; } = 0;
     [Export] public bool PlayWinSfx { get; set; } = false;
     [Export] private CheatMeter _cheatMeter;
     public Marker2D PlayerPositionMarker { get; set; }
@@ -36,6 +36,20 @@ public partial class Player : Node2D {
 
     public bool IsDealerWatching { get; set; } = false;
 
+    private int _heat = 0;
+    public int Heat {
+        get => _heat;
+        set {
+            _heat = Math.Clamp(value, 0, 100);
+            EmitSignal(SignalName.HeatChanged, _heat);
+        }
+    }
+
+    private const int OkHitHeat = 5;
+    private const int MissHeat = 10;
+    private const int CaughtCheatingHeat = 20;
+    private const int RoundEndHeatMinus = 5;
+    
     private bool _isTurn = false;
     public bool IsTurn {
         get => _isTurn;
@@ -117,6 +131,7 @@ public partial class Player : Node2D {
     public void PlayerCaughtCheating() {
         GD.Print("Player caught cheating");
         StopCheat();
+        Heat += CaughtCheatingHeat;
     }
 
     private void OnBetAmountTextChanged(string newText) {
@@ -249,6 +264,7 @@ public partial class Player : Node2D {
 
     private void OnOkHit(int hitCount) {
         OnHit(hitCount);
+        Heat += OkHitHeat;
     }
 
     private void OnHit(int hitCount) {
@@ -260,6 +276,7 @@ public partial class Player : Node2D {
     private void OnMiss() {
         GD.Print($"Player {_cheatingState} missed!");
         StopCheat();
+        Heat += MissHeat;
     }
 
     private void StopCheat() {
@@ -322,6 +339,7 @@ public partial class Player : Node2D {
 
     public void EndRound() {
         ClearHand();
+        Heat -= RoundEndHeatMinus;
     }
 
     private void ClearHand() {
@@ -505,6 +523,9 @@ public partial class Player : Node2D {
         }
         else if (hand.Result == HandResult.PlayerBlackjack) {
             Chips += hand.Chips + (int)(hand.Chips * (3.0 / 2.0));
+        }
+        else if (hand.Result == HandResult.Push) {
+            Chips += hand.Chips;
         }
     }
 

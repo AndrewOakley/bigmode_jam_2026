@@ -1,0 +1,59 @@
+[gd_scene load_steps=9 format=3 uid="uid://krmr1nc7whua"]
+
+[ext_resource type="Shader" uid="uid://cfga5licb0pmp" path="res://scenes/heat_meter/heat_meter.gdshader" id="1_6x6tx"]
+[ext_resource type="Script" uid="uid://c4f88ekrmsyap" path="res://scenes/heat_meter/HeatMeter.cs" id="1_gokc6"]
+[ext_resource type="Texture2D" uid="uid://cpgysgp6mmbbt" path="res://assets/sprites/meter/loadingBarEmpty.png" id="1_rxeva"]
+[ext_resource type="Texture2D" uid="uid://hlnvvnpj1bcc" path="res://assets/sprites/meter/loadingBarBody.png" id="2_6x6tx"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gokc6"]
+shader = ExtResource("1_6x6tx")
+shader_parameter/flame_color = Color(1, 0.33333334, 0.2, 1)
+shader_parameter/edge_color = Color(1, 0.1, 0, 1)
+shader_parameter/speed = 2.36400010903012
+shader_parameter/target_color = Color(1, 0, 0, 1)
+shader_parameter/sensitivity = 0.6650000315875
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gokc6"]
+atlas = ExtResource("1_rxeva")
+region = Rect2(1, 2, 78, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yx01e"]
+atlas = ExtResource("2_6x6tx")
+region = Rect2(2, 3, 76, 10)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6x6tx"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(35, 1, 1)
+direction = Vector3(1, -1, 0)
+angular_velocity_min = 31.999983
+angular_velocity_max = 31.999983
+gravity = Vector3(0, -10, 0)
+linear_accel_min = 99.99999
+linear_accel_max = 99.99999
+scale_min = 1.5
+scale_max = 2.0
+color = Color(1, 0, 0.18039216, 1)
+
+[node name="HeatMeter" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_gokc6")
+
+[node name="HeatBar" type="TextureProgressBar" parent="."]
+clip_children = 2
+material = SubResource("ShaderMaterial_gokc6")
+layout_mode = 0
+offset_right = 78.0
+offset_bottom = 12.0
+value = 100.0
+texture_under = SubResource("AtlasTexture_gokc6")
+texture_progress = SubResource("AtlasTexture_yx01e")
+texture_progress_offset = Vector2(1, 1)
+
+[node name="Fire" type="GPUParticles2D" parent="HeatBar"]
+position = Vector2(39, 9)
+scale = Vector2(1.0042366, 0.35402402)
+amount = 100
+lifetime = 0.3
+process_material = SubResource("ParticleProcessMaterial_6x6tx")

@@ -60,8 +60,4 @@ public partial class BetSlider : Control {
 		int frameIndex = _totalFrames - (Mathf.RoundToInt(percentage * (_totalFrames - 1))) - 1;
 		_sprite.Frame = Mathf.Clamp(frameIndex, 0, _totalFrames - 1);
 	}
-
-	public override void _Process(double delta)
-	{
-	}
 }

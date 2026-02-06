@@ -21,6 +21,7 @@ public partial class GameUI : Control {
     private Label _maxBetLabel;
     private BetSlider _betSlider;
     private Button _placeBetButton;
+    private HeatMeter _heatMeter;
 
     private Player _mainPlayer;
     private Player _npcOne;
@@ -44,6 +45,8 @@ public partial class GameUI : Control {
 
         _placeBetButton = GetNode<Button>("%PlaceBet");
         _placeBetButton.Hide();
+        
+        _heatMeter = GetNode<HeatMeter>("%HeatMeter");
 
         _handTimer = new Timer();
         _handTimer.WaitTime = 1.0;
@@ -79,6 +82,8 @@ public partial class GameUI : Control {
 
         Utils.StopTurnTimer += OnStopTurnTimer;
         Utils.BettingStarted += OnBettingStarted;
+
+        _mainPlayer.HeatChanged += OnHeatChanged;
     }
 
     private void OnChipsChanged(int chips) {
@@ -99,6 +104,10 @@ public partial class GameUI : Control {
     private int RoundBet(int bet, int minBet, int maxBet) {
         int rounded = (int)(Math.Floor(bet / (float)BetStep) * BetStep);
         return Math.Clamp(rounded, minBet, maxBet);
+    }
+
+    private void OnHeatChanged(int heat) {
+        _heatMeter.SetHeat(heat);
     }
 
     private void OnBetValueChanged(int value) {
