@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using SlickBlackJack.Components;
 
 public partial class GameUI : Control {
@@ -30,6 +31,8 @@ public partial class GameUI : Control {
 
     private Timer _handTimer;
     private int _timeRemaining;
+    
+    private List<Button> _actionButtons = [];
 
     public override void _Ready() {
         _playerChipCountLabel = GetNode<Label>("%PlayerChipCount");
@@ -45,8 +48,7 @@ public partial class GameUI : Control {
         _betSlider.ValueChanged += OnBetValueChanged;
 
         _placeBetButton = GetNode<Button>("%PlaceBet");
-        _placeBetButton.Hide();
-
+        
         _heatMeter = GetNode<HeatMeter>("%HeatMeter");
         _chipSfx = GetNode<AudioStreamPlayer>("chipsfx");
 
@@ -56,6 +58,13 @@ public partial class GameUI : Control {
         _handTimer.Timeout += OnTimerTick;
         AddChild(_handTimer);
 
+        var actionNodes = GetTree().GetNodesInGroup("action");
+        foreach (var actionNode in actionNodes) {
+            if (actionNode is Button actionButton) {
+                _actionButtons.Add(actionButton);
+            }
+        }
+;
         var mainPlayers = GetTree().GetNodesInGroup("main_player");
         foreach (var player in mainPlayers) {
             if (player is Player mainPlayer) {
@@ -64,6 +73,8 @@ public partial class GameUI : Control {
                 UpdatePlayerChipCount(_mainPlayer.Chips);
                 _mainPlayer.HandStarted += OnMainHandStarted;
                 _mainPlayer.PlayerTurnEnded += OnMainTurnEnded;
+                _mainPlayer.PlayerTurnStarted += OnMainTurnStarted;
+                _mainPlayer.PlayerMoveFinished += OnMoveFinished;
             }
         }
 
@@ -88,6 +99,8 @@ public partial class GameUI : Control {
         Utils.BettingStarted += OnBettingStarted;
 
         _mainPlayer.HeatChanged += OnHeatChanged;
+        
+        DisableActionButtons();
     }
 
     private void OnChipsChanged(int chips) {
@@ -134,36 +147,42 @@ public partial class GameUI : Control {
     }
 
     private void OnBettingStarted() {
-        _placeBetButton.Show();
-        // Set bet slider to max value at start of betting
-        _betSlider.Value = _betSlider.MaxValue;
+        _placeBetButton.Disabled = false;
     }
 
     private void OnPlaceBetPressed() {
         _chipSfx.Play();
         Utils.EmitPlayerbetSubmitted(_mainPlayer.PlayerBet);
-        _placeBetButton.Hide();
+        _placeBetButton.Disabled = true;
     }
 
     public void OnHitPressed() {
+        DisableActionButtons();
         EmitSignal(SignalName.Hit);
     }
 
     public void OnSplitPressed() {
+        DisableActionButtons();
         EmitSignal(SignalName.Split);
     }
 
     public void OnStandPressed() {
+        DisableActionButtons();
         EmitSignal(SignalName.Stand);
     }
 
     public void OnDoubleDownPressed() {
+        DisableActionButtons();
         EmitSignal(SignalName.DoubleDown);
     }
 
     public void OnRestartPressed() {
         GD.Print("Restarting...");
         GetTree().ReloadCurrentScene();
+    }
+    
+    private void OnMoveFinished() {
+        EnableActionButtons();
     }
 
     public void OnCheatPressed() {
@@ -188,6 +207,7 @@ public partial class GameUI : Control {
     }
 
     private void OnMainHandStarted(Hand hand) {
+        EnableActionButtons();
         if (!_enableTimer) return;
 
         StopTimer();
@@ -211,9 +231,27 @@ public partial class GameUI : Control {
     }
 
     private void OnMainTurnEnded() {
+        DisableActionButtons();
+        
         if (!_enableTimer) return;
 
         StopTimer();
+    }
+    
+    private void DisableActionButtons() {
+        foreach (var button in _actionButtons) {
+            button.Disabled = true;
+        }
+    }
+    
+    private void EnableActionButtons() {
+        foreach (var button in _actionButtons) {
+            button.Disabled = false;
+        }
+    }
+    
+    private void OnMainTurnStarted() {
+        EnableActionButtons();
     }
 
     private void UpdateNpcChipCount(int npcIndex, int chipCount) {

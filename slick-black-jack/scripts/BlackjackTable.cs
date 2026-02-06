@@ -105,20 +105,7 @@ public partial class BlackjackTable : Node {
     }
     
     public async Task PlayerDoubleDown() {
-        if (_game.State != GameState.PlayerTurn) {
-            GD.PrintErr("Cannot double down - not player's turn");
-            return;
-        }
-
-        if (!_game.CanDoubleDown()) {
-            return;
-        }
-
-        int playerIndex = _game.CurrentPlayerIndex;
         await _game.DoubleDown();
-        EmitSignal(SignalName.DoubleDown, playerIndex);
-
-        PrintGameState();
     }
     
     /// <summary>
@@ -138,23 +125,6 @@ public partial class BlackjackTable : Node {
         }
         
         PrintGameState();
-        
-        // var lastCard = _game.Players[playerIndex].GetCurrentHand().GetCards()[_game.Players[playerIndex].GetCurrentHand().CardCount - 1];
-        // EmitSignal(SignalName.Hit, playerIndex, lastCard);
-        //
-        //
-        // // Check if this player busted and moved to next player
-        // if (_game.State == GameState.PlayerTurn && _game.CurrentPlayerIndex != playerIndex) {
-        //     EmitSignal(SignalName.PlayerTurnStarted, _game.CurrentPlayerIndex);
-        // }
-        //
-        // // Check if all players are done and dealer plays
-        // if (_game.State == GameState.DealerTurn || _game.State == GameState.RoundOver) {
-        //     EmitSignal(SignalName.DealerRevealed);
-        //     if (_game.State == GameState.RoundOver) {
-        //         EmitSignal(SignalName.RoundEnded);
-        //     }
-        // }
     }
 
     /// <summary>
@@ -162,17 +132,9 @@ public partial class BlackjackTable : Node {
     /// </summary>
     public async void PlayerStand() {
         Utils.EmitStopTurnTimer();
-        
-        if (_game.State != GameState.PlayerTurn) {
-            GD.PrintErr("Cannot stand - not player's turn");
-            return;
-        }
 
         int playerIndex = _game.CurrentPlayerIndex;
         await _game.Stand();
-        EmitSignal(SignalName.Stood, playerIndex);
-
-        PrintGameState();
     }
 
     /// <summary>

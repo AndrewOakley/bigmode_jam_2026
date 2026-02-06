@@ -19,6 +19,7 @@ public partial class Player : Node2D {
     [Signal] public delegate void PlayerTurnEndedEventHandler();
     [Signal] public delegate void HandStartedEventHandler(Hand hand);
     [Signal] public delegate void HeatChangedEventHandler(int newHeat);
+    [Signal] public delegate void PlayerMoveFinishedEventHandler();
 
     [Export] public Container HandsUIContainer { get; set; }
     [Export] public string Name { get; set; }
@@ -417,6 +418,8 @@ public partial class Player : Node2D {
             EmitSignal(SignalName.CurrentHandChanged, CurrentHandIndex);
             return true;
         }
+        
+        EmitSignal(SignalName.PlayerMoveFinished);
 
         return false;
     }
@@ -429,15 +432,15 @@ public partial class Player : Node2D {
 
         if (Chips <= 0) {
             GD.Print("Not enough chips to split hand");
+            EmitSignal(SignalName.PlayerMoveFinished);
             return false;
         }
 
         if (!currentHand.CanSplit()) {
             GD.PrintErr($"invalid attempt to split {Name} hand {currentHand}");
+            EmitSignal(SignalName.PlayerMoveFinished);
             return false;
         }
-
-        EmitHandStarted();
 
         if (_handAnimations != null) {
             _handAnimations.Play("split");
@@ -454,8 +457,12 @@ public partial class Player : Node2D {
 
         var card = currentHand.RemoveCard(0);
         newHand.AddCard(card);
-
+        
         return true;
+    }
+    
+    public void EmitPlayerMoveFinished() {
+        EmitSignal(SignalName.PlayerMoveFinished);
     }
 
     public async Task<bool> DoubleDownCurrentHand(Card card) {
@@ -463,14 +470,18 @@ public partial class Player : Node2D {
 
         var currentHand = GetCurrentHand();
 
-        if (!currentHand.CanDoubleDown() && Chips > 0) return false;
+        if (!currentHand.CanDoubleDown() && Chips > 0) {
+            EmitSignal(SignalName.PlayerMoveFinished);
+            return false;
+        }
 
         var chipsForHand = Math.Min(currentHand.Chips, Chips);
         currentHand.Chips += chipsForHand;
 
         Chips -= chipsForHand;
 
-        return await HitCurrentHand(card);
+        await HitCurrentHand(card);
+        return true;
     }
 
     public async Task StandCurrentHand(bool noAnimation = false) {
@@ -484,6 +495,7 @@ public partial class Player : Node2D {
         activeHand.Stand();
         CurrentHandIndex++;
         EmitSignal(SignalName.CurrentHandChanged, CurrentHandIndex);
+        EmitSignal(SignalName.PlayerMoveFinished);
     }
     // End Black jack moves ----------------------------------------------------------------------------------------
 

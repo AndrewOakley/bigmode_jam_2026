@@ -35,7 +35,7 @@ namespace SlickBlackJack.Components {
         
         // FOR DEBUGGING
         private bool ForcePlayerBlackjack = false;
-        private bool ForcePlayerSplitCards = false;
+        private bool ForcePlayerSplitCards = true;
         
         public BlackjackGame(Dealer dealer, List<Player> players, int numberOfDecks = 1) {
             Dealer = dealer;
@@ -180,38 +180,23 @@ namespace SlickBlackJack.Components {
         public async Task DoubleDown() {
             if (State != GameState.PlayerTurn) {
                 GD.PrintErr("Cannot double down - not player's turn");
+                return;
             }
             
             GD.Print($"{Players[CurrentPlayerIndex].Name} doubled down");
 
             var currentPlayer = Players[CurrentPlayerIndex];
-            var done = await currentPlayer.DoubleDownCurrentHand(Deck.DrawCard());
-            if (done) {
-                MoveToNextPlayer();
-            }
-            else {
+            var canDouble = await currentPlayer.DoubleDownCurrentHand(Deck.DrawCard());
+            if (canDouble) {
                 await Stand(true);
             }
-
         }
         
         /// <summary>
         /// Current player splits
         /// </summary>
         public async Task<bool> Split() {
-            if (State != GameState.PlayerTurn) {
-                GD.PrintErr("Cannot split - not player's turn");
-                return false;
-            }
-
             var currentPlayer = Players[CurrentPlayerIndex];
-            Hand activeHand = currentPlayer.GetCurrentHand();
-            var canSplit = activeHand.CanSplit();
-            
-            if (!canSplit) {
-                GD.PrintErr("Cannot split");
-                return false;
-            }
             
             var success = await currentPlayer.SplitHand();
             if (!success) {
@@ -231,11 +216,6 @@ namespace SlickBlackJack.Components {
         /// Current player stands (ends their turn)
         /// </summary>
         public async Task Stand(bool noAnimation = false) {
-            if (State != GameState.PlayerTurn) {
-                GD.PrintErr("Cannot stand - not player's turn");
-                return;
-            }
-
             await Players[CurrentPlayerIndex].StandCurrentHand(noAnimation);
             await MoveToNextPlayer();
         }

@@ -35,6 +35,7 @@ main_player=""
 npc_player=""
 player=""
 betSlider=""
+action=""
 
 [input]
 

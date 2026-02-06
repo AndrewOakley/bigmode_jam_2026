@@ -34,21 +34,6 @@ font = ExtResource("2_mrh3v")
 [sub_resource type="LabelSettings" id="LabelSettings_r8ob0"]
 font = ExtResource("2_mrh3v")
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3qmfa"]
-content_margin_left = 0.0
-content_margin_top = 3.0
-content_margin_right = 0.0
-content_margin_bottom = 3.0
-texture = ExtResource("7_vghou")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8wx05"]
-content_margin_left = 0.0
-content_margin_top = 3.0
-content_margin_right = 0.0
-content_margin_bottom = 3.0
-texture = ExtResource("8_h1nqx")
-modulate_color = Color(0.6008681, 1, 0.5811878, 1)
-
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_h1nqx"]
 content_margin_left = 0.0
 content_margin_top = 3.0
@@ -126,6 +111,21 @@ font = ExtResource("2_mrh3v")
 [sub_resource type="LabelSettings" id="LabelSettings_h1nqx"]
 font = ExtResource("2_mrh3v")
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3qmfa"]
+content_margin_left = 0.0
+content_margin_top = 3.0
+content_margin_right = 0.0
+content_margin_bottom = 3.0
+texture = ExtResource("7_vghou")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8wx05"]
+content_margin_left = 0.0
+content_margin_top = 3.0
+content_margin_right = 0.0
+content_margin_bottom = 3.0
+texture = ExtResource("8_h1nqx")
+modulate_color = Color(0.6008681, 1, 0.5811878, 1)
+
 [node name="GameUI" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -202,6 +202,7 @@ text = "headphones: 22,000"
 label_settings = SubResource("LabelSettings_r8ob0")
 
 [node name="ActionsContainer" type="MarginContainer" parent="Panel/Panel2/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 165)
 layout_mode = 2
 size_flags_vertical = 10
 size_flags_stretch_ratio = 10.4
@@ -215,17 +216,8 @@ custom_minimum_size = Vector2(0, 157)
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="Cheat" type="Button" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions"]
-layout_mode = 2
-focus_mode = 0
-theme_override_colors/font_color = Color(0.318843, 0.31881776, 0.34837988, 1)
-theme_override_colors/font_hover_color = Color(0.19215687, 0.19215687, 0.21176471, 1)
-theme_override_fonts/font = ExtResource("2_mrh3v")
-theme_override_styles/normal = SubResource("StyleBoxTexture_3qmfa")
-theme_override_styles/hover = SubResource("StyleBoxTexture_8wx05")
-text = "STEAL"
-
-[node name="Hit" type="Button" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions"]
+[node name="Hit" type="Button" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions" groups=["action"]]
+custom_minimum_size = Vector2(0, 19)
 layout_mode = 2
 focus_mode = 0
 theme = ExtResource("7_p7dk6")
@@ -237,7 +229,8 @@ theme_override_styles/hover = SubResource("StyleBoxTexture_p7dk6")
 theme_override_styles/disabled_mirrored = SubResource("StyleBoxTexture_30exp")
 text = "HIT"
 
-[node name="Split" type="Button" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions"]
+[node name="Split" type="Button" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions" groups=["action"]]
+custom_minimum_size = Vector2(0, 19)
 layout_mode = 2
 focus_mode = 0
 theme = ExtResource("7_p7dk6")
@@ -248,7 +241,8 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_r8ob0")
 theme_override_styles/hover = SubResource("StyleBoxTexture_h46sw")
 text = "SPLIT"
 
-[node name="DoubleDown" type="Button" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions"]
+[node name="DoubleDown" type="Button" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions" groups=["action"]]
+custom_minimum_size = Vector2(0, 19)
 layout_mode = 2
 focus_mode = 0
 theme_override_colors/font_color = Color(0.318843, 0.31881776, 0.34837988, 1)
@@ -258,7 +252,8 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_mmx8v")
 theme_override_styles/hover = SubResource("StyleBoxTexture_j6wqh")
 text = "DOUBLE DOWN"
 
-[node name="Stand" type="Button" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions"]
+[node name="Stand" type="Button" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions" groups=["action"]]
+custom_minimum_size = Vector2(0, 19)
 layout_mode = 2
 focus_mode = 0
 theme_override_colors/font_color = Color(0.318843, 0.31881776, 0.34837988, 1)
@@ -329,6 +324,7 @@ autowrap_mode = 3
 
 [node name="PlaceBet" type="Button" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 19)
 layout_mode = 2
 focus_mode = 0
 theme_override_colors/font_color = Color(0.318843, 0.31881776, 0.34837988, 1)
@@ -440,6 +436,21 @@ theme_override_fonts/font = ExtResource("2_mrh3v")
 text = "Heat"
 horizontal_alignment = 1
 
+[node name="Cheat" type="Button" parent="." groups=["action"]]
+custom_minimum_size = Vector2(0, 19)
+layout_mode = 0
+offset_left = 17.0
+offset_top = 125.0
+offset_right = 142.0
+offset_bottom = 144.0
+focus_mode = 0
+theme_override_colors/font_color = Color(0.318843, 0.31881776, 0.34837988, 1)
+theme_override_colors/font_hover_color = Color(0.19215687, 0.19215687, 0.21176471, 1)
+theme_override_fonts/font = ExtResource("2_mrh3v")
+theme_override_styles/normal = SubResource("StyleBoxTexture_3qmfa")
+theme_override_styles/hover = SubResource("StyleBoxTexture_8wx05")
+text = "STEAL"
+
 [node name="HeatMeter" parent="." instance=ExtResource("13_r8ob0")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(122, 22)
@@ -456,9 +467,9 @@ stream = ExtResource("14_h46sw")
 volume_db = -11.739
 pitch_scale = 0.83
 
-[connection signal="pressed" from="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions/Cheat" to="." method="OnCheatPressed"]
 [connection signal="pressed" from="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions/Hit" to="." method="OnHitPressed"]
 [connection signal="pressed" from="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions/Split" to="." method="OnSplitPressed"]
 [connection signal="pressed" from="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions/DoubleDown" to="." method="OnDoubleDownPressed"]
 [connection signal="pressed" from="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions/Stand" to="." method="OnStandPressed"]
 [connection signal="pressed" from="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions/PlaceBet" to="." method="OnPlaceBetPressed"]
+[connection signal="pressed" from="Cheat" to="." method="OnCheatPressed"]
