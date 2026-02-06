@@ -1,0 +1,256 @@
+[gd_scene load_steps=27 format=3 uid="uid://iebvt587cxm7"]
+
+[ext_resource type="Texture2D" uid="uid://dfdu0kax1oykj" path="res://assets/sprites/menubackground.png" id="1_vjb58"]
+[ext_resource type="FontFile" uid="uid://ufuswpnuuugo" path="res://assets/fonts/ByteBounce.ttf" id="2_ufwb2"]
+[ext_resource type="Script" uid="uid://c83xwvbqknwkb" path="res://scripts/components/MenuText.cs" id="3_con2f"]
+[ext_resource type="AudioStream" uid="uid://c3jqqkidufyn4" path="res://assets/music/mainMenu.wav" id="4_4ytvr"]
+[ext_resource type="AudioStream" uid="uid://bqys0rqbldyal" path="res://assets/sfx/deal6.wav" id="5_70i5f"]
+[ext_resource type="AudioStream" uid="uid://sdokrlih48mj" path="res://assets/sfx/deal5.wav" id="6_mj5lg"]
+[ext_resource type="AudioStream" uid="uid://0f8b7mbuw0y8" path="res://assets/sfx/deal4.wav" id="7_ufwb2"]
+[ext_resource type="AudioStream" uid="uid://bo0ayp14cc4ka" path="res://assets/sfx/deal3.wav" id="8_6cdou"]
+[ext_resource type="AudioStream" uid="uid://meq0mksubkv7" path="res://assets/sfx/deal2.wav" id="9_i42df"]
+[ext_resource type="AudioStream" uid="uid://gp1kl33yuq5k" path="res://assets/sfx/deal1.wav" id="10_7jp70"]
+[ext_resource type="Texture2D" uid="uid://s6mv7vrijsuy" path="res://assets/sprites/cards.png" id="11_mj5lg"]
+[ext_resource type="Script" uid="uid://dpxarlr8spv4c" path="res://scripts/components/MenuCards.cs" id="11_ufwb2"]
+[ext_resource type="Texture2D" uid="uid://b3oiyxonb16ri" path="res://assets/sprites/textures/button.png" id="13_6cdou"]
+[ext_resource type="Texture2D" uid="uid://dqnfnjscub272" path="res://assets/sprites/chips-small.png" id="13_7jp70"]
+[ext_resource type="Texture2D" uid="uid://s1q6ucl1dnhr" path="res://assets/sprites/textures/buttonPressed.png" id="14_i42df"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_g3eks"]
+font = ExtResource("2_ufwb2")
+font_size = 52
+
+[sub_resource type="AudioStreamPlaylist" id="AudioStreamPlaylist_mxgkd"]
+shuffle = true
+loop = false
+fade_time = 0.51
+stream_count = 11
+stream_0 = ExtResource("5_70i5f")
+stream_1 = ExtResource("6_mj5lg")
+stream_2 = ExtResource("7_ufwb2")
+stream_3 = ExtResource("8_6cdou")
+stream_4 = ExtResource("9_i42df")
+stream_5 = ExtResource("10_7jp70")
+stream_6 = ExtResource("10_7jp70")
+stream_7 = ExtResource("9_i42df")
+stream_8 = ExtResource("8_6cdou")
+stream_9 = ExtResource("7_ufwb2")
+stream_10 = ExtResource("6_mj5lg")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mj5lg"]
+atlas = ExtResource("11_mj5lg")
+region = Rect2(0, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mxgkd"]
+atlas = ExtResource("13_7jp70")
+region = Rect2(6, 6, 19, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g6gyw"]
+atlas = ExtResource("13_7jp70")
+region = Rect2(70, 6, 19, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ufwb2"]
+atlas = ExtResource("11_mj5lg")
+region = Rect2(480, 192, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7jp70"]
+atlas = ExtResource("13_7jp70")
+region = Rect2(38, 6, 19, 18)
+
+[sub_resource type="Gradient" id="Gradient_mhnvy"]
+offsets = PackedFloat32Array(0, 0.0027322404)
+colors = PackedColorArray(1, 1, 1, 0, 0.16862746, 0.5176471, 0, 0.06666667)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4ytvr"]
+gradient = SubResource("Gradient_mhnvy")
+fill_from = Vector2(0.491453, 1)
+fill_to = Vector2(0.47863248, 0)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_i42df"]
+content_margin_left = 0.0
+content_margin_top = 3.0
+content_margin_right = 0.0
+content_margin_bottom = 5.0
+texture = ExtResource("13_6cdou")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7jp70"]
+texture = ExtResource("14_i42df")
+modulate_color = Color(0.819391, 0.99928147, 0.8334372, 1)
+
+[node name="menu" type="Node2D"]
+
+[node name="Area2D" type="Area2D" parent="."]
+metadata/_edit_lock_ = true
+metadata/_edit_group_ = true
+
+[node name="TextureRect" type="TextureRect" parent="Area2D"]
+offset_right = 640.0
+offset_bottom = 360.0
+texture = ExtResource("1_vjb58")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 85.0
+offset_top = 26.0
+offset_right = 579.0
+offset_bottom = 101.0
+text = "SLICK JACK'S SWIFT GRAB:
+ CASINO ROYALE"
+label_settings = SubResource("LabelSettings_g3eks")
+horizontal_alignment = 1
+script = ExtResource("3_con2f")
+
+[node name="music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_4ytvr")
+volume_db = -26.187
+autoplay = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamPlaylist_mxgkd")
+volume_db = -8.872
+autoplay = true
+
+[node name="Container" type="Container" parent="."]
+modulate = Color(0.95596343, 0.9559633, 0.95596343, 1)
+offset_left = 0.9999999
+offset_top = 21.0
+offset_right = 41.0
+offset_bottom = 61.0
+rotation = -0.034034804
+scale = Vector2(0.83886206, 0.83435917)
+
+[node name="ace" type="Area2D" parent="Container"]
+position = Vector2(-297.69846, 55.76633)
+rotation = -0.09155946
+scale = Vector2(0.9999999, 0.99999994)
+skew = -0.1989677
+script = ExtResource("11_ufwb2")
+SwayX = 0.0
+SwayY = 1.0
+RotationAmount = 0.0
+Speed = 1.855
+
+[node name="TextureRect" type="TextureRect" parent="Container/ace"]
+offset_left = 263.48196
+offset_top = 197.20409
+offset_right = 378.48196
+offset_bottom = 377.2041
+texture = SubResource("AtlasTexture_mj5lg")
+metadata/_edit_use_anchors_ = true
+
+[node name="red" type="Area2D" parent="Container"]
+position = Vector2(49.57158, 156.3962)
+rotation = -0.15479678
+scale = Vector2(0.314, 0.314)
+script = ExtResource("11_ufwb2")
+SwayX = 0.0
+RotationAmount = 0.0
+StutterInterval = 0.05
+
+[node name="TextureRect" type="TextureRect" parent="Container/red"]
+offset_left = 118.241394
+offset_top = -42.248817
+offset_right = 215.7669
+offset_bottom = 84.293816
+rotation = 0.03308507
+pivot_offset = Vector2(47.19822, 81.78815)
+texture = SubResource("AtlasTexture_mxgkd")
+
+[node name="black" type="Area2D" parent="Container"]
+position = Vector2(49.57158, 156.3962)
+rotation = -0.14740126
+scale = Vector2(0.314, 0.314)
+script = ExtResource("11_ufwb2")
+SwayX = 0.0
+RotationAmount = 0.0
+StutterInterval = 0.05
+
+[node name="TextureRect" type="TextureRect" parent="Container/black"]
+offset_left = -1.9712837
+offset_top = 116.060905
+offset_right = 95.55423
+offset_bottom = 236.42975
+rotation = -0.051216442
+pivot_offset = Vector2(47.19822, 81.78815)
+texture = SubResource("AtlasTexture_g6gyw")
+
+[node name="jack" type="Area2D" parent="Container"]
+position = Vector2(-67.87378, -109.053925)
+rotation = 0.08537554
+scale = Vector2(1.1488568, 1.1488569)
+skew = 0.26878047
+script = ExtResource("11_ufwb2")
+SwayX = 0.0
+SwayY = 1.0
+RotationAmount = 0.0
+Offset = 0.235
+StutterInterval = 0.05
+
+[node name="TextureRect" type="TextureRect" parent="Container/jack"]
+offset_left = 263.48196
+offset_top = 197.20409
+offset_right = 361.00748
+offset_bottom = 377.2041
+texture = SubResource("AtlasTexture_ufwb2")
+
+[node name="green" type="Area2D" parent="Container"]
+position = Vector2(92.28472, 127.87787)
+rotation = 0.21730928
+scale = Vector2(0.314, 0.31400004)
+script = ExtResource("11_ufwb2")
+SwayX = 0.0
+RotationAmount = 0.0
+StutterInterval = 0.05
+
+[node name="TextureRect" type="TextureRect" parent="Container/green"]
+offset_left = 169.88208
+offset_top = -62.510727
+offset_right = 267.4076
+offset_bottom = 70.058975
+rotation = -0.029823232
+pivot_offset = Vector2(47.19822, 81.78815)
+texture = SubResource("AtlasTexture_7jp70")
+
+[node name="TextureRect2" type="TextureRect" parent="."]
+offset_right = 638.0
+offset_bottom = 360.0
+texture = SubResource("GradientTexture2D_4ytvr")
+metadata/_edit_lock_ = true
+
+[node name="buttons" type="VBoxContainer" parent="."]
+offset_left = 295.0
+offset_top = 155.0
+offset_right = 452.0
+offset_bottom = 246.0
+scale = Vector2(2.0292468, 2.0292468)
+theme_override_constants/separation = 15
+
+[node name="Button" type="Button" parent="buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_override_colors/font_color = Color(0.36282945, 0.36282945, 0.36282945, 1)
+theme_override_colors/font_hover_color = Color(0.29219013, 0.29219002, 0.29219, 1)
+theme_override_fonts/font = ExtResource("2_ufwb2")
+theme_override_styles/normal = SubResource("StyleBoxTexture_i42df")
+theme_override_styles/hover = SubResource("StyleBoxTexture_7jp70")
+text = "LET IT RIDE"
+
+[node name="Button2" type="Button" parent="buttons"]
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.36282945, 0.36282945, 0.36282945, 1)
+theme_override_colors/font_hover_color = Color(0.29219013, 0.29219002, 0.29219, 1)
+theme_override_fonts/font = ExtResource("2_ufwb2")
+theme_override_styles/normal = SubResource("StyleBoxTexture_i42df")
+theme_override_styles/hover = SubResource("StyleBoxTexture_7jp70")
+text = "OPTIONS"
+
+[node name="Button3" type="Button" parent="buttons"]
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.36282945, 0.36282945, 0.36282945, 1)
+theme_override_colors/font_hover_color = Color(0.29219013, 0.29219002, 0.29219, 1)
+theme_override_fonts/font = ExtResource("2_ufwb2")
+theme_override_styles/normal = SubResource("StyleBoxTexture_i42df")
+theme_override_styles/hover = SubResource("StyleBoxTexture_7jp70")
+text = "CASH OUT"

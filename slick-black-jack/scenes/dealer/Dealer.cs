@@ -9,23 +9,26 @@ public partial class Dealer : Node2D {
     private Marker2D _fingerOrigin;
     private Control _handContainer;
     [Export] private AnimatedSprite2D _headSprite;
+    [Export] private AudioStreamPlayer _cueAudio;
+    [Export] public float CueToMoveDelay { get; set; } = 0.5f;
+    private AudioStream[] _cueStreams;
     private List<Player> _players = [];
     private Timer _lookTimer;
     private bool _isRoundActive = false;
     private float _originalRotation = 0.0f;
-    
+
     public Hand Hand { get; private set; } = new Hand();
-    
+
     private PackedScene _handScene = GD.Load<PackedScene>("res://scenes/hand/HandUI.tscn");
-    
+
     public override void _Ready() {
         DealerFinger ??= GetNode<Marker2D>("DealerFinger");
         _handContainer ??= GetNode<Control>("HandContainer");
         _fingerOrigin ??= GetNode<Marker2D>("FingerOrigin");
         _headSprite ??= GetNode<AnimatedSprite2D>("head");
-        
+
         _originalRotation = _headSprite.Rotation;
-        
+
         DealerFinger.Hide();
 
         ResetRound();
@@ -43,21 +46,29 @@ public partial class Dealer : Node2D {
         _lookTimer = new Timer();
         AddChild(_lookTimer);
         _lookTimer.Timeout += OnLookTimerTimeout;
+
+        // Cache audio streams from playlist
+        if (_cueAudio?.Stream is AudioStreamPlaylist playlist) {
+            _cueStreams = new AudioStream[playlist.StreamCount];
+            for (int i = 0; i < playlist.StreamCount; i++) {
+                _cueStreams[i] = playlist.GetListStream(i);
+            }
+        }
     }
-    
-        
+
+
     // ALWAYS DO THIS IF CALLING SIGNALS FROM UTILS
     protected override void Dispose(bool disposing) {
         Utils.NpcCardSelectStart -= OnNpcCardSelectStart;
         Utils.UserSwappedCard -= OnUserSwappedCards;
         base.Dispose(disposing);
     }
-    
+
     private void OnNpcCardSelectStart() {
         var upCardUI = GetUpCardUI();
         upCardUI.SetCardSelectable(true);
     }
-    
+
     private void OnUserSwappedCards() {
         var upCardUI = GetUpCardUI();
         upCardUI.SetCardSelectable(false);
@@ -70,7 +81,7 @@ public partial class Dealer : Node2D {
         Hand.Clear();
         DealerFinger.Hide();
         DealerFinger.GlobalPosition = _fingerOrigin.GlobalPosition;
-        
+
         var tween = CreateTween();
         tween.TweenProperty(_headSprite, "rotation", _originalRotation, 1.0)
             .SetTrans(Tween.TransitionType.Cubic)
@@ -98,7 +109,7 @@ public partial class Dealer : Node2D {
         _isRoundActive = false;
         _lookTimer.Stop();
     }
-    
+
     public void AddCard(Card card) {
         var faceDown = Hand.CardCount == 1;
         Hand.AddCard(card, faceDown);
@@ -106,19 +117,20 @@ public partial class Dealer : Node2D {
 
     public async Task DealerPointToHand(HandUI handUi) {
         DealerFinger.Show();
-        
+
         var tween = CreateTween();
         tween.TweenProperty(DealerFinger, "global_position", handUi.DealerPointTo.GlobalPosition, 0.3);
-        await ToSignal(tween, "finished");    }
-    
+        await ToSignal(tween, "finished");
+    }
+
     public Card GetUpCard() {
         return Hand.GetCards()[0];
     }
-    
+
     public CardUI GetUpCardUI() {
         var handUIs = _handContainer.GetChildren();
         var handUI = handUIs[0] as HandUI;
-        
+
         return handUI.GetUpCardUi();
     }
 
@@ -136,7 +148,7 @@ public partial class Dealer : Node2D {
         _lookTimer.Start();
     }
 
-    private void OnLookTimerTimeout() {
+    private async void OnLookTimerTimeout() {
         if (!_isRoundActive || _players.Count == 0) return;
 
         if (_currentLookAtPlayer != null) {
@@ -148,13 +160,25 @@ public partial class Dealer : Node2D {
         var randomPlayer = _players[(int)randomIndex];
         _currentLookAtPlayer = randomPlayer;
 
+        // Play random audio cue before moving
+        if (_cueStreams != null && _cueStreams.Length > 0) {
+            var audioIndex = (int)GD.RandRange(0, _cueStreams.Length - 1);
+            _cueAudio.Stream = _cueStreams[audioIndex];
+            _cueAudio.Play();
+        }
+
+        // Wait before moving
+        if (CueToMoveDelay > 0) {
+            await ToSignal(GetTree().CreateTimer(CueToMoveDelay), "timeout");
+        }
+
         // Tween to look at the player
         var targetRotation = _headSprite.GlobalPosition.AngleToPoint(_currentLookAtPlayer.PlayerPositionMarker.GlobalPosition);
         var tween = CreateTween();
         tween.TweenProperty(_headSprite, "rotation", targetRotation, 1.5)
             .SetTrans(Tween.TransitionType.Cubic)
             .SetEase(Tween.EaseType.InOut);
-    
+
         tween.Finished += OnTweenFinished;
     }
 

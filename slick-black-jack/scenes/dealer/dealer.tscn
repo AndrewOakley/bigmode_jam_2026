@@ -1,10 +1,18 @@
-[gd_scene load_steps=16 format=3 uid="uid://c5m1i0e1rpq6w"]
+[gd_scene load_steps=25 format=3 uid="uid://c5m1i0e1rpq6w"]
 
 [ext_resource type="Script" uid="uid://bsrhxukx78rbq" path="res://scenes/dealer/Dealer.cs" id="1_lhbsm"]
 [ext_resource type="PackedScene" uid="uid://c2nwtq6fu1vo6" path="res://scenes/hand/HandUI.tscn" id="2_atwe4"]
 [ext_resource type="Texture2D" uid="uid://c4gmrmey6m712" path="res://assets/sprites/characters/dealer/body.png" id="3_3qiar"]
 [ext_resource type="Texture2D" uid="uid://couv3croc1e7l" path="res://assets/sprites/characters/dealer/head.png" id="4_6pnfo"]
 [ext_resource type="Texture2D" uid="uid://bdb2ttrg4wn2o" path="res://assets/sprites/characters/dealer/dealerArm.png" id="5_b5ndd"]
+[ext_resource type="AudioStream" uid="uid://co2gv220y7bij" path="res://assets/sfx/dealercues/sniff3.wav" id="8_a1bta"]
+[ext_resource type="AudioStream" uid="uid://du2uc818wnkfp" path="res://assets/sfx/dealercues/throat1.wav" id="9_if74x"]
+[ext_resource type="AudioStream" uid="uid://b4enf38btb8wu" path="res://assets/sfx/dealercues/throat2.wav" id="10_n06ev"]
+[ext_resource type="AudioStream" uid="uid://13jgshfca88o" path="res://assets/sfx/dealercues/ice1.wav" id="14_h7n8q"]
+[ext_resource type="AudioStream" uid="uid://cobhhk0qjv4od" path="res://assets/sfx/dealercues/ice2.wav" id="15_qgcq4"]
+[ext_resource type="AudioStream" uid="uid://2odcco2akl3h" path="res://assets/sfx/dealercues/ice3.wav" id="16_h2fgl"]
+[ext_resource type="AudioStream" uid="uid://ddyrpvtxg6v1t" path="res://assets/sfx/dealercues/sniff1.wav" id="17_mkoo1"]
+[ext_resource type="AudioStream" uid="uid://yl6cmp17qkjn" path="res://assets/sfx/dealercues/sniff2.wav" id="18_k21pb"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ct545"]
 atlas = ExtResource("3_3qiar")
@@ -78,9 +86,24 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Dealer" type="Node2D"]
+[sub_resource type="AudioStreamPlaylist" id="AudioStreamPlaylist_45els"]
+shuffle = true
+loop = false
+stream_count = 8
+stream_0 = ExtResource("17_mkoo1")
+stream_1 = ExtResource("18_k21pb")
+stream_2 = ExtResource("8_a1bta")
+stream_3 = ExtResource("9_if74x")
+stream_4 = ExtResource("10_n06ev")
+stream_5 = ExtResource("16_h2fgl")
+stream_6 = ExtResource("15_qgcq4")
+stream_7 = ExtResource("14_h7n8q")
+
+[node name="Dealer" type="Node2D" node_paths=PackedStringArray("_cueAudio")]
 z_index = 1
 script = ExtResource("1_lhbsm")
+_cueAudio = NodePath("AudioStreamPlayer")
+CueToMoveDelay = 1.0
 
 [node name="HandContainer" type="BoxContainer" parent="."]
 offset_left = 161.0
@@ -121,5 +144,9 @@ texture = ExtResource("5_b5ndd")
 
 [node name="FingerOrigin" type="Marker2D" parent="."]
 position = Vector2(408, 125)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamPlaylist_45els")
+volume_db = -31.355
 
 [editable path="HandContainer/DealerHand"]

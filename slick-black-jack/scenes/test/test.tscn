@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://c3ksnt0ea2ray"]
+[gd_scene load_steps=17 format=3 uid="uid://c3ksnt0ea2ray"]
 
 [ext_resource type="Script" uid="uid://cpk63f74thfsv" path="res://scenes/test/Test.cs" id="1_m7npr"]
 [ext_resource type="PackedScene" uid="uid://bvli2013m2a38" path="res://scenes/black_jack_table.tscn" id="2_da6vm"]
@@ -14,6 +14,10 @@
 [ext_resource type="AudioStream" uid="uid://gybvns7idnft" path="res://assets/sfx/casinobackground.wav" id="14_x4ubh"]
 [ext_resource type="AudioStream" uid="uid://8hl3uwwwj7nv" path="res://assets/music/diamon heist.wav" id="14_xm0ii"]
 [ext_resource type="PackedScene" uid="uid://48bu4tpvh518" path="res://scenes/cheat_meter/cheat_meter.tscn" id="15_xm0ii"]
+
+[sub_resource type="AudioStreamPlaylist" id="AudioStreamPlaylist_xm0ii"]
+stream_count = 1
+stream_0 = ExtResource("14_x4ubh")
 
 [sub_resource type="AudioStreamPlaylist" id="AudioStreamPlaylist_x4ubh"]
 stream_count = 3
@@ -70,13 +74,12 @@ position = Vector2(-23, 38)
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="backgroundMusic" type="AudioStreamPlayer" parent="audio"]
-stream = SubResource("AudioStreamPlaylist_x4ubh")
-volume_db = -31.479
+[node name="backgroundNoise" type="AudioStreamPlayer" parent="audio"]
+stream = SubResource("AudioStreamPlaylist_xm0ii")
+volume_db = -36.817
 autoplay = true
 
-[node name="backgroundNoise" type="AudioStreamPlayer" parent="audio"]
-stream = ExtResource("14_x4ubh")
-volume_db = -38.734
+[node name="backgroundMusic" type="AudioStreamPlayer" parent="audio"]
+stream = SubResource("AudioStreamPlaylist_x4ubh")
+volume_db = -31.0
 autoplay = true
-playback_type = 1

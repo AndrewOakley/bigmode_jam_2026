@@ -133,6 +133,8 @@ public partial class GameUI : Control {
 
     private void OnBettingStarted() {
         _placeBetButton.Show();
+        // Set bet slider to max value at start of betting
+        _betSlider.Value = _betSlider.MaxValue;
     }
 
     private void OnPlaceBetPressed() {
