@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://bsoodols5srp3"]
+[gd_scene load_steps=37 format=3 uid="uid://bsoodols5srp3"]
 
 [ext_resource type="Script" uid="uid://bll4aq7db2eej" path="res://scenes/game_ui/GameUI.cs" id="1_2jtrj"]
 [ext_resource type="FontFile" uid="uid://cq3yt1gs4m3ka" path="res://assets/fonts/ARCADECLASSIC.TTF" id="1_8rf5x"]
@@ -9,6 +9,9 @@
 [ext_resource type="Texture2D" uid="uid://2rmrjc2eg0va" path="res://assets/sprites/textures/uiborder.png" id="3_nelv4"]
 [ext_resource type="PackedScene" uid="uid://b8q4dlpf06h11" path="res://scenes/game_ui/betSlider.tscn" id="3_sg8it"]
 [ext_resource type="Texture2D" uid="uid://cs4kpitoxjsc6" path="res://assets/items/whiskey.png" id="4_mrh3v"]
+[ext_resource type="Theme" uid="uid://bitipvdngbifb" path="res://scenes/game_ui/themes/buttonTheme.tres" id="7_p7dk6"]
+[ext_resource type="Texture2D" uid="uid://b3oiyxonb16ri" path="res://assets/sprites/textures/button.png" id="7_vghou"]
+[ext_resource type="Texture2D" uid="uid://s1q6ucl1dnhr" path="res://assets/sprites/textures/buttonPressed.png" id="8_h1nqx"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_nelv4"]
 texture = ExtResource("2_r4xku")
@@ -29,6 +32,46 @@ font = ExtResource("2_mrh3v")
 [sub_resource type="LabelSettings" id="LabelSettings_r8ob0"]
 font = ExtResource("2_mrh3v")
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_h1nqx"]
+content_margin_left = 0.0
+content_margin_top = 3.0
+content_margin_right = 0.0
+content_margin_bottom = 3.0
+texture = ExtResource("7_vghou")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_p7dk6"]
+texture = ExtResource("8_h1nqx")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_r8ob0"]
+content_margin_left = 0.0
+content_margin_top = 3.0
+content_margin_right = 0.0
+content_margin_bottom = 3.0
+texture = ExtResource("7_vghou")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_h46sw"]
+texture = ExtResource("8_h1nqx")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_mmx8v"]
+content_margin_left = 0.0
+content_margin_top = 3.0
+content_margin_right = 0.0
+content_margin_bottom = 3.0
+texture = ExtResource("7_vghou")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_j6wqh"]
+texture = ExtResource("8_h1nqx")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hj8fc"]
+content_margin_left = 0.0
+content_margin_top = 3.0
+content_margin_right = 0.0
+content_margin_bottom = 3.0
+texture = ExtResource("7_vghou")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_yr0h1"]
+texture = ExtResource("8_h1nqx")
+
 [sub_resource type="Theme" id="Theme_mrh3v"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_nelv4"]
@@ -36,6 +79,16 @@ font = ExtResource("2_mrh3v")
 
 [sub_resource type="LabelSettings" id="LabelSettings_sg8it"]
 font = ExtResource("2_mrh3v")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ib3au"]
+content_margin_left = 0.0
+content_margin_top = 3.0
+content_margin_right = 0.0
+content_margin_bottom = 3.0
+texture = ExtResource("7_vghou")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7xvqy"]
+texture = ExtResource("8_h1nqx")
 
 [sub_resource type="LabelSettings" id="LabelSettings_r4xku"]
 line_spacing = -5.355
@@ -45,6 +98,20 @@ font_size = 14
 [sub_resource type="AtlasTexture" id="AtlasTexture_2jtrj"]
 atlas = ExtResource("4_mrh3v")
 region = Rect2(0, 9, 16, 23)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3qmfa"]
+content_margin_left = 0.0
+content_margin_top = 3.0
+content_margin_right = 0.0
+content_margin_bottom = 3.0
+texture = ExtResource("7_vghou")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8wx05"]
+content_margin_left = 0.0
+content_margin_top = 3.0
+content_margin_right = 0.0
+content_margin_bottom = 3.0
+texture = ExtResource("8_h1nqx")
 
 [sub_resource type="LabelSettings" id="LabelSettings_vghou"]
 font = ExtResource("2_mrh3v")
@@ -61,6 +128,7 @@ offset_left = -10.0
 offset_right = -10.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(42, 164)
 mouse_filter = 2
 script = ExtResource("1_2jtrj")
 
@@ -99,6 +167,7 @@ layout_mode = 2
 
 [node name="npcChips" type="VBoxContainer" parent="Panel/Panel2/MarginContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 0
 theme_override_constants/separation = 4
 
 [node name="Label3" type="Label" parent="Panel/Panel2/MarginContainer/VBoxContainer/npcChips"]
@@ -127,6 +196,8 @@ label_settings = SubResource("LabelSettings_r8ob0")
 
 [node name="ActionsContainer" type="MarginContainer" parent="Panel/Panel2/MarginContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 6
+size_flags_stretch_ratio = 10.4
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
@@ -137,6 +208,48 @@ layout_mode = 2
 size_flags_vertical = 8
 alignment = 2
 
+[node name="Hit" type="Button" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions"]
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("7_p7dk6")
+theme_override_colors/font_color = Color(0.318843, 0.31881776, 0.34837988, 1)
+theme_override_colors/font_hover_color = Color(0.19215687, 0.19215687, 0.21176471, 1)
+theme_override_fonts/font = ExtResource("2_mrh3v")
+theme_override_styles/normal = SubResource("StyleBoxTexture_h1nqx")
+theme_override_styles/hover = SubResource("StyleBoxTexture_p7dk6")
+text = "HIT"
+
+[node name="Split" type="Button" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions"]
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("7_p7dk6")
+theme_override_colors/font_color = Color(0.318843, 0.31881776, 0.34837988, 1)
+theme_override_colors/font_hover_color = Color(0.19215687, 0.19215687, 0.21176471, 1)
+theme_override_fonts/font = ExtResource("2_mrh3v")
+theme_override_styles/normal = SubResource("StyleBoxTexture_r8ob0")
+theme_override_styles/hover = SubResource("StyleBoxTexture_h46sw")
+text = "SPLIT"
+
+[node name="DoubleDown" type="Button" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions"]
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.318843, 0.31881776, 0.34837988, 1)
+theme_override_colors/font_hover_color = Color(0.19215687, 0.19215687, 0.21176471, 1)
+theme_override_fonts/font = ExtResource("2_mrh3v")
+theme_override_styles/normal = SubResource("StyleBoxTexture_mmx8v")
+theme_override_styles/hover = SubResource("StyleBoxTexture_j6wqh")
+text = "DOUBLE DOWN"
+
+[node name="Stand" type="Button" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions"]
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.318843, 0.31881776, 0.34837988, 1)
+theme_override_colors/font_hover_color = Color(0.19215687, 0.19215687, 0.21176471, 1)
+theme_override_fonts/font = ExtResource("2_mrh3v")
+theme_override_styles/normal = SubResource("StyleBoxTexture_hj8fc")
+theme_override_styles/hover = SubResource("StyleBoxTexture_yr0h1")
+text = "STAND"
+
 [node name="PlayerChipCount" type="Label" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -145,14 +258,6 @@ theme_override_colors/font_color = Color(0, 1, 0, 1)
 text = "Current: $25,543"
 label_settings = SubResource("LabelSettings_nelv4")
 horizontal_alignment = 1
-
-[node name="PlaceBet" type="Button" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions"]
-unique_name_in_owner = true
-layout_mode = 2
-focus_mode = 0
-theme_override_fonts/font = ExtResource("2_mrh3v")
-theme_override_font_sizes/font_size = 16
-text = "PLACE BET"
 
 [node name="BetBar" type="HBoxContainer" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions"]
 layout_mode = 2
@@ -194,41 +299,29 @@ label_settings = SubResource("LabelSettings_8rf5x")
 
 [node name="BetAmount" type="Label" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_vertical = 1
-text = "CURRENT BET
-$40"
+text = "BET: $40"
 label_settings = SubResource("LabelSettings_sg8it")
 horizontal_alignment = 1
-autowrap_mode = 1
+autowrap_mode = 3
 
-[node name="Hit" type="Button" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions"]
+[node name="PlaceBet" type="Button" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions"]
+unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
+theme_override_colors/font_color = Color(0.318843, 0.31881776, 0.34837988, 1)
+theme_override_colors/font_hover_color = Color(0.19215687, 0.19215687, 0.21176471, 1)
 theme_override_fonts/font = ExtResource("2_mrh3v")
-text = "HIT"
-
-[node name="Split" type="Button" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions"]
-layout_mode = 2
-focus_mode = 0
-theme_override_fonts/font = ExtResource("2_mrh3v")
-text = "SPLIT"
-
-[node name="DoubleDown" type="Button" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions"]
-layout_mode = 2
-focus_mode = 0
-theme_override_fonts/font = ExtResource("2_mrh3v")
-text = "DOUBLE DOWN"
-
-[node name="Stand" type="Button" parent="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions"]
-layout_mode = 2
-focus_mode = 0
-theme_override_fonts/font = ExtResource("2_mrh3v")
-text = "STAND"
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxTexture_ib3au")
+theme_override_styles/hover = SubResource("StyleBoxTexture_7xvqy")
+text = "PLACE BET"
 
 [node name="Items" type="MarginContainer" parent="Panel/Panel2/MarginContainer/VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 3
+size_flags_vertical = 10
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
@@ -285,7 +378,11 @@ label_settings = SubResource("LabelSettings_r4xku")
 [node name="Cheat" type="Button" parent="Panel/Panel2/MarginContainer/VBoxContainer/Items/VBoxContainer"]
 layout_mode = 2
 focus_mode = 0
+theme_override_colors/font_color = Color(0.318843, 0.31881776, 0.34837988, 1)
+theme_override_colors/font_hover_color = Color(0.19215687, 0.19215687, 0.21176471, 1)
 theme_override_fonts/font = ExtResource("2_mrh3v")
+theme_override_styles/normal = SubResource("StyleBoxTexture_3qmfa")
+theme_override_styles/hover = SubResource("StyleBoxTexture_8wx05")
 text = "STEAL"
 
 [node name="RoundInfo" type="VBoxContainer" parent="."]
@@ -317,9 +414,9 @@ text = "10"
 label_settings = SubResource("LabelSettings_h1nqx")
 horizontal_alignment = 1
 
-[connection signal="pressed" from="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions/PlaceBet" to="." method="OnPlaceBetPressed"]
 [connection signal="pressed" from="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions/Hit" to="." method="OnHitPressed"]
 [connection signal="pressed" from="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions/Split" to="." method="OnSplitPressed"]
 [connection signal="pressed" from="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions/DoubleDown" to="." method="OnDoubleDownPressed"]
 [connection signal="pressed" from="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions/Stand" to="." method="OnStandPressed"]
+[connection signal="pressed" from="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions/PlaceBet" to="." method="OnPlaceBetPressed"]
 [connection signal="pressed" from="Panel/Panel2/MarginContainer/VBoxContainer/Items/VBoxContainer/Cheat" to="." method="OnCheatPressed"]

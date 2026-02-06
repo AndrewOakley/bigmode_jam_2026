@@ -60,6 +60,7 @@ rotation = -0.64692277
 [node name="GameUI" parent="." instance=ExtResource("10_saoeg")]
 offset_left = -1.0
 offset_right = -1.0
+_enableTimer = false
 
 [node name="CheatMeter" parent="." instance=ExtResource("15_xm0ii")]
 visible = false
