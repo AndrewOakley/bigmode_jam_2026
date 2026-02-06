@@ -27,13 +27,13 @@ public partial class Player : Node2D {
     [Export] private CheatMeter _cheatMeter;
     public Marker2D PlayerPositionMarker { get; set; }
     private Sprite2D _eyeSprite;
-    
+
     public List<Hand> Hands { get; set; } = []; // holds the list of all hands (needed for splitting)
     public int PlayerBet { get; set; } = 10;
 
     private const int SwapHitSpeed = 300;
     private const int _swapHitRequired = 2;
-    
+
     public bool IsDealerWatching { get; set; } = false;
 
     private bool _isTurn = false;
@@ -49,7 +49,8 @@ public partial class Player : Node2D {
 
             if (_isTurn) {
                 EmitSignal(SignalName.PlayerTurnStarted);
-            } else {
+            }
+            else {
                 EmitSignal(SignalName.PlayerTurnEnded);
             }
         }
@@ -67,7 +68,7 @@ public partial class Player : Node2D {
     }
 
     public int CurrentHandIndex { get; set; } = 0;
-    
+
     private PackedScene _handScene = GD.Load<PackedScene>("res://scenes/hand/HandUI.tscn");
 
     enum CheatingStates {
@@ -75,8 +76,8 @@ public partial class Player : Node2D {
         Cheating,
         CardSwap,
     }
-    private CheatingStates _cheatingState = CheatingStates.None; 
-    
+    private CheatingStates _cheatingState = CheatingStates.None;
+
     public override void _Ready() {
         ClearHand();
         _winSfx = GetNode<AudioStreamPlayer>("WinSFX");
@@ -84,12 +85,12 @@ public partial class Player : Node2D {
         _eyeSprite = GetNode<Sprite2D>("eye");
         _eyeSprite.Hide();
         _cheatMeter?.Hide();
-        
+
         Utils.CheatStarted += OnCheatStarted;
         Utils.CardSelected += OnCardSelected;
         Utils.NpcCardSelectStart += OnNpcCardSelectStart;
         Utils.UserSwappedCard += OnUserSwappedCard;
-        
+
         if (_cheatMeter != null) {
             _cheatMeter.PerfectHit += OnPerfectHit;
             _cheatMeter.OkHit += OnOkHit;
@@ -103,7 +104,8 @@ public partial class Player : Node2D {
 
         if (IsDealerWatching) {
             _eyeSprite.Show();
-        } else {
+        }
+        else {
             _eyeSprite.Hide();
         }
 
@@ -116,14 +118,13 @@ public partial class Player : Node2D {
         GD.Print("Player caught cheating");
         StopCheat();
     }
-    
-    private void OnBetAmountTextChanged(string newText)
-    {
+
+    private void OnBetAmountTextChanged(string newText) {
         if (int.TryParse(newText, out int betAmount)) {
             PlayerBet = betAmount;
         }
     }
-    
+
     // ALWAYS DO THIS IF CALLING SIGNALS FROM UTILS
     protected override void Dispose(bool disposing) {
         Utils.CheatStarted -= OnCheatStarted;
@@ -132,13 +133,14 @@ public partial class Player : Node2D {
         Utils.UserSwappedCard -= OnUserSwappedCard;
         base.Dispose(disposing);
     }
-    
+
     private void OnCheatStarted() {
         if (_cheatingState != CheatingStates.None) {
             GD.PrintErr($"Player {_cheatingState} already cheating!");
             return;
-        };
-        
+        }
+        ;
+
         if (IsNpc) return;
 
         if (IsDealerWatching) {
@@ -149,7 +151,7 @@ public partial class Player : Node2D {
         SetHandsSelectable(true);
         _cheatingState = CheatingStates.Cheating;
     }
-    
+
     public async Task TurnTimeOut() {
         StopCheat();
         await StandCurrentHand();
@@ -157,45 +159,104 @@ public partial class Player : Node2D {
 
     private Card _userSwapCard;
     private Card _npcSwapCard;
-    private void OnCardSelected(Card card) {
+    private CardUI _userSwapCardUI;
+    private CardUI _npcSwapCardUI;
+
+    private void OnCardSelected(Card card, CardUI cardUI) {
         if (CheatingStates.Cheating == _cheatingState) {
             _userSwapCard = card;
-            
+            _userSwapCardUI = cardUI;
+
             GD.Print($"Player {_cheatingState} selected card {card}");
             SetHandsSelectable(false);
             Utils.EmitNpcCardSelectStart();
             _cheatingState = CheatingStates.CardSwap;
-        } 
+        }
         else if (CheatingStates.CardSwap == _cheatingState) {
             Utils.EmitStopAllCardsSelectable();
             _npcSwapCard = card;
             _cheatMeter.StartMeter(SwapHitSpeed);
+            _npcSwapCardUI = cardUI;
         }
     }
 
-    public void SuccessfulSwap() {
+    private Sprite2D _handSprite;
+    public async Task PlayStealAnimation(Vector2 targetGlobalPos, Vector2 finalGlobalPos) {
+        _handSprite ??= GetNode<Sprite2D>("hand");
+        var animation = _handAnimations.GetAnimation("steal");
+
+        var targetLocalPos = ToLocal(targetGlobalPos);
+        var finalLocalPos = ToLocal(finalGlobalPos);
+        bool isTargetOnRight = targetLocalPos.Y > 0;
+
+        int posTrackIdx = animation.FindTrack(".:position", Animation.TrackType.Value);
+
+        // Get start position from keyframe 0
+        var startPos = (Vector2)animation.TrackGetKeyValue(posTrackIdx, 0);
+
+        // Calculate 30% of the way to target for keyframes 1 and 2
+        var partialPos = startPos.Lerp(targetLocalPos, 0.3f);
+        animation.TrackSetKeyValue(posTrackIdx, 1, partialPos);
+        animation.TrackSetKeyValue(posTrackIdx, 2, partialPos);
+
+        // Set keyframe 3 to target position (NPC card)
+        animation.TrackSetKeyValue(posTrackIdx, 3, targetLocalPos);
+
+        // Set final keyframe to user's card position
+        animation.TrackSetKeyValue(posTrackIdx, 4, finalLocalPos);
+
+
+        _handSprite.FlipH = !isTargetOnRight;
+
+        _handAnimations.Play("steal");
+
+        // Wait for 90% of animation, then call the swap callback
+        float animLength = animation.Length;
+        await ToSignal(GetTree().CreateTimer(animLength * 0.67f), "timeout");
+        _onSwapCallback?.Invoke();
+
+        // Wait for remaining 10%
+        await ToSignal(_handAnimations, "animation_finished");
+
+        _handSprite.FlipH = false;
+    }
+
+    private Action _onSwapCallback;
+
+    public async void SuccessfulSwap() {
         _cheatMeter.StopMeter();
-        Card.Swap(_userSwapCard, _npcSwapCard);
+
+        // Set the swap to happen at 90% of the animation
+        _onSwapCallback = () => Card.Swap(_userSwapCard, _npcSwapCard);
+
+        var stealTarget = _npcSwapCardUI.GetNode<Marker2D>("Marker2D");
+        var userCardTarget = _userSwapCardUI.GetNode<Marker2D>("Marker2D");
+        await PlayStealAnimation(stealTarget.GlobalPosition, userCardTarget.GlobalPosition);
+
+        _onSwapCallback = null;
+
         _userSwapCard = null;
         _npcSwapCard = null;
+        _userSwapCardUI = null;
+        _npcSwapCardUI = null;
         _cheatingState = CheatingStates.None;
         Utils.EmitUserSwappedCard();
     }
-    
+
     private void OnPerfectHit(int hitCount) {
         OnHit(hitCount);
     }
-    
+
     private void OnOkHit(int hitCount) {
         OnHit(hitCount);
     }
-    
+
     private void OnHit(int hitCount) {
         if (_cheatingState == CheatingStates.CardSwap && hitCount == _swapHitRequired) {
             SuccessfulSwap();
         }
     }
-    
+
     private void OnMiss() {
         GD.Print($"Player {_cheatingState} missed!");
         StopCheat();
@@ -212,13 +273,13 @@ public partial class Player : Node2D {
 
         SetHandsSelectable(true);
     }
-    
+
     private void OnUserSwappedCard() {
         if (!IsNpc) return;
-        
+
         SetHandsSelectable(false);
     }
-    
+
     private void SetHandsSelectable(bool selectable) {
         foreach (var node in HandsUIContainer.GetChildren()) {
             if (node is HandUI handUi) {
@@ -226,20 +287,20 @@ public partial class Player : Node2D {
             }
         }
     }
-    
+
     public Hand GetCurrentHand() {
         if (CurrentHandIndex >= Hands.Count) {
             GD.PrintErr($"Player {Name} has no active hands left to play.");
             return null;
         }
-        
+
         return Hands[CurrentHandIndex];
     }
 
     public void EmitHandStarted() {
         EmitSignal(SignalName.HandStarted, GetCurrentHand());
     }
-    
+
     // HandsUI is reverse of Hands, need to get the reversed value index
     public HandUI GetCurrentHandUI() {
         int uiIndex = Hands.Count - 1 - CurrentHandIndex;
@@ -249,7 +310,7 @@ public partial class Player : Node2D {
 
         return HandsUIContainer.GetChild(uiIndex) as HandUI;
     }
-    
+
     public HandUI GetHandUIByIndex(int index) {
         int uiIndex = Hands.Count - 1 - index;
         if (uiIndex < 0 || uiIndex >= Hands.Count) {
@@ -278,14 +339,14 @@ public partial class Player : Node2D {
         else {
             PlayerBet = mainPlayerBet;
         }
-        
+
         var hand = new Hand(PlayerBet);
         Chips -= PlayerBet;
-        
+
         Hands.Add(hand);
         AddHandToUi(hand);
     }
-    
+
     private void AddHandToUi(Hand hand) {
         var handNode = _handScene.Instantiate<HandUI>();
         handNode.SetHand(hand);
@@ -301,7 +362,7 @@ public partial class Player : Node2D {
             Hands[0].Status = HandStatus.Done;
         }
     }
-    
+
     public override void _PhysicsProcess(double delta) {
         if (Input.IsActionJustPressed("escape") && _cheatingState != CheatingStates.None) {
             StopCheat();
@@ -312,12 +373,12 @@ public partial class Player : Node2D {
     // Returns true if hand was busted
     public async Task<bool> HitCurrentHand(Card card, bool noAnimation = false) {
         StopCheat();
-        
+
         if (_handAnimations != null && !noAnimation) {
             _handAnimations.Play("hit");
             await ToSignal(_handAnimations, "animation_finished");
         }
-        
+
         Hand activeHand = GetCurrentHand();
         activeHand.AddCard(card);
 
@@ -331,10 +392,10 @@ public partial class Player : Node2D {
 
         return false;
     }
-    
+
     public async Task<bool> SplitHand() {
         StopCheat();
-        
+
         // TODO: need to check if player has enough chips to split
         var currentHand = GetCurrentHand();
 
@@ -347,7 +408,7 @@ public partial class Player : Node2D {
             GD.PrintErr($"invalid attempt to split {Name} hand {currentHand}");
             return false;
         }
-        
+
         EmitHandStarted();
 
         if (_handAnimations != null) {
@@ -357,12 +418,12 @@ public partial class Player : Node2D {
 
         var chipsForHand = Math.Min(currentHand.Chips, Chips);
         var newHand = new Hand(chipsForHand);
-        
+
         Chips -= chipsForHand;
-        
+
         Hands.Add(newHand);
         AddHandToUi(newHand);
-        
+
         var card = currentHand.RemoveCard(0);
         newHand.AddCard(card);
 
@@ -371,26 +432,26 @@ public partial class Player : Node2D {
 
     public async Task<bool> DoubleDownCurrentHand(Card card) {
         StopCheat();
-        
+
         var currentHand = GetCurrentHand();
 
         if (!currentHand.CanDoubleDown() && Chips > 0) return false;
-        
+
         var chipsForHand = Math.Min(currentHand.Chips, Chips);
         currentHand.Chips += chipsForHand;
-        
+
         Chips -= chipsForHand;
 
         return await HitCurrentHand(card);
     }
-    
+
     public async Task StandCurrentHand(bool noAnimation = false) {
         StopCheat();
         if (_handAnimations != null && !noAnimation) {
             _handAnimations.Play("stand");
             await ToSignal(_handAnimations, "animation_finished");
         }
-        
+
         Hand activeHand = GetCurrentHand();
         activeHand.Stand();
         CurrentHandIndex++;
@@ -402,9 +463,9 @@ public partial class Player : Node2D {
         for (var i = 0; i < Hands.Count; i++) {
             var hand = Hands[i];
             var handUi = GetHandUIByIndex(i);
-            
+
             var playerValue = hand.GetValue();
-            
+
             if (hand.IsBlackjack() && dealerValue != 21) {
                 hand.Result = HandResult.PlayerBlackjack;
             }
@@ -427,12 +488,12 @@ public partial class Player : Node2D {
                 GD.PrintErr($"Invalid hand result for hand {hand}");
                 hand.Result = HandResult.PlayerWin;
             }
-            
-            
+
+
             if ((hand.Result == HandResult.PlayerWin || hand.Result == HandResult.PlayerBlackjack) && PlayWinSfx) {
                 _winSfx.Play();
             }
-            
+
             handUi.ShowResult(hand.Result);
             AdjustChips(hand);
         }
@@ -450,7 +511,7 @@ public partial class Player : Node2D {
     public bool CanDoubleDown() {
         return GetCurrentHand().CanDoubleDown();
     }
-    
+
     public bool HasActiveHand() {
         return Hands.Find(hand => hand.Status == HandStatus.Active) != null;
     }
@@ -460,13 +521,13 @@ public partial class Player : Node2D {
             GD.Print($"Hand: {hand}");
         }
     }
-    
+
     public void PrintResults() {
         foreach (var hand in Hands) {
             GD.Print($"Result: {hand.Result}");
         }
     }
-    
+
     public PlayerMove NpcTurn(int dealerUpcard) {
         Hand currentHand = GetCurrentHand();
         int handValue = currentHand.GetValue();

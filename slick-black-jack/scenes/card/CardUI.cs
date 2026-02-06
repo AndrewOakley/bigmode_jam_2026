@@ -97,7 +97,7 @@ public partial class CardUI : TextureRect {
 	private async Task EmitCardSelected() {
 		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
-		Utils.EmitCardSelected(Card);
+		Utils.EmitCardSelected(Card, this);
 	}
 	
 	public void SetCardFaceUp() {

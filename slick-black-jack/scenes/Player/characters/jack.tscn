@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://ca3mq4iyvkm1v"]
+[gd_scene load_steps=57 format=3 uid="uid://ca3mq4iyvkm1v"]
 
 [ext_resource type="PackedScene" uid="uid://cljhd4qk0x3gi" path="res://scenes/Player/player.tscn" id="1_oq1x1"]
 [ext_resource type="Texture2D" uid="uid://pfdtxe58coer" path="res://assets/sprites/characters/baldGuy/jackarmsplit.png" id="2_5deju"]
@@ -58,6 +58,30 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [0.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".:offset")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.16821861, 24.183275)]
 }
 
 [sub_resource type="Animation" id="Animation_rrmke"]
@@ -123,6 +147,18 @@ tracks/4/keys = {
 "update": 0,
 "values": [0.0, 0.31198707, 0.0, 0.31198707, 0.0, 0.0]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".:offset")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.16821861, 24.183275)]
+}
 
 [sub_resource type="Animation" id="Animation_ehain"]
 resource_name = "split"
@@ -173,6 +209,18 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [-1.9851662]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:offset")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.16821861, 24.183275)]
 }
 
 [sub_resource type="Animation" id="Animation_hdmlt"]
@@ -226,13 +274,90 @@ tracks/3/keys = {
 "update": 0,
 "values": [-1.9851662, -1.9851662, -1.2149888, -1.2149888]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:offset")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.16821861, 24.183275)]
+}
+
+[sub_resource type="Animation" id="Animation_ysqyj"]
+resource_name = "steal"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("4_ehain")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5, 1, 1.1666666, 1.3333331),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(18, 3), Vector2(40.88617, -22.295237), Vector2(40.88617, -22.295237), Vector2(94, -81), Vector2(18, 3)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.033333335, 0.43333334, 1.1999999, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:offset")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-5.3561516, -35.69361)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-1.4442196]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_igmgj"]
 _data = {
 &"RESET": SubResource("Animation_igmgj"),
 &"hit": SubResource("Animation_rrmke"),
 &"split": SubResource("Animation_ehain"),
-&"stand": SubResource("Animation_hdmlt")
+&"stand": SubResource("Animation_hdmlt"),
+&"steal": SubResource("Animation_ysqyj")
 }
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mj6pv"]

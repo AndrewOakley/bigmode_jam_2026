@@ -8,10 +8,10 @@ public partial class Utils : Node {
     
     public static void EmitCheatStarted() => CheatStarted?.Invoke();
     
-    public delegate void CardSelectedventHandler(Card card);
+    public delegate void CardSelectedventHandler(Card card, CardUI cardUI);
     public static event CardSelectedventHandler CardSelected;
     
-    public static void EmitCardSelected(Card card) => CardSelected?.Invoke(card);
+    public static void EmitCardSelected(Card card, CardUI cardUI) => CardSelected?.Invoke(card, cardUI);
     
     public delegate void NpcCardSelectStartEventHandler();
     public static event NpcCardSelectStartEventHandler NpcCardSelectStart;
