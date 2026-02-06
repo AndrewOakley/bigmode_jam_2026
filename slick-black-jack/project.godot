@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="slick_black_jack"
-run/main_scene="uid://c3ksnt0ea2ray"
+run/main_scene="uid://iebvt587cxm7"
 config/features=PackedStringArray("4.5", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 

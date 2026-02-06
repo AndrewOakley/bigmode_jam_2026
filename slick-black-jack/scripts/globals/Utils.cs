@@ -3,6 +3,7 @@ using System;
 using SlickBlackJack.Components;
 
 public partial class Utils : Node {
+    public static int FattestStack { get; set; } = 0;
     public delegate void CheatStartedEventHandler();
     public static event CheatStartedEventHandler CheatStarted;
     

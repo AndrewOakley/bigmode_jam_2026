@@ -1,5 +1,6 @@
-[gd_scene load_steps=27 format=3 uid="uid://iebvt587cxm7"]
+[gd_scene load_steps=29 format=3 uid="uid://iebvt587cxm7"]
 
+[ext_resource type="Script" path="res://scenes/Menu.cs" id="1_menu"]
 [ext_resource type="Texture2D" uid="uid://dfdu0kax1oykj" path="res://assets/sprites/menubackground.png" id="1_vjb58"]
 [ext_resource type="FontFile" uid="uid://ufuswpnuuugo" path="res://assets/fonts/ByteBounce.ttf" id="2_ufwb2"]
 [ext_resource type="Script" uid="uid://c83xwvbqknwkb" path="res://scripts/components/MenuText.cs" id="3_con2f"]
@@ -19,6 +20,10 @@
 [sub_resource type="LabelSettings" id="LabelSettings_g3eks"]
 font = ExtResource("2_ufwb2")
 font_size = 52
+
+[sub_resource type="LabelSettings" id="LabelSettings_fatstack"]
+font = ExtResource("2_ufwb2")
+font_size = 18
 
 [sub_resource type="AudioStreamPlaylist" id="AudioStreamPlaylist_mxgkd"]
 shuffle = true
@@ -78,6 +83,7 @@ texture = ExtResource("14_i42df")
 modulate_color = Color(0.819391, 0.99928147, 0.8334372, 1)
 
 [node name="menu" type="Node2D"]
+script = ExtResource("1_menu")
 
 [node name="Area2D" type="Area2D" parent="."]
 metadata/_edit_lock_ = true
