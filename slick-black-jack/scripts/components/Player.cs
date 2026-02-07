@@ -609,7 +609,7 @@ public partial class Player : Node2D {
     }
     // End Black jack moves ----------------------------------------------------------------------------------------
     public bool CheckIfPlayerIsOut() {
-        if (Chips <= 0) {
+        if (Chips <= 0 && PlayerIsOut == false) {
             // EmitSignal(SignalName.PlayerIsOut);
             PlayerIsOut = true;
             _animationPlayer?.Play("fade_away");
