@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cljhd4qk0x3gi"]
+[gd_scene load_steps=11 format=3 uid="uid://cljhd4qk0x3gi"]
 
 [ext_resource type="Script" uid="uid://bc2dypdqsitc3" path="res://scripts/components/Player.cs" id="1_1kbk7"]
 [ext_resource type="PackedScene" uid="uid://c2nwtq6fu1vo6" path="res://scenes/hand/HandUI.tscn" id="2_c4h5g"]
@@ -7,12 +7,17 @@
 [ext_resource type="AudioStream" uid="uid://ci7qi1radign7" path="res://assets/sfx/win3.wav" id="5_a06cl"]
 [ext_resource type="Texture2D" uid="uid://b6h0g7iertrqw" path="res://assets/sprites/eye.png" id="6_hvfru"]
 [ext_resource type="AudioStream" uid="uid://xqhjo0smm5ch" path="res://assets/sfx/wrong.mp3" id="7_a06cl"]
+[ext_resource type="FontFile" uid="uid://ufuswpnuuugo" path="res://assets/fonts/ByteBounce.ttf" id="8_dl1wr"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_dl1wr"]
 streams_count = 3
 stream_0/stream = ExtResource("3_uiqp4")
 stream_1/stream = ExtResource("4_hvfru")
 stream_2/stream = ExtResource("5_a06cl")
+
+[sub_resource type="LabelSettings" id="LabelSettings_dl1wr"]
+font = ExtResource("8_dl1wr")
+shadow_color = Color(0, 0, 0, 0.558)
 
 [node name="Player2" type="Node2D" node_paths=PackedStringArray("HandsUIContainer")]
 script = ExtResource("1_1kbk7")
@@ -62,3 +67,13 @@ texture = ExtResource("6_hvfru")
 stream = ExtResource("7_a06cl")
 volume_db = -8.625
 pitch_scale = 0.65
+
+[node name="stealToolTip" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = 97.99997
+offset_top = 59.999985
+offset_right = 174.99997
+offset_bottom = 70.999985
+rotation = 1.5708026
+text = "Hold to steal"
+label_settings = SubResource("LabelSettings_dl1wr")

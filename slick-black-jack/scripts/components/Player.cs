@@ -27,6 +27,7 @@ public partial class Player : Node2D {
     [Export] public bool PlayWinSfx { get; set; } = false;
     [Export] private CheatMeter _cheatMeter;
     [Export] private float _stealHoldTime = 1.5f;
+    private Label _stealTooltip;
     public Marker2D PlayerPositionMarker { get; set; }
     private Sprite2D _eyeSprite;
 
@@ -97,6 +98,8 @@ public partial class Player : Node2D {
     private Animation _stealAnimation;
     private float _stealReachTime; // the point in the animation where the hand reaches the card
 
+    private Vector2 _targetCardPos;
+
     public override void _Ready() {
         ClearHand();
         _winSfx = GetNode<AudioStreamPlayer>("WinSFX");
@@ -108,14 +111,28 @@ public partial class Player : Node2D {
         _eyeSprite = GetNode<Sprite2D>("eye");
         _eyeSprite.Hide();
         _cheatMeter?.Hide();
+        _stealTooltip = GetNode<Label>("%stealToolTip");
+        _stealTooltip.Hide();
 
         Utils.CheatStarted += OnCheatStarted;
         Utils.CardSelected += OnCardSelected;
         Utils.NpcCardSelectStart += OnNpcCardSelectStart;
         Utils.UserSwappedCard += OnUserSwappedCard;
 
+        Utils.StopAllCardsSelectable += StopAllCardsSelectable;
+        Utils.CheatingStopped += CheatingStopped;
+
     }
 
+    private void StopAllCardsSelectable() {
+        _stealTooltip.Hide();
+        _stealTooltip.Position = new Vector2(0, 0);
+    }
+
+    private void CheatingStopped() {
+        _stealTooltip.Hide();
+        _stealTooltip.Position = new Vector2(0, 0);
+    }
     public void SetIsDealerWatching(bool isWatching) {
         IsDealerWatching = isWatching;
         GD.Print($"Dealer is watching: {Name}");
@@ -135,6 +152,8 @@ public partial class Player : Node2D {
     public void PlayerCaughtCheating() {
         GD.Print("Player caught cheating");
         StopCheat();
+        _stealTooltip.Hide();
+        _stealTooltip.Position = new Vector2(0, 0);
         Heat += CaughtCheatingHeat;
     }
 
@@ -190,6 +209,8 @@ public partial class Player : Node2D {
             SetHandsSelectable(false);
             Utils.EmitNpcCardSelectStart();
             _cheatingState = CheatingStates.CardSwap;
+            _stealTooltip.Position = new Vector2(0, 0);
+            _stealTooltip.Hide();
         }
         else if (CheatingStates.CardSwap == _cheatingState) {
             Utils.EmitStopAllCardsSelectable();
@@ -216,6 +237,8 @@ public partial class Player : Node2D {
         var userCardTarget = _userSwapCardUI.GetNode<Marker2D>("Marker2D");
 
         var targetLocalPos = ToLocal(stealTarget.GlobalPosition);
+        _targetCardPos = targetLocalPos;
+        OnNpcCardSelectStart();
         var finalLocalPos = ToLocal(userCardTarget.GlobalPosition);
         bool isTargetOnRight = targetLocalPos.Y > 0;
 
@@ -244,6 +267,9 @@ public partial class Player : Node2D {
             _handSfx.Stream = _successfulStealSfx;
             _handSfx.Play();
         }
+
+        _stealTooltip.Hide();
+        _stealTooltip.Position = new Vector2(0, 0);
 
         // Set the swap callback
         _onSwapCallback = () => Card.Swap(_userSwapCard, _npcSwapCard);
@@ -303,7 +329,13 @@ public partial class Player : Node2D {
     }
 
     private void OnNpcCardSelectStart() {
-        if (!IsNpc) return;
+        if (!IsNpc) {
+            if (_targetCardPos != new Vector2(0, 0)) {
+                _stealTooltip.Position = _targetCardPos + new Vector2(30, -5);
+                _stealTooltip.Show();
+            }
+            return;
+        }
 
         SetHandsSelectable(true, Control.CursorShape.PointingHand);
     }

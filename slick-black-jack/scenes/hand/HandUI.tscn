@@ -93,54 +93,63 @@ layout_mode = 2
 position = Vector2(7, 8)
 
 [node name="Panel3" parent="Cards" instance=ExtResource("2_jefut")]
+visible = false
 layout_mode = 2
 
 [node name="Marker2D" type="Marker2D" parent="Cards/Panel3"]
 position = Vector2(8, 9)
 
 [node name="Panel4" parent="Cards" instance=ExtResource("2_jefut")]
+visible = false
 layout_mode = 2
 
 [node name="Marker2D" type="Marker2D" parent="Cards/Panel4"]
 position = Vector2(10, 10)
 
 [node name="Panel5" parent="Cards" instance=ExtResource("2_jefut")]
+visible = false
 layout_mode = 2
 
 [node name="Marker2D" type="Marker2D" parent="Cards/Panel5"]
 position = Vector2(7, 9)
 
 [node name="Panel6" parent="Cards" instance=ExtResource("2_jefut")]
+visible = false
 layout_mode = 2
 
 [node name="Marker2D" type="Marker2D" parent="Cards/Panel6"]
 position = Vector2(8, 9)
 
 [node name="Panel7" parent="Cards" instance=ExtResource("2_jefut")]
+visible = false
 layout_mode = 2
 
 [node name="Marker2D" type="Marker2D" parent="Cards/Panel7"]
 position = Vector2(4, 10)
 
 [node name="Panel8" parent="Cards" instance=ExtResource("2_jefut")]
+visible = false
 layout_mode = 2
 
 [node name="Marker2D" type="Marker2D" parent="Cards/Panel8"]
 position = Vector2(9, 10)
 
 [node name="Panel9" parent="Cards" instance=ExtResource("2_jefut")]
+visible = false
 layout_mode = 2
 
 [node name="Marker2D" type="Marker2D" parent="Cards/Panel9"]
 position = Vector2(8, 9)
 
 [node name="Panel10" parent="Cards" instance=ExtResource("2_jefut")]
+visible = false
 layout_mode = 2
 
 [node name="Marker2D" type="Marker2D" parent="Cards"]
 position = Vector2(161, 10)
 
 [node name="Panel11" parent="Cards" instance=ExtResource("2_jefut")]
+visible = false
 layout_mode = 2
 
 [node name="Marker2D" type="Marker2D" parent="Cards/Panel11"]

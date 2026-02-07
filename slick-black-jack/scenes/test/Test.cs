@@ -47,12 +47,23 @@ public partial class Test : Node
             {
                 _mainPlayer = p;
                 _mainPlayer.ChipsChanged += OnMainPlayerChipsChanged;
+                _mainPlayer.HeatChanged += OnHeatChanged;
                 UpdateFattestStack(_mainPlayer.Chips);
                 break;
             }
         }
 
         _table.OpenForBets();
+    }
+
+    private void OnHeatChanged(int newHeat)
+    {
+        GD.Print(newHeat);
+        if (newHeat >= 100)
+        {
+            RoundEndedHelper();
+        }
+
     }
 
     private void OnHitPressed()
@@ -87,7 +98,7 @@ public partial class Test : Node
         GD.Print("Round ended!");
         await ToSignal(GetTree().CreateTimer(1.0f), SceneTreeTimer.SignalName.Timeout);
 
-        if (_mainPlayer != null && _mainPlayer.Chips <= 0)
+        if (_mainPlayer != null && _mainPlayer.Chips <= 0 || _mainPlayer != null && _mainPlayer.Heat >= 100)
         {
             var fattestStackLabel = _gameOverUi.GetNode<Label>("VBoxContainer/Label3");
             fattestStackLabel.Text = $"CLOSEST TO BEING A GOOD DAD: ${Utils.FattestStack:N0}";
@@ -97,7 +108,7 @@ public partial class Test : Node
             return;
         }
 
-        if (_mainPlayer.Chips >= 100)
+        if (_mainPlayer.Chips >= 1000000)
         {
             _gameOverUi.Hide();
             _gameWinUi.Show();

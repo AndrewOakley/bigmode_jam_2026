@@ -18,11 +18,12 @@
 [ext_resource type="PackedScene" uid="uid://48bu4tpvh518" path="res://scenes/cheat_meter/cheat_meter.tscn" id="15_xm0ii"]
 
 [sub_resource type="Gradient" id="Gradient_xm0ii"]
-colors = PackedColorArray(0, 0, 0, 0.28100002, 0.025840001, 0.025840001, 0.025840001, 0.586)
+offsets = PackedFloat32Array(0, 0.0027322404)
+colors = PackedColorArray(0, 0, 0, 0.28100002, 0.025840001, 0.025840001, 0.025840001, 0.81200004)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_bg4ew"]
 gradient = SubResource("Gradient_xm0ii")
-fill_from = Vector2(0.53846157, 1)
+fill_from = Vector2(0, 1)
 fill_to = Vector2(0.52136755, 0)
 
 [sub_resource type="AudioStreamPlaylist" id="AudioStreamPlaylist_xm0ii"]
@@ -68,7 +69,6 @@ _chips = 1000
 [node name="jack" parent="BlackJackTable/Players" instance=ExtResource("6_2ns80")]
 position = Vector2(387, 322)
 rotation = -1.5707964
-_chips = 1000
 
 [node name="headphones" parent="BlackJackTable/Players" instance=ExtResource("7_5unt0")]
 position = Vector2(205.00002, 241.00002)

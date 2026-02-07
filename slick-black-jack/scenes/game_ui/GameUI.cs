@@ -27,6 +27,7 @@ public partial class GameUI : Control
     private AudioStreamPlayer _chipSfx;
     private Button _cheatButton;
 
+
     private Player _mainPlayer;
     private Player _npcOne;
     private Player _npcTwo;
@@ -102,6 +103,7 @@ public partial class GameUI : Control
         _npcTwo.ChipsChanged += UpdateNpcTwoChipCount;
         UpdateNpcTwoChipCount(_npcTwo.Chips);
         _mainPlayer.ChipsChanged += OnChipsChanged;
+
 
         OnChipsChanged(_mainPlayer.Chips);
 
