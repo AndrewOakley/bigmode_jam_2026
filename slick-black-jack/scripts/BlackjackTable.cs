@@ -51,15 +51,20 @@ public partial class BlackjackTable : Node {
         
         Utils.TurnTimerExpired += OnTurnTimerExpired;
         Utils.PlayerbetSubmitted += OnPlayerbetSubmitted;
+        Utils.InsuranceSelected += OnInsuranceSelected;
     }
     
     // ALWAYS DO THIS IF CALLING SIGNALS FROM UTILS
     protected override void Dispose(bool disposing) {
         Utils.TurnTimerExpired -= OnTurnTimerExpired;
         Utils.PlayerbetSubmitted -= OnPlayerbetSubmitted;
+        Utils.InsuranceSelected -= OnInsuranceSelected;
         base.Dispose(disposing);
     }
 
+    public void OnInsuranceSelected() {
+        _game.DelayedStartRound();
+    }
     
     public void OnTurnTimerExpired() {
         PlayerStand();

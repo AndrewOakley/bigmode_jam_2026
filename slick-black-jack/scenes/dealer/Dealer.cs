@@ -11,6 +11,8 @@ public partial class Dealer : Node2D {
     [Export] private AnimatedSprite2D _headSprite;
     [Export] private AudioStreamPlayer _cueAudio;
     [Export] public float CueToMoveDelay { get; set; } = 0.5f;
+    private Label _dealerResponse;
+    
     private AudioStream[] _cueStreams;
     private List<Player> _players = [];
     private Timer _lookTimer;
@@ -26,6 +28,8 @@ public partial class Dealer : Node2D {
         _handContainer ??= GetNode<Control>("HandContainer");
         _fingerOrigin ??= GetNode<Marker2D>("FingerOrigin");
         _headSprite ??= GetNode<AnimatedSprite2D>("head");
+        _dealerResponse ??= GetNode<Label>("Response");
+        _dealerResponse.Hide();
 
         _originalRotation = _headSprite.Rotation;
 
@@ -58,6 +62,8 @@ public partial class Dealer : Node2D {
         if (_cueAudio != null) {
             _cueAudio.Finished += OnCueFinished;
         }
+
+        Utils.InsuranceYes += OnInsuranceYes;
     }
 
 
@@ -65,7 +71,31 @@ public partial class Dealer : Node2D {
     protected override void Dispose(bool disposing) {
         Utils.NpcCardSelectStart -= OnNpcCardSelectStart;
         Utils.UserSwappedCard -= OnUserSwappedCards;
+        Utils.InsuranceYes -= OnInsuranceYes;
+        
         base.Dispose(disposing);
+    }
+
+    private bool _responding = false;
+    private async void OnInsuranceYes() {
+        if (_responding) return;
+        
+        _responding = true;
+        
+        // on yes select a random response and show it for 2 seconds
+        var responses = new string[] {
+            "Try again.",
+            "Nope.",
+            "Coward",
+            "Insurance is for pu*****",
+        };
+        
+        _dealerResponse.Text = responses[new Random().Next(responses.Length)];
+        _dealerResponse.Show();
+        await Task.Delay(2000);
+        
+        _dealerResponse.Hide();
+        _responding = false;
     }
 
     private void OnNpcCardSelectStart() {
@@ -116,7 +146,17 @@ public partial class Dealer : Node2D {
         _lookTimer.Stop();
     }
 
-    public void AddCard(Card card) {
+    public void AddCard(Card card, bool forceDealerBlackjack = false) {
+        if (forceDealerBlackjack) {
+            if (Hand.CardCount == 0) {
+                card = new Card(card.Suit, Rank.Ace);
+            }
+
+            if (Hand.CardCount == 1) {
+                card = new Card(card.Suit, Rank.Ten);
+            }
+        }
+        
         var faceDown = Hand.CardCount == 1;
         Hand.AddCard(card, faceDown);
     }

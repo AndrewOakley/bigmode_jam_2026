@@ -54,4 +54,19 @@ public partial class Utils : Node {
     public static event CheatingStoppedEventHandler CheatingStopped;
     
     public static void EmitCheatingStopped() => CheatingStopped?.Invoke();
+    
+    public delegate void ShowInsuranceEventHandler();
+    public static event ShowInsuranceEventHandler ShowInsurance;
+    
+    public static void EmitShowInsurance() => ShowInsurance?.Invoke();
+    
+    public delegate void InsuranceSelectedEventHandler();
+    public static event InsuranceSelectedEventHandler InsuranceSelected;
+    
+    public static void EmitInsuranceSelected() => InsuranceSelected?.Invoke();
+    
+    public delegate void InsuranceYesEventHandler();
+    public static event InsuranceYesEventHandler InsuranceYes;
+    
+    public static void EmitInsuranceYes() => InsuranceYes?.Invoke();
 }

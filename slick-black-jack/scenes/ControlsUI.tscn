@@ -463,6 +463,47 @@ offset_bottom = 119.00001
 scale = Vector2(1.6222408, 1.6587222)
 size_flags_vertical = 3
 
+[node name="Insurance" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+z_index = 4096
+layout_mode = 0
+offset_left = 421.0
+offset_top = 118.0
+offset_right = 487.0
+offset_bottom = 158.0
+
+[node name="Label" type="Label" parent="Insurance"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_mrh3v")
+text = "Insurance?"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Insurance"]
+layout_mode = 2
+
+[node name="InsuranceYes" type="Button" parent="Insurance/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(31, 19)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.318843, 0.31881776, 0.34837988, 1)
+theme_override_colors/font_hover_color = Color(0.19215687, 0.19215687, 0.21176471, 1)
+theme_override_fonts/font = ExtResource("2_mrh3v")
+theme_override_styles/normal = SubResource("StyleBoxTexture_hj8fc")
+theme_override_styles/hover = SubResource("StyleBoxTexture_yr0h1")
+text = "YES"
+
+[node name="InsuranceNo" type="Button" parent="Insurance/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(31, 19)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.318843, 0.31881776, 0.34837988, 1)
+theme_override_colors/font_hover_color = Color(0.19215687, 0.19215687, 0.21176471, 1)
+theme_override_fonts/font = ExtResource("2_mrh3v")
+theme_override_styles/normal = SubResource("StyleBoxTexture_hj8fc")
+theme_override_styles/hover = SubResource("StyleBoxTexture_yr0h1")
+text = "NO"
+
 [node name="chipsfx" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("14_h46sw")
 volume_db = -11.739
@@ -474,3 +515,5 @@ pitch_scale = 0.83
 [connection signal="pressed" from="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions/Stand" to="." method="OnStandPressed"]
 [connection signal="pressed" from="Panel/Panel2/MarginContainer/VBoxContainer/ActionsContainer/GameActions/PlaceBet" to="." method="OnPlaceBetPressed"]
 [connection signal="pressed" from="Cheat" to="." method="OnCheatPressed"]
+[connection signal="pressed" from="Insurance/HBoxContainer/InsuranceYes" to="." method="OnYesPressed"]
+[connection signal="pressed" from="Insurance/HBoxContainer/InsuranceNo" to="." method="OnNoPressed"]

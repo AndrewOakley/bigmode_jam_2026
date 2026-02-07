@@ -39,6 +39,7 @@ namespace SlickBlackJack.Components
         // FOR DEBUGGING
         private bool ForcePlayerBlackjack = false;
         private bool ForcePlayerSplitCards = false;
+        private bool ForceDealerBlackJack = true;
 
         public BlackjackGame(Dealer dealer, List<Player> players, int numberOfDecks = 1)
         {
@@ -85,7 +86,7 @@ namespace SlickBlackJack.Components
             }
 
             await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
-            Dealer.AddCard(Deck.DrawCard());
+            Dealer.AddCard(Deck.DrawCard(), ForceDealerBlackJack);
             for (var i = 0; i < NumberOfPlayers; i++)
             {
                 if (Players[i].PlayerIsOut) continue;
@@ -96,9 +97,19 @@ namespace SlickBlackJack.Components
             }
 
             await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
-            Dealer.AddCard(Deck.DrawCard());
+            Dealer.AddCard(Deck.DrawCard(), ForceDealerBlackJack);
 
             // Check for immediate blackjacks
+            if (Dealer.Hand.GetCards()[0].IsAce()) {
+                GD.Print("Ask for insurance");
+                Utils.EmitShowInsurance();
+            }
+            else {
+                DelayedStartRound();
+            }
+        }
+
+        public async void DelayedStartRound() {
             var dealerHasBlackjack = Dealer.Hand.IsBlackjack();
 
             if (dealerHasBlackjack)

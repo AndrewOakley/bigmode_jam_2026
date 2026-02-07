@@ -26,7 +26,7 @@ public partial class GameUI : Control
     private HeatMeter _heatMeter;
     private AudioStreamPlayer _chipSfx;
     private Button _cheatButton;
-
+    private VBoxContainer _insuranceContainer;
 
     private Player _mainPlayer;
     private Player _npcOne;
@@ -57,6 +57,9 @@ public partial class GameUI : Control
         _heatMeter = GetNode<HeatMeter>("%HeatMeter");
         _chipSfx = GetNode<AudioStreamPlayer>("chipsfx");
         _cheatButton = GetNode<Button>("%Cheat");
+        
+        _insuranceContainer = GetNode<VBoxContainer>("%Insurance");
+        _insuranceContainer.Hide();
 
         _handTimer = new Timer();
         _handTimer.WaitTime = 1.0;
@@ -109,6 +112,7 @@ public partial class GameUI : Control
 
         Utils.StopTurnTimer += OnStopTurnTimer;
         Utils.BettingStarted += OnBettingStarted;
+        Utils.ShowInsurance += OnShowInsurance;
         // Utils.CheatingStopped += OnCheatingStopped;
 
         _mainPlayer.HeatChanged += OnHeatChanged;
@@ -121,6 +125,7 @@ public partial class GameUI : Control
     {
         Utils.StopTurnTimer -= OnStopTurnTimer;
         Utils.BettingStarted -= OnBettingStarted;
+        Utils.ShowInsurance -= OnShowInsurance;
         // Utils.CheatingStopped -= OnCheatingStopped;
         base.Dispose(disposing);
     }
@@ -211,6 +216,19 @@ public partial class GameUI : Control
     private void OnMoveFinished()
     {
         EnableActionButtons();
+    }
+
+    public void OnShowInsurance() {
+        _insuranceContainer.Show();
+    }
+
+    public void OnYesPressed() {
+        Utils.EmitInsuranceYes();
+    }
+
+    public void OnNoPressed() {
+        Utils.EmitInsuranceSelected();
+        _insuranceContainer.Hide();
     }
 
     public void OnCheatPressed()
