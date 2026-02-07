@@ -49,4 +49,9 @@ public partial class Utils : Node {
     public static event BettingStartedEventHandler BettingStarted;
     
     public static void EmitBettingStarted() => BettingStarted?.Invoke();
+    
+    public delegate void CheatingStoppedEventHandler();
+    public static event CheatingStoppedEventHandler CheatingStopped;
+    
+    public static void EmitCheatingStopped() => CheatingStopped?.Invoke();
 }

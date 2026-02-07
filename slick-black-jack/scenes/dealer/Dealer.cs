@@ -54,6 +54,10 @@ public partial class Dealer : Node2D {
                 _cueStreams[i] = playlist.GetListStream(i);
             }
         }
+
+        if (_cueAudio != null) {
+            _cueAudio.Finished += OnCueFinished;
+        }
     }
 
 
@@ -148,7 +152,8 @@ public partial class Dealer : Node2D {
         _lookTimer.Start();
     }
 
-    private async void OnLookTimerTimeout() {
+    private void OnLookTimerTimeout() {
+        GD.Print("Look timer timeout");
         if (!_isRoundActive || _players.Count == 0) return;
 
         if (_currentLookAtPlayer != null) {
@@ -166,19 +171,18 @@ public partial class Dealer : Node2D {
             _cueAudio.Stream = _cueStreams[audioIndex];
             _cueAudio.Play();
         }
-
-        // Wait before moving
-        if (CueToMoveDelay > 0) {
-            await ToSignal(GetTree().CreateTimer(CueToMoveDelay), "timeout");
+        else {
+            OnCueFinished();
         }
-
-        // Tween to look at the player
+    }
+    
+    private void OnCueFinished() {
         var targetRotation = _headSprite.GlobalPosition.AngleToPoint(_currentLookAtPlayer.PlayerPositionMarker.GlobalPosition);
         var tween = CreateTween();
         tween.TweenProperty(_headSprite, "rotation", targetRotation, 1.5)
             .SetTrans(Tween.TransitionType.Cubic)
             .SetEase(Tween.EaseType.InOut);
-
+        
         tween.Finished += OnTweenFinished;
     }
 

@@ -437,6 +437,7 @@ text = "Heat"
 horizontal_alignment = 1
 
 [node name="Cheat" type="Button" parent="." groups=["action"]]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 19)
 layout_mode = 0
 offset_left = 17.0

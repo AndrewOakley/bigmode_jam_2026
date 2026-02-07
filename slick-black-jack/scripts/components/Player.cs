@@ -280,9 +280,10 @@ public partial class Player : Node2D {
         Heat += MissHeat;
     }
 
-    private void StopCheat() {
+    public void StopCheat() {
         _cheatingState = CheatingStates.None;
         Utils.EmitStopAllCardsSelectable();
+        Utils.EmitCheatingStopped();
         _cheatMeter?.StopMeter();
     }
 

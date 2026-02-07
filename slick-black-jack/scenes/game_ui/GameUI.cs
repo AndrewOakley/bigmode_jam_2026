@@ -24,6 +24,7 @@ public partial class GameUI : Control {
     private Button _placeBetButton;
     private HeatMeter _heatMeter;
     private AudioStreamPlayer _chipSfx;
+    private Button _cheatButton;
 
     private Player _mainPlayer;
     private Player _npcOne;
@@ -33,6 +34,7 @@ public partial class GameUI : Control {
     private int _timeRemaining;
     
     private List<Button> _actionButtons = [];
+    private bool _cheatButtonCheatMode = true; // if true the button says steal, if false it says stop
 
     public override void _Ready() {
         _playerChipCountLabel = GetNode<Label>("%PlayerChipCount");
@@ -51,6 +53,7 @@ public partial class GameUI : Control {
         
         _heatMeter = GetNode<HeatMeter>("%HeatMeter");
         _chipSfx = GetNode<AudioStreamPlayer>("chipsfx");
+        _cheatButton = GetNode<Button>("%Cheat");
 
         _handTimer = new Timer();
         _handTimer.WaitTime = 1.0;
@@ -97,10 +100,19 @@ public partial class GameUI : Control {
 
         Utils.StopTurnTimer += OnStopTurnTimer;
         Utils.BettingStarted += OnBettingStarted;
+        // Utils.CheatingStopped += OnCheatingStopped;
 
         _mainPlayer.HeatChanged += OnHeatChanged;
         
         DisableActionButtons();
+    }
+    
+    // ALWAYS DO THIS IF CALLING SIGNALS FROM UTILS
+    protected override void Dispose(bool disposing) {
+        Utils.StopTurnTimer -= OnStopTurnTimer;
+        Utils.BettingStarted -= OnBettingStarted;
+        // Utils.CheatingStopped -= OnCheatingStopped;
+        base.Dispose(disposing);
     }
 
     private void OnChipsChanged(int chips) {
@@ -133,13 +145,6 @@ public partial class GameUI : Control {
         _mainPlayer.PlayerBet = Math.Min(RoundBet(value, minBet, maxBet),
             _betSlider.MaxValue);
         _betAmountLabel.Text = $"BET: ${_mainPlayer.PlayerBet:N0}";
-    }
-
-    // ALWAYS DO THIS IF CALLING SIGNALS FROM UTILS
-    protected override void Dispose(bool disposing) {
-        Utils.StopTurnTimer -= OnStopTurnTimer;
-        Utils.BettingStarted -= OnBettingStarted;
-        base.Dispose(disposing);
     }
 
     private void OnStopTurnTimer() {
@@ -187,7 +192,23 @@ public partial class GameUI : Control {
 
     public void OnCheatPressed() {
         Utils.EmitCheatStarted();
+        //
+        // if (_cheatButtonCheatMode) {
+        //     _cheatButton.Text = "STOP (esc)";
+        //     Utils.EmitCheatStarted();
+        //     _cheatButtonCheatMode = false;
+        // }
+        // else {
+        //     _mainPlayer.StopCheat();
+        //     _cheatButton.Text = "STEAL";
+        //     _cheatButtonCheatMode = true;
+        // }
     }
+
+    // private void OnCheatingStopped() {
+    //     _cheatButton.Text = "STEAL";
+    //     _cheatButtonCheatMode = true;
+    // }
 
     public void StopTimer() {
         _handTimer.Stop();
