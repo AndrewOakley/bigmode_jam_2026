@@ -28,10 +28,10 @@ line_spacing = -6.41
 font = ExtResource("2_mrh3v")
 font_size = 20
 
-[sub_resource type="LabelSettings" id="LabelSettings_p7dk6"]
+[sub_resource type="LabelSettings" id="LabelSettings_r8ob0"]
 font = ExtResource("2_mrh3v")
 
-[sub_resource type="LabelSettings" id="LabelSettings_r8ob0"]
+[sub_resource type="LabelSettings" id="LabelSettings_p7dk6"]
 font = ExtResource("2_mrh3v")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_h1nqx"]
@@ -185,14 +185,6 @@ text = "Table Chips"
 label_settings = SubResource("LabelSettings_8rf5x")
 horizontal_alignment = 1
 
-[node name="NpcOneChipCount" type="Label" parent="Panel/Panel2/MarginContainer/VBoxContainer/npcChips"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_fonts/font = ExtResource("1_8rf5x")
-theme_override_font_sizes/font_size = 12
-text = "Glasses: "
-label_settings = SubResource("LabelSettings_p7dk6")
-
 [node name="NpcTwoChipCount" type="Label" parent="Panel/Panel2/MarginContainer/VBoxContainer/npcChips"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -200,6 +192,14 @@ theme_override_fonts/font = ExtResource("1_8rf5x")
 theme_override_font_sizes/font_size = 12
 text = "Headphones: 22,000"
 label_settings = SubResource("LabelSettings_r8ob0")
+
+[node name="NpcOneChipCount" type="Label" parent="Panel/Panel2/MarginContainer/VBoxContainer/npcChips"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8rf5x")
+theme_override_font_sizes/font_size = 12
+text = "Glasses: "
+label_settings = SubResource("LabelSettings_p7dk6")
 
 [node name="ActionsContainer" type="MarginContainer" parent="Panel/Panel2/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 165)
