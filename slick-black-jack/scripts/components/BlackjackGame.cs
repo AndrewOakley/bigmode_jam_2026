@@ -39,7 +39,7 @@ namespace SlickBlackJack.Components
         // FOR DEBUGGING
         private bool ForcePlayerBlackjack = false;
         private bool ForcePlayerSplitCards = false;
-        private bool ForceDealerBlackJack = true;
+        private bool ForceDealerBlackJack = false;
 
         public BlackjackGame(Dealer dealer, List<Player> players, int numberOfDecks = 1)
         {
