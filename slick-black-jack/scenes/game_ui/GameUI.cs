@@ -148,6 +148,11 @@ public partial class GameUI : Control
 
     private int RoundBet(int bet, int minBet, int maxBet)
     {
+        // Allow betting exact maxBet even if not divisible by BetStep
+        if (bet == maxBet)
+        {
+            return maxBet;
+        }
         int rounded = (int)(Math.Floor(bet / (float)BetStep) * BetStep);
         return Math.Clamp(rounded, minBet, maxBet);
     }

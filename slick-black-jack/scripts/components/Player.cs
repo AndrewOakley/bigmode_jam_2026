@@ -398,7 +398,6 @@ public partial class Player : Node2D {
 
     public void EndRound() {
         ClearHand();
-        Heat -= RoundEndHeatMinus;
     }
 
     private void ClearHand() {
@@ -424,12 +423,14 @@ public partial class Player : Node2D {
             // Use exponential distribution for bet percentage (2% to 40%)
             // Lower percentages are much more likely than higher ones
             int baseBet;
-            if (Chips <= 300) {
-                double randomValue = _rng.Randf(); // 0.0 to 1.0
-                double skewedValue = Math.Pow(randomValue, 2); // square it to heavily favor lower values
-                int betPercent = (int)(skewedValue * 100);
-                double betPercentDouble = betPercent / 100.0;
-                baseBet = (int)(Chips * betPercentDouble);
+            if (true) {
+                // double randomValue = _rng.Randf(); // 0.0 to 1.0
+                // double skewedValue = Math.Pow(randomValue, 2); // square it to heavily favor lower values
+                // int betPercent = (int)(skewedValue * 100);
+                // double betPercentDouble = betPercent / 100.0;
+                // baseBet = (int)(Chips * betPercentDouble);
+                // base bet is random number between 10 and Chips
+                baseBet = _rng.RandiRange(0, Chips);
             }
             else {
 
@@ -693,7 +694,7 @@ public partial class Player : Node2D {
         Hand currentHand = GetCurrentHand();
         int handValue = currentHand.GetValue();
         bool isSoft = currentHand.IsSoft();
-        bool canSplit = currentHand.CanSplit();
+        bool canSplit = currentHand.CanSplit() && Chips > 0;
         bool canDoubleDown = currentHand.CardCount == 2; // Can only double on initial two cards
 
         // Check for split first (only on initial two cards)

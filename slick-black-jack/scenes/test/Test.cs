@@ -36,7 +36,7 @@ public partial class Test : Node
         // _gameWinUi.Hide();
         var winPlayAgainBtn = _gameWinUi.GetNode<Button>("VBoxContainer/HBoxContainer/Button");
         var winQuitBtn = _gameWinUi.GetNode<Button>("VBoxContainer/HBoxContainer/Button2");
-        winPlayAgainBtn.Pressed += OnLetItRidePressed;
+        winPlayAgainBtn.Pressed += OnContinuePressed;
         winQuitBtn.Pressed += OnGiveUpPressed;
 
         // Find the main player and track peak chips
@@ -93,6 +93,7 @@ public partial class Test : Node
         RoundEndedHelper();
     }
 
+    private bool GameWon = false;
     public async void RoundEndedHelper()
     {
         GD.Print("Round ended!");
@@ -108,8 +109,8 @@ public partial class Test : Node
             return;
         }
 
-        if (_mainPlayer.Chips >= 1000000)
-        {
+        if (_mainPlayer.Chips >= 100_000 && !GameWon) {
+            GameWon = true;
             _gameOverUi.Hide();
             _gameWinUi.Show();
             _gameOverOverlay.Show();
@@ -135,6 +136,12 @@ public partial class Test : Node
     private void OnLetItRidePressed()
     {
         GetTree().ReloadCurrentScene();
+    }
+
+    private void OnContinuePressed() {
+        _gameWinUi.Hide();
+        _gameOverOverlay.Hide();
+        _table.OpenForBets();
     }
 
     private void OnGiveUpPressed()

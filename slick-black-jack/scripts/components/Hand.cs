@@ -68,7 +68,7 @@ namespace SlickBlackJack.Components {
             }
             
             if (forceSplitCards) {
-                card = new Card(card.Suit, Rank.Five);
+                card = new Card(card.Suit, Rank.Ace);
             }
             
             if (card == null) {
