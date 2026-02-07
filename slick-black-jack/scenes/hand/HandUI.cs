@@ -100,7 +100,16 @@ public partial class HandUI : Control {
 	private void OnChipsChanged(int chipCount) {
 		if (chipCount == 0 || _chipCountLabel == null || _chipTexture == null) return;
 		
-		_chipCountLabel.Text = chipCount.ToString("N0");
+		// format chips with a k if greater than 10,000, and M if greater than 1,000,000
+		string formattedChips;
+		if (chipCount >= 1_000_000) {
+			formattedChips = $"{chipCount / 1_000_000.0:F1}M";
+		} else if (chipCount >= 1_000) {
+			formattedChips = $"{chipCount / 1_000.0:F1}k";
+		} else {
+			formattedChips = chipCount.ToString("N0");
+		}
+		_chipCountLabel.Text = formattedChips;
 		_chipCountLabel.Show();
 		_chipTexture.Show();
 	}

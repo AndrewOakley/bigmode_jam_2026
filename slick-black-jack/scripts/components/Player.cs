@@ -45,7 +45,7 @@ public partial class Player : Node2D {
         }
     }
 
-    private const int CaughtCheatingHeat = 20;
+    private const int CaughtCheatingHeat = 25;
     private const int RoundEndHeatMinus = 10;
 
     private bool _isTurn = false;

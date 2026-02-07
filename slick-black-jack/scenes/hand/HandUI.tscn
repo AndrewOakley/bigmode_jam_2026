@@ -1,9 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://c2nwtq6fu1vo6"]
+[gd_scene load_steps=13 format=3 uid="uid://c2nwtq6fu1vo6"]
 
 [ext_resource type="Script" uid="uid://dba4oiiukcnt5" path="res://scenes/hand/HandUI.cs" id="1_5s1xj"]
 [ext_resource type="FontFile" uid="uid://cq3yt1gs4m3ka" path="res://assets/fonts/ARCADECLASSIC.TTF" id="2_4tt56"]
 [ext_resource type="PackedScene" uid="uid://b6u7iaay5cqmu" path="res://scenes/card/card_ui.tscn" id="2_jefut"]
-[ext_resource type="Texture2D" uid="uid://dqnfnjscub272" path="res://assets/sprites/chips-small.png" id="4_4tt56"]
+[ext_resource type="Texture2D" uid="uid://cc0yvjt8yoljm" path="res://assets/sprites/red-small-2.png" id="4_ub7ud"]
 [ext_resource type="AudioStream" uid="uid://gp1kl33yuq5k" path="res://assets/sfx/deal1.wav" id="5_ub7ud"]
 [ext_resource type="AudioStream" uid="uid://meq0mksubkv7" path="res://assets/sfx/deal2.wav" id="6_n5ph1"]
 [ext_resource type="AudioStream" uid="uid://bo0ayp14cc4ka" path="res://assets/sfx/deal3.wav" id="7_nb54d"]
@@ -15,10 +15,6 @@
 font = ExtResource("2_4tt56")
 font_size = 18
 font_color = Color(0.8745098, 0.91764706, 0.89411765, 1)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_lh0ee"]
-atlas = ExtResource("4_4tt56")
-region = Rect2(6, 6, 19, 18)
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_3j3rd"]
 streams_count = 6
@@ -167,7 +163,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-texture = SubResource("AtlasTexture_lh0ee")
+texture = ExtResource("4_ub7ud")
 stretch_mode = 4
 
 [node name="Control" type="Control" parent="MarginContainer/ChipTexture"]
@@ -184,12 +180,14 @@ anchors_preset = -1
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 20.0
-grow_horizontal = 2
+offset_left = -5.0
+offset_top = -1.0
+offset_right = 25.0
+offset_bottom = -1.0
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("2_4tt56")
-theme_override_font_sizes/font_size = 12
-text = "25"
+theme_override_font_sizes/font_size = 10
+text = "1,2412"
 vertical_alignment = 1
 
 [node name="DealerPointTo" type="Marker2D" parent="."]
