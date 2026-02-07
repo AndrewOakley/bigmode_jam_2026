@@ -157,9 +157,10 @@ volume_db = -31.355
 unique_name_in_owner = true
 offset_left = 400.0
 offset_top = 27.0
-offset_right = 440.0
-offset_bottom = 50.0
+offset_right = 537.0
+offset_bottom = 52.0
 theme_override_fonts/font = ExtResource("14_hnjpe")
-text = "Try again"
+text = "No wonder your wife wants to leave you"
+autowrap_mode = 2
 
 [editable path="HandContainer/DealerHand"]

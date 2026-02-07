@@ -88,6 +88,7 @@ public partial class Dealer : Node2D {
             "Nope.",
             "Coward",
             "Insurance is for pu*****",
+            "No wonder your wife wants to leave you"
         };
         
         _dealerResponse.Text = responses[new Random().Next(responses.Length)];
