@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://c5kwgoqs23bvg"]
+[gd_scene load_steps=29 format=3 uid="uid://c5kwgoqs23bvg"]
 
 [ext_resource type="PackedScene" uid="uid://cljhd4qk0x3gi" path="res://scenes/Player/player.tscn" id="1_l650y"]
 [ext_resource type="Texture2D" uid="uid://clfr45l5w2tm6" path="res://assets/sprites/characters/headphonesGuy/body.png" id="2_l5h58"]
@@ -160,9 +160,47 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Player" groups=["npc_player", "player"] instance=ExtResource("1_l650y")]
+[sub_resource type="Animation" id="Animation_l5h58"]
+resource_name = "fade_away"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.9),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_b2oy6"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_edlr3"]
+_data = {
+&"RESET": SubResource("Animation_b2oy6"),
+&"fade_away": SubResource("Animation_l5h58")
+}
+
+[node name="Player" node_paths=PackedStringArray("_animationPlayer") groups=["npc_player", "player"] instance=ExtResource("1_l650y")]
 Name = "headphones"
 IsNpc = true
+_animationPlayer = NodePath("AnimationPlayer")
+_initialChips = 100
 
 [node name="Hands" parent="." index="0"]
 offset_left = -141.0
@@ -179,5 +217,7 @@ frame_progress = 0.033250183
 sprite_frames = SubResource("SpriteFrames_ijjlt")
 frame_progress = 0.7387414
 
-[node name="WinSFX" parent="." index="3"]
-stream_paused = true
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="8"]
+libraries = {
+&"": SubResource("AnimationLibrary_edlr3")
+}

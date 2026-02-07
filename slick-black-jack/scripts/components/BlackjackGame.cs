@@ -35,7 +35,6 @@ namespace SlickBlackJack.Components
 
         private int _numberOfDecks;
         private const int DealOutTimer = 500;
-        private const int InitalChipCount = 1000;
 
         // FOR DEBUGGING
         private bool ForcePlayerBlackjack = false;
@@ -78,6 +77,8 @@ namespace SlickBlackJack.Components
             // First card to each player, then dealer, then second card to each player, then dealer
             for (var i = 0; i < NumberOfPlayers; i++)
             {
+                if (Players[i].PlayerIsOut) continue;
+                
                 await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
                 var forceBlackjack = ForcePlayerBlackjack;
                 Players[i].InitialDeal(Deck.DrawCard(), forceBlackjack, ForcePlayerSplitCards);
@@ -87,6 +88,8 @@ namespace SlickBlackJack.Components
             Dealer.AddCard(Deck.DrawCard());
             for (var i = 0; i < NumberOfPlayers; i++)
             {
+                if (Players[i].PlayerIsOut) continue;
+                
                 await Task.Delay(TimeSpan.FromMilliseconds(DealOutTimer));
                 var forceBlackjack = ForcePlayerBlackjack;
                 Players[i].InitialDeal(Deck.DrawCard(), forceBlackjack, ForcePlayerSplitCards);
@@ -216,6 +219,11 @@ namespace SlickBlackJack.Components
             {
                 await Stand(true);
             }
+            else {
+                if (currentPlayer.IsNpc) {
+                    await Hit();
+                }
+            }
         }
 
         /// <summary>
@@ -331,6 +339,7 @@ namespace SlickBlackJack.Components
             for (var i = 0; i < NumberOfPlayers; i++)
             {
                 Players[i].DetermineHandResults(dealerValue);
+                Players[i].CheckIfPlayerIsOut();
             }
         }
 

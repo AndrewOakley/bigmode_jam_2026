@@ -25,7 +25,6 @@ HandsUIContainer = NodePath("Hands")
 Name = "andy"
 IsNpc = false
 _stealHoldTime = 2.0
-_chips = 5000
 
 [node name="Hands" type="HBoxContainer" parent="." groups=["player"]]
 offset_left = -161.0

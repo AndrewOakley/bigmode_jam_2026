@@ -27,9 +27,12 @@ public partial class Player : Node2D {
     [Export] public bool PlayWinSfx { get; set; } = false;
     [Export] private CheatMeter _cheatMeter;
     [Export] private float _stealHoldTime = 1.5f;
+    [Export] private AnimationPlayer _animationPlayer;
+    
     private Label _stealTooltip;
     public Marker2D PlayerPositionMarker { get; set; }
     private Sprite2D _eyeSprite;
+    public bool PlayerIsOut { get; set; } = false;
 
     public List<Hand> Hands { get; set; } = []; // holds the list of all hands (needed for splitting)
     public int PlayerBet { get; set; } = 10;
@@ -74,7 +77,8 @@ public partial class Player : Node2D {
     private AudioStream _wrongSfx;
     private AudioStream _successfulStealSfx;
     [Export] private AnimationPlayer _handAnimations;
-    [Export] private int _chips = 1000;
+    [Export] private int _initialChips = 6969;
+    private int _chips = 10;
     public int Chips {
         get => _chips;
         set {
@@ -122,16 +126,24 @@ public partial class Player : Node2D {
         Utils.StopAllCardsSelectable += StopAllCardsSelectable;
         Utils.CheatingStopped += CheatingStopped;
 
+        Chips = _initialChips;
+
+    }
+
+    private async void HideStealTooltip() {
+        // wait 2 seconds before hiding tooltip
+        await ToSignal(GetTree().CreateTimer(2f), "timeout");
+        _targetCardPos = new Vector2(0, 0);
+        _stealTooltip.Hide();
+        _stealTooltip.Position = new Vector2(0, 0);
     }
 
     private void StopAllCardsSelectable() {
-        _stealTooltip.Hide();
-        _stealTooltip.Position = new Vector2(0, 0);
+        HideStealTooltip();
     }
 
     private void CheatingStopped() {
-        _stealTooltip.Hide();
-        _stealTooltip.Position = new Vector2(0, 0);
+        HideStealTooltip();
     }
     public void SetIsDealerWatching(bool isWatching) {
         IsDealerWatching = isWatching;
@@ -152,8 +164,7 @@ public partial class Player : Node2D {
     public void PlayerCaughtCheating() {
         GD.Print("Player caught cheating");
         StopCheat();
-        _stealTooltip.Hide();
-        _stealTooltip.Position = new Vector2(0, 0);
+        HideStealTooltip();
         Heat += CaughtCheatingHeat;
     }
 
@@ -209,8 +220,7 @@ public partial class Player : Node2D {
             SetHandsSelectable(false);
             Utils.EmitNpcCardSelectStart();
             _cheatingState = CheatingStates.CardSwap;
-            _stealTooltip.Position = new Vector2(0, 0);
-            _stealTooltip.Hide();
+            HideStealTooltip();
         }
         else if (CheatingStates.CardSwap == _cheatingState) {
             Utils.EmitStopAllCardsSelectable();
@@ -268,7 +278,7 @@ public partial class Player : Node2D {
             _handSfx.Play();
         }
 
-        _stealTooltip.Hide();
+        HideStealTooltip();
         _stealTooltip.Position = new Vector2(0, 0);
 
         // Set the swap callback
@@ -400,16 +410,36 @@ public partial class Player : Node2D {
     }
 
     public void StartRound(int mainPlayerBet = 0) {
+        if (Chips == 0) {
+            PlayerIsOut = true;
+        }
+        
+        if (PlayerIsOut) {
+            return;
+        }
+        
         if (IsNpc) {
             RandomNumberGenerator _rng = new RandomNumberGenerator();
             // Set to a random number between 2 percent and 20 percent of their chips
             // Use exponential distribution for bet percentage (2% to 40%)
             // Lower percentages are much more likely than higher ones
-            double randomValue = _rng.Randf(); // 0.0 to 1.0
-            double skewedValue = Math.Pow(randomValue, 3); // Cube it to heavily favor lower values
-            int betPercent = 2 + (int)(skewedValue * 38); // 2 + (0 to 38) = 2 to 40
-            double betPercentDouble = betPercent / 100.0;
-            int baseBet = (int)(Chips * betPercentDouble);
+            int baseBet;
+            if (Chips <= 300) {
+                double randomValue = _rng.Randf(); // 0.0 to 1.0
+                double skewedValue = Math.Pow(randomValue, 2); // square it to heavily favor lower values
+                int betPercent = (int)(skewedValue * 100);
+                double betPercentDouble = betPercent / 100.0;
+                baseBet = (int)(Chips * betPercentDouble);
+            }
+            else {
+
+                double randomValue = _rng.Randf(); // 0.0 to 1.0
+                double skewedValue = Math.Pow(randomValue, 2); // square it to heavily favor lower values
+                int betPercent = 2 + (int)(skewedValue * 38); // 2 + (0 to 38) = 2 to 40
+                double betPercentDouble = betPercent / 100.0;
+                baseBet = (int)(Chips * betPercentDouble);
+            }
+            
             int roundedBet = (int)(Math.Ceiling(baseBet / 10.0) * 10);
             PlayerBet = Math.Clamp(roundedBet, 10, Chips);
         }
@@ -577,6 +607,15 @@ public partial class Player : Node2D {
         EmitSignal(SignalName.PlayerMoveFinished);
     }
     // End Black jack moves ----------------------------------------------------------------------------------------
+    public bool CheckIfPlayerIsOut() {
+        if (Chips <= 0) {
+            // EmitSignal(SignalName.PlayerIsOut);
+            PlayerIsOut = true;
+            _animationPlayer?.Play("fade_away");
+        }
+        
+        return PlayerIsOut;
+    }
 
     public void DetermineHandResults(int dealerValue) {
         for (var i = 0; i < Hands.Count; i++) {

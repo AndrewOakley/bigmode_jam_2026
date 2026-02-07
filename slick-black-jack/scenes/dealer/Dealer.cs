@@ -94,6 +94,8 @@ public partial class Dealer : Node2D {
         foreach (var player in _players) {
             player.SetIsDealerWatching(false);
         }
+        
+        _players = _players.FindAll(p => !p.PlayerIsOut);
     }
 
     public void StartRound() {
@@ -166,7 +168,7 @@ public partial class Dealer : Node2D {
         // Pick a random player
         var randomIndex = GD.RandRange(0, _players.Count - 1);
         var randomPlayer = _players[(int)randomIndex];
-        if (randomPlayer == _currentLookAtPlayer) {
+        if (randomPlayer == _currentLookAtPlayer && _players.Count > 1) {
             _samePlayerCount++;
             if (_samePlayerCount >= _samePlayerMax) {
                 GD.Print("Same player count reached max, picking another player");

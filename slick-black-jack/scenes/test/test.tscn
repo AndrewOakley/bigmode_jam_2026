@@ -64,7 +64,7 @@ position = Vector2(65, 27)
 position = Vector2(579, 230)
 rotation = -2.5321772
 _stealHoldTime = 1.5
-_chips = 1000
+_initialChips = 1000
 
 [node name="jack" parent="BlackJackTable/Players" instance=ExtResource("6_2ns80")]
 position = Vector2(387, 322)
@@ -74,7 +74,7 @@ rotation = -1.5707964
 position = Vector2(205.00002, 241.00002)
 rotation = -0.64692277
 _stealHoldTime = 1.5
-_chips = 1000
+_initialChips = 1000
 
 [node name="CheatMeter" parent="." instance=ExtResource("15_xm0ii")]
 visible = false

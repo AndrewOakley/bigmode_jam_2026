@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://gog6jny4ukt4"]
+[gd_scene load_steps=31 format=3 uid="uid://gog6jny4ukt4"]
 
 [ext_resource type="PackedScene" uid="uid://cljhd4qk0x3gi" path="res://scenes/Player/player.tscn" id="1_emri4"]
 [ext_resource type="Texture2D" uid="uid://diubfsberjeex" path="res://assets/sprites/characters/glassesGuy/body.png" id="2_4pcmr"]
@@ -174,9 +174,46 @@ animations = [{
 "speed": 1.0
 }]
 
-[node name="Player" groups=["npc_player", "player"] instance=ExtResource("1_emri4")]
+[sub_resource type="Animation" id="Animation_emri4"]
+resource_name = "fade_away"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.9),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_4pcmr"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_l21ph"]
+_data = {
+&"RESET": SubResource("Animation_4pcmr"),
+&"fade_away": SubResource("Animation_emri4")
+}
+
+[node name="Player" node_paths=PackedStringArray("_animationPlayer") groups=["npc_player", "player"] instance=ExtResource("1_emri4")]
 Name = "glasses"
 IsNpc = true
+_animationPlayer = NodePath("AnimationPlayer")
 
 [node name="Hands" parent="." index="0"]
 offset_left = -136.0
@@ -191,3 +228,8 @@ sprite_frames = SubResource("SpriteFrames_opqh1")
 [node name="head" parent="." index="2"]
 sprite_frames = SubResource("SpriteFrames_dr4nv")
 frame_progress = 0.7584362
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="8"]
+libraries = {
+&"": SubResource("AnimationLibrary_l21ph")
+}
