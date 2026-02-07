@@ -293,12 +293,8 @@ public partial class GameUI : Control
 
     private void DisableActionButtons()
     {
-        foreach (var button in _actionButtons)
-        {
-            if (button.Text != "STEAL")
-            {
-                button.Disabled = true;
-            }
+        foreach (var button in _actionButtons) {
+            button.Disabled = true;
         }
     }
 

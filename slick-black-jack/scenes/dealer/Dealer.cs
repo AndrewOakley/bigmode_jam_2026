@@ -176,14 +176,15 @@ public partial class Dealer : Node2D {
         }
     }
     
-    private void OnCueFinished() {
+    private async void OnCueFinished() {
         var targetRotation = _headSprite.GlobalPosition.AngleToPoint(_currentLookAtPlayer.PlayerPositionMarker.GlobalPosition);
         var tween = CreateTween();
         tween.TweenProperty(_headSprite, "rotation", targetRotation, 1.5)
             .SetTrans(Tween.TransitionType.Cubic)
             .SetEase(Tween.EaseType.InOut);
         
-        tween.Finished += OnTweenFinished;
+        await ToSignal(tween, "finished");
+        OnTweenFinished();
     }
 
     private void OnTweenFinished() {
