@@ -132,7 +132,9 @@ public partial class Player : Node2D {
 
     private async void HideStealTooltip() {
         // wait 2 seconds before hiding tooltip
+        if (!IsInstanceValid(this) || IsQueuedForDeletion()) return;
         await ToSignal(GetTree().CreateTimer(2f), "timeout");
+        if (!IsInstanceValid(this) || IsQueuedForDeletion()) return;
         _targetCardPos = new Vector2(0, 0);
         _stealTooltip.Hide();
         _stealTooltip.Position = new Vector2(0, 0);
