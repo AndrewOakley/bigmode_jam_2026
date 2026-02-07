@@ -243,9 +243,14 @@ namespace SlickBlackJack.Components
         /// <summary>
         /// Current player stands (ends their turn)
         /// </summary>
-        public async Task Stand(bool noAnimation = false)
-        {
-            await Players[CurrentPlayerIndex].StandCurrentHand(noAnimation);
+        public async Task Stand(bool noAnimation = false) {
+            try {
+                await Players[CurrentPlayerIndex].StandCurrentHand(noAnimation);
+            }
+            catch (Exception e) {
+                GD.PrintErr("This is a hacky way to fix this");
+            }
+
             await MoveToNextPlayer();
         }
 

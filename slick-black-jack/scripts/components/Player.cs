@@ -471,6 +471,16 @@ public partial class Player : Node2D {
     // BLACK JACk MOVES ------------------------------------------------------------
     // Returns true if hand was busted
     public async Task<bool> HitCurrentHand(Card card, bool noAnimation = false) {
+        Hand activeHand = GetCurrentHand();
+        // forces player to get 21
+        // if (activeHand.CardCount >= 2) {
+        //     var value = activeHand.GetValue();
+        //     var neededValue = 21 - value;
+        //     // force user to get 21 on this hand
+        //     card = new Card(card.Suit, (Rank)neededValue);
+        //     
+        // }
+        
         StopCheat();
 
         if (_handAnimations != null && !noAnimation) {
@@ -478,7 +488,6 @@ public partial class Player : Node2D {
             await ToSignal(_handAnimations, "animation_finished");
         }
 
-        Hand activeHand = GetCurrentHand();
         activeHand.AddCard(card);
 
         // hand is done

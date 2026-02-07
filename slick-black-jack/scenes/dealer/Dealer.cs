@@ -143,15 +143,18 @@ public partial class Dealer : Node2D {
     }
 
     Player _currentLookAtPlayer = null;
-    private void StartRandomLook() {
+    private async void StartRandomLook() {
         if (_players.Count == 0) return;
 
         // Set random interval between 1-3 seconds
         var randomInterval = GD.RandRange(2.0, 6.0);
-        _lookTimer.WaitTime = randomInterval;
-        _lookTimer.Start();
+        await ToSignal(GetTree().CreateTimer(randomInterval), SceneTreeTimer.SignalName.Timeout);
+
+        OnLookTimerTimeout();
     }
 
+    private int _samePlayerCount = 0;
+    private int _samePlayerMax = 2;
     private void OnLookTimerTimeout() {
         GD.Print("Look timer timeout");
         if (!_isRoundActive || _players.Count == 0) return;
@@ -163,6 +166,20 @@ public partial class Dealer : Node2D {
         // Pick a random player
         var randomIndex = GD.RandRange(0, _players.Count - 1);
         var randomPlayer = _players[(int)randomIndex];
+        if (randomPlayer == _currentLookAtPlayer) {
+            _samePlayerCount++;
+            if (_samePlayerCount >= _samePlayerMax) {
+                GD.Print("Same player count reached max, picking another player");
+                // pick a random player that is not the current one
+                var otherPlayers = _players.FindAll(p => p != _currentLookAtPlayer);
+                randomIndex = GD.RandRange(0, otherPlayers.Count - 1);
+                randomPlayer = otherPlayers[(int)randomIndex];
+            } 
+        }
+        else {
+            _samePlayerCount = 0;
+        }
+        
         _currentLookAtPlayer = randomPlayer;
 
         // Play random audio cue before moving
