@@ -190,7 +190,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8rf5x")
 theme_override_font_sizes/font_size = 12
-text = "Glasses"
+text = "Glasses: "
 label_settings = SubResource("LabelSettings_p7dk6")
 
 [node name="NpcTwoChipCount" type="Label" parent="Panel/Panel2/MarginContainer/VBoxContainer/npcChips"]
@@ -198,7 +198,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8rf5x")
 theme_override_font_sizes/font_size = 12
-text = "headphones: 22,000"
+text = "Headphones: 22,000"
 label_settings = SubResource("LabelSettings_r8ob0")
 
 [node name="ActionsContainer" type="MarginContainer" parent="Panel/Panel2/MarginContainer/VBoxContainer"]
@@ -405,7 +405,7 @@ theme_override_constants/separation = 7
 
 [node name="GoalAmount" type="Label" parent="RoundInfo/HBoxContainer"]
 layout_mode = 2
-text = "Goal: $1,000,000"
+text = "Four Years of Tuition: $100,000"
 label_settings = SubResource("LabelSettings_vghou")
 
 [node name="HandTimer" type="Label" parent="."]

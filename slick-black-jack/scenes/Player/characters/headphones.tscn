@@ -178,3 +178,6 @@ frame_progress = 0.033250183
 [node name="head" parent="." index="2"]
 sprite_frames = SubResource("SpriteFrames_ijjlt")
 frame_progress = 0.7387414
+
+[node name="WinSFX" parent="." index="3"]
+stream_paused = true

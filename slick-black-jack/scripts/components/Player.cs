@@ -26,14 +26,12 @@ public partial class Player : Node2D {
     [Export] public bool IsNpc { get; set; } = true;
     [Export] public bool PlayWinSfx { get; set; } = false;
     [Export] private CheatMeter _cheatMeter;
+    [Export] private float _stealHoldTime = 1.5f;
     public Marker2D PlayerPositionMarker { get; set; }
     private Sprite2D _eyeSprite;
 
     public List<Hand> Hands { get; set; } = []; // holds the list of all hands (needed for splitting)
     public int PlayerBet { get; set; } = 10;
-
-    private const int SwapHitSpeed = 300;
-    private const int _swapHitRequired = 2;
 
     public bool IsDealerWatching { get; set; } = false;
 
@@ -46,11 +44,9 @@ public partial class Player : Node2D {
         }
     }
 
-    private const int OkHitHeat = 5;
-    private const int MissHeat = 10;
     private const int CaughtCheatingHeat = 20;
     private const int RoundEndHeatMinus = 10;
-    
+
     private bool _isTurn = false;
     public bool IsTurn {
         get => _isTurn;
@@ -72,6 +68,10 @@ public partial class Player : Node2D {
     }
 
     private AudioStreamPlayer _winSfx;
+    private AudioStreamPlayer _handSfx;
+    private AudioStream _slideSfx;
+    private AudioStream _wrongSfx;
+    private AudioStream _successfulStealSfx;
     [Export] private AnimationPlayer _handAnimations;
     [Export] private int _chips = 1000;
     public int Chips {
@@ -90,12 +90,20 @@ public partial class Player : Node2D {
         None,
         Cheating,
         CardSwap,
+        HoldingSteal,
     }
     private CheatingStates _cheatingState = CheatingStates.None;
+    private float _stealHoldElapsed = 0f;
+    private Animation _stealAnimation;
+    private float _stealReachTime; // the point in the animation where the hand reaches the card
 
     public override void _Ready() {
         ClearHand();
         _winSfx = GetNode<AudioStreamPlayer>("WinSFX");
+        _handSfx = GetNode<AudioStreamPlayer>("handsfx");
+        _slideSfx = GD.Load<AudioStream>("res://assets/sfx/slideasc.wav");
+        _wrongSfx = GD.Load<AudioStream>("res://assets/sfx/wrong.wav");
+        _successfulStealSfx = GD.Load<AudioStream>("res://assets/sfx/success.wav");
         PlayerPositionMarker = GetNode<Marker2D>("%PlayerPosition");
         _eyeSprite = GetNode<Sprite2D>("eye");
         _eyeSprite.Hide();
@@ -106,11 +114,6 @@ public partial class Player : Node2D {
         Utils.NpcCardSelectStart += OnNpcCardSelectStart;
         Utils.UserSwappedCard += OnUserSwappedCard;
 
-        if (_cheatMeter != null) {
-            _cheatMeter.PerfectHit += OnPerfectHit;
-            _cheatMeter.OkHit += OnOkHit;
-            _cheatMeter.Miss += OnMiss;
-        }
     }
 
     public void SetIsDealerWatching(bool isWatching) {
@@ -163,7 +166,7 @@ public partial class Player : Node2D {
             PlayerCaughtCheating();
             return;
         }
-        
+
         SetHandsSelectable(true);
         _cheatingState = CheatingStates.Cheating;
     }
@@ -191,96 +194,108 @@ public partial class Player : Node2D {
         else if (CheatingStates.CardSwap == _cheatingState) {
             Utils.EmitStopAllCardsSelectable();
             _npcSwapCard = card;
-            _cheatMeter.StartMeter(SwapHitSpeed);
             _npcSwapCardUI = cardUI;
+            PrepareStealAnimation();
+            _stealHoldElapsed = 0f;
+            _cheatingState = CheatingStates.HoldingSteal;
+            if (!IsNpc) {
+                _handSfx.Stream = _slideSfx;
+                _handSfx.Play();
+            }
         }
     }
 
     private Sprite2D _handSprite;
-    public async Task PlayStealAnimation(Vector2 targetGlobalPos, Vector2 finalGlobalPos) {
-        _handSprite ??= GetNode<Sprite2D>("hand");
-        var animation = _handAnimations.GetAnimation("steal");
-
-        var targetLocalPos = ToLocal(targetGlobalPos);
-        var finalLocalPos = ToLocal(finalGlobalPos);
-        bool isTargetOnRight = targetLocalPos.Y > 0;
-
-        int posTrackIdx = animation.FindTrack(".:position", Animation.TrackType.Value);
-
-        // Get start position from keyframe 0
-        var startPos = (Vector2)animation.TrackGetKeyValue(posTrackIdx, 0);
-
-        // Calculate 30% of the way to target for keyframes 1 and 2
-        var partialPos = startPos.Lerp(targetLocalPos, 0.3f);
-        animation.TrackSetKeyValue(posTrackIdx, 1, partialPos);
-        animation.TrackSetKeyValue(posTrackIdx, 2, partialPos);
-
-        // Set keyframe 3 to target position (NPC card)
-        animation.TrackSetKeyValue(posTrackIdx, 3, targetLocalPos);
-
-        // Set final keyframe to user's card position
-        animation.TrackSetKeyValue(posTrackIdx, 4, finalLocalPos);
-
-
-        _handSprite.FlipH = !isTargetOnRight;
-
-        _handAnimations.Play("steal");
-
-        // Wait for 90% of animation, then call the swap callback
-        float animLength = animation.Length;
-        await ToSignal(GetTree().CreateTimer(animLength * 0.67f), "timeout");
-        _onSwapCallback?.Invoke();
-
-        // Wait for remaining 10%
-        await ToSignal(_handAnimations, "animation_finished");
-
-        _handSprite.FlipH = false;
-    }
-
     private Action _onSwapCallback;
 
-    public async void SuccessfulSwap() {
-        _cheatMeter.StopMeter();
-
-        // Set the swap to happen at 90% of the animation
-        _onSwapCallback = () => Card.Swap(_userSwapCard, _npcSwapCard);
+    private void PrepareStealAnimation() {
+        _handSprite ??= GetNode<Sprite2D>("hand");
+        _stealAnimation = _handAnimations.GetAnimation("steal");
 
         var stealTarget = _npcSwapCardUI.GetNode<Marker2D>("Marker2D");
         var userCardTarget = _userSwapCardUI.GetNode<Marker2D>("Marker2D");
-        await PlayStealAnimation(stealTarget.GlobalPosition, userCardTarget.GlobalPosition);
 
+        var targetLocalPos = ToLocal(stealTarget.GlobalPosition);
+        var finalLocalPos = ToLocal(userCardTarget.GlobalPosition);
+        bool isTargetOnRight = targetLocalPos.Y > 0;
+
+        int posTrackIdx = _stealAnimation.FindTrack(".:position", Animation.TrackType.Value);
+
+        // Set keyframe 1 to NPC card position (the "reach" target)
+        _stealAnimation.TrackSetKeyValue(posTrackIdx, 1, targetLocalPos);
+        // Set keyframe 2 to user's card position (the "return" target)
+        _stealAnimation.TrackSetKeyValue(posTrackIdx, 2, finalLocalPos);
+
+        _handSprite.FlipH = !isTargetOnRight;
+
+        // The reach portion ends at keyframe 1's time
+        _stealReachTime = (float)_stealAnimation.TrackGetKeyTime(posTrackIdx, 1);
+
+        // Seek to start so the hand is visible and at start position
+        _handAnimations.Play("steal");
+        _handAnimations.Seek(0, true);
+        _handAnimations.Pause();
+    }
+
+    private async void CompleteSteal() {
+        _cheatingState = CheatingStates.None;
+        if (!IsNpc) {
+            _handSfx.Stop();
+            _handSfx.Stream = _successfulStealSfx;
+            _handSfx.Play();
+        }
+
+        // Set the swap callback
+        _onSwapCallback = () => Card.Swap(_userSwapCard, _npcSwapCard);
+
+        // Resume playing from the reach point
+        _handAnimations.Play("steal");
+        _handAnimations.Seek(_stealReachTime, true);
+
+        // Wait for swap timing (67% of full animation)
+        float animLength = _stealAnimation.Length;
+        float remainingToSwap = (animLength * 0.67f) - _stealReachTime;
+        if (remainingToSwap > 0) {
+            await ToSignal(GetTree().CreateTimer(remainingToSwap), "timeout");
+        }
+        _onSwapCallback?.Invoke();
+
+        // Wait for animation to finish
+        await ToSignal(_handAnimations, "animation_finished");
+
+        _handSprite.FlipH = false;
         _onSwapCallback = null;
-
         _userSwapCard = null;
         _npcSwapCard = null;
         _userSwapCardUI = null;
         _npcSwapCardUI = null;
-        _cheatingState = CheatingStates.None;
         Utils.EmitUserSwappedCard();
     }
 
-    private void OnPerfectHit(int hitCount) {
-        OnHit(hitCount);
-    }
-
-    private void OnOkHit(int hitCount) {
-        OnHit(hitCount);
-        Heat += OkHitHeat;
-    }
-
-    private void OnHit(int hitCount) {
-        if (_cheatingState == CheatingStates.CardSwap && hitCount == _swapHitRequired) {
-            SuccessfulSwap();
+    private void CancelStealHold() {
+        _handAnimations.Stop();
+        _handSprite ??= GetNode<Sprite2D>("hand");
+        _handSprite.FlipH = false;
+        _handSprite.Modulate = new Color(1, 1, 1, 0);
+        _stealHoldElapsed = 0f;
+        StopCheat();
+        if (!IsNpc) {
+            _handSfx.Stream = _wrongSfx;
+            _handSfx.Play();
         }
     }
 
-    private void OnMiss() {
-        GD.Print($"Player {_cheatingState} missed!");
-        StopCheat();
-        Heat += MissHeat;
-    }
-
     public void StopCheat() {
+        if (_cheatingState == CheatingStates.HoldingSteal) {
+            _handAnimations?.Stop();
+            _handSprite ??= GetNode<Sprite2D>("hand");
+            _handSprite.FlipH = false;
+            _handSprite.Modulate = new Color(1, 1, 1, 0);
+            _stealHoldElapsed = 0f;
+            if (!IsNpc) {
+                _handSfx.Stop();
+            }
+        }
         _cheatingState = CheatingStates.None;
         Utils.EmitStopAllCardsSelectable();
         Utils.EmitCheatingStopped();
@@ -290,7 +305,7 @@ public partial class Player : Node2D {
     private void OnNpcCardSelectStart() {
         if (!IsNpc) return;
 
-        SetHandsSelectable(true);
+        SetHandsSelectable(true, Control.CursorShape.PointingHand);
     }
 
     private void OnUserSwappedCard() {
@@ -299,10 +314,10 @@ public partial class Player : Node2D {
         SetHandsSelectable(false);
     }
 
-    private void SetHandsSelectable(bool selectable) {
+    private void SetHandsSelectable(bool selectable, Control.CursorShape cursor = Control.CursorShape.PointingHand) {
         foreach (var node in HandsUIContainer.GetChildren()) {
             if (node is HandUI handUi) {
-                handUi.SetHandSelectable(selectable);
+                handUi.SetHandSelectable(selectable, cursor);
             }
         }
     }
@@ -354,7 +369,7 @@ public partial class Player : Node2D {
 
     public void StartRound(int mainPlayerBet = 0) {
         if (IsNpc) {
-             RandomNumberGenerator _rng = new RandomNumberGenerator();
+            RandomNumberGenerator _rng = new RandomNumberGenerator();
             // Set to a random number between 2 percent and 20 percent of their chips
             // Use exponential distribution for bet percentage (2% to 40%)
             // Lower percentages are much more likely than higher ones
@@ -395,7 +410,29 @@ public partial class Player : Node2D {
 
     public override void _PhysicsProcess(double delta) {
         if (Input.IsActionJustPressed("escape") && _cheatingState != CheatingStates.None) {
-            StopCheat();
+            if (_cheatingState == CheatingStates.HoldingSteal) {
+                CancelStealHold();
+            }
+            else {
+                StopCheat();
+            }
+        }
+
+        if (_cheatingState == CheatingStates.HoldingSteal) {
+            if (Input.IsActionPressed("click")) {
+                _stealHoldElapsed += (float)delta;
+                float progress = Mathf.Clamp(_stealHoldElapsed / _stealHoldTime, 0f, 1f);
+
+                // Seek the animation to match hold progress (0 to reach point)
+                _handAnimations.Seek(progress * _stealReachTime, true);
+
+                if (_stealHoldElapsed >= _stealHoldTime) {
+                    CompleteSteal();
+                }
+            }
+            else if (Input.IsActionJustReleased("click")) {
+                CancelStealHold();
+            }
         }
     }
 
@@ -419,7 +456,7 @@ public partial class Player : Node2D {
             EmitSignal(SignalName.CurrentHandChanged, CurrentHandIndex);
             return true;
         }
-        
+
         EmitSignal(SignalName.PlayerMoveFinished);
 
         return false;
@@ -458,10 +495,10 @@ public partial class Player : Node2D {
 
         var card = currentHand.RemoveCard(0);
         newHand.AddCard(card);
-        
+
         return true;
     }
-    
+
     public void EmitPlayerMoveFinished() {
         EmitSignal(SignalName.PlayerMoveFinished);
     }
@@ -471,7 +508,7 @@ public partial class Player : Node2D {
 
         var currentHand = GetCurrentHand();
 
-        if (!currentHand.CanDoubleDown() || Chips  <= 0) {
+        if (!currentHand.CanDoubleDown() || Chips <= 0) {
             EmitSignal(SignalName.PlayerMoveFinished);
             return false;
         }

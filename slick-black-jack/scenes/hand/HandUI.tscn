@@ -34,7 +34,7 @@ custom_minimum_size = Vector2(328, 81)
 offset_left = 192.0
 offset_top = -16.0
 offset_right = 520.0
-offset_bottom = 42.0
+offset_bottom = 65.0
 mouse_filter = 2
 theme_override_constants/separation = 0
 alignment = 2
@@ -149,6 +149,7 @@ position = Vector2(8, 10)
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
 theme_override_constants/margin_top = 5
+metadata/_edit_lock_ = true
 
 [node name="ChipTexture" type="TextureRect" parent="MarginContainer"]
 unique_name_in_owner = true
@@ -159,10 +160,11 @@ texture = SubResource("AtlasTexture_lh0ee")
 stretch_mode = 4
 
 [node name="Control" type="Control" parent="MarginContainer/ChipTexture"]
+visible = false
 anchors_preset = 0
 offset_left = 1.0
-offset_right = 41.0
-offset_bottom = 40.0
+offset_right = 20.0
+offset_bottom = 17.0
 pivot_offset = Vector2(4, 15)
 
 [node name="ChipCount" type="Label" parent="MarginContainer/ChipTexture/Control"]
@@ -186,4 +188,4 @@ position = Vector2(163, 17)
 
 [node name="DealSFX" type="AudioStreamPlayer" parent="."]
 stream = SubResource("AudioStreamRandomizer_3j3rd")
-volume_db = -8.914
+volume_db = 4.985

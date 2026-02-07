@@ -119,6 +119,9 @@ metadata/_edit_use_anchors_ = true
 [node name="MarginContainer" parent="HandContainer/DealerHand" index="5"]
 visible = false
 
+[node name="DealSFX" parent="HandContainer/DealerHand" index="7"]
+volume_db = 7.416
+
 [node name="body" type="AnimatedSprite2D" parent="."]
 z_index = -1
 position = Vector2(326, 37)

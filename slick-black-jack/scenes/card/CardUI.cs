@@ -68,12 +68,12 @@ public partial class CardUI : TextureRect {
 		SetCard(card, _isFaceDown);
 	}
 
-	public void SetCardSelectable(bool selectable) {
+	public void SetCardSelectable(bool selectable, CursorShape cursor = CursorShape.PointingHand) {
 		_selectable = selectable;
 
 		if (selectable) {
 			_animationPlayer.Play("selectable");
-			MouseDefaultCursorShape = CursorShape.PointingHand;
+			MouseDefaultCursorShape = cursor;
 		}
 		else {
 			_animationPlayer.Stop();

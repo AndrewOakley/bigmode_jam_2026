@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cljhd4qk0x3gi"]
+[gd_scene load_steps=9 format=3 uid="uid://cljhd4qk0x3gi"]
 
 [ext_resource type="Script" uid="uid://bc2dypdqsitc3" path="res://scripts/components/Player.cs" id="1_1kbk7"]
 [ext_resource type="PackedScene" uid="uid://c2nwtq6fu1vo6" path="res://scenes/hand/HandUI.tscn" id="2_c4h5g"]
@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://4ntwgacxebs5" path="res://assets/sfx/win2.wav" id="4_hvfru"]
 [ext_resource type="AudioStream" uid="uid://ci7qi1radign7" path="res://assets/sfx/win3.wav" id="5_a06cl"]
 [ext_resource type="Texture2D" uid="uid://b6h0g7iertrqw" path="res://assets/sprites/eye.png" id="6_hvfru"]
+[ext_resource type="AudioStream" uid="uid://xqhjo0smm5ch" path="res://assets/sfx/wrong.mp3" id="7_a06cl"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_dl1wr"]
 streams_count = 3
@@ -18,6 +19,7 @@ script = ExtResource("1_1kbk7")
 HandsUIContainer = NodePath("Hands")
 Name = "andy"
 IsNpc = false
+_stealHoldTime = 2.0
 _chips = 5000
 
 [node name="Hands" type="HBoxContainer" parent="." groups=["player"]]
@@ -45,7 +47,7 @@ autoplay = "default"
 
 [node name="WinSFX" type="AudioStreamPlayer" parent="."]
 stream = SubResource("AudioStreamRandomizer_dl1wr")
-volume_db = -10.305
+volume_db = 4.073
 
 [node name="PlayerPosition" type="Marker2D" parent="."]
 unique_name_in_owner = true
@@ -55,3 +57,8 @@ z_index = 4096
 position = Vector2(-18, 43)
 scale = Vector2(0.092715845, 0.092715845)
 texture = ExtResource("6_hvfru")
+
+[node name="handsfx" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_a06cl")
+volume_db = -8.625
+pitch_scale = 0.65

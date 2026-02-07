@@ -85,7 +85,7 @@ theme_override_fonts/font = ExtResource("1_37gkv")
 theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxTexture_xc76p")
 theme_override_styles/hover = SubResource("StyleBoxTexture_yr6ub")
-text = "FOUR SEMESTERS IS ENOUGH"
+text = "I CAN SETTLE FOR FOUR YEARS"
 autowrap_mode = 3
 
 [node name="Label" type="Label" parent="."]
@@ -97,8 +97,6 @@ offset_bottom = 58.0
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_exh17")
 volume_db = -20.13
-autoplay = true
 
 [node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_gtklt")
-autoplay = true

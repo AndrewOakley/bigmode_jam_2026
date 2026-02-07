@@ -165,7 +165,7 @@ script = ExtResource("3_con2f")
 
 [node name="music" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_4ytvr")
-volume_db = -26.187
+volume_db = -13.83
 autoplay = true
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
@@ -312,7 +312,7 @@ theme_override_colors/font_hover_color = Color(0.29219013, 0.29219002, 0.29219, 
 theme_override_fonts/font = ExtResource("2_ufwb2")
 theme_override_styles/normal = SubResource("StyleBoxTexture_i42df")
 theme_override_styles/hover = SubResource("StyleBoxTexture_mxgkd")
-text = "BACK TO THE MOTEL 6"
+text = "BACK TO MOTEL 6"
 
 [node name="winsfx" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("17_g6gyw")

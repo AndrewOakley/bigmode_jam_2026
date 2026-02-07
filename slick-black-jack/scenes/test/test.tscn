@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://c3ksnt0ea2ray"]
+[gd_scene load_steps=21 format=3 uid="uid://c3ksnt0ea2ray"]
 
 [ext_resource type="Script" uid="uid://cpk63f74thfsv" path="res://scenes/test/Test.cs" id="1_m7npr"]
 [ext_resource type="PackedScene" uid="uid://bvli2013m2a38" path="res://scenes/black_jack_table.tscn" id="2_da6vm"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://cskp0ilbn83eq" path="res://scenes/game_ui/gameOver.tscn" id="9_xm0ii"]
 [ext_resource type="PackedScene" uid="uid://bsoodols5srp3" path="res://scenes/ControlsUI.tscn" id="10_saoeg"]
 [ext_resource type="AudioStream" uid="uid://gw0s2msnpdtu" path="res://assets/music/casino midnight.wav" id="10_xi5sv"]
+[ext_resource type="PackedScene" uid="uid://585l7gxextrx" path="res://scenes/game_ui/gameWin.tscn" id="12_bg4ew"]
 [ext_resource type="AudioStream" uid="uid://od41ciesowgg" path="res://assets/music/LOOP(detective) 60bpm_Wandering In The Streets.ogg" id="13_x4ubh"]
 [ext_resource type="AudioStream" uid="uid://gybvns7idnft" path="res://assets/sfx/casinobackground.wav" id="14_x4ubh"]
 [ext_resource type="AudioStream" uid="uid://8hl3uwwwj7nv" path="res://assets/music/diamon heist.wav" id="14_xm0ii"]
@@ -61,6 +62,7 @@ position = Vector2(65, 27)
 [node name="glasses" parent="BlackJackTable/Players" instance=ExtResource("8_5unt0")]
 position = Vector2(579, 230)
 rotation = -2.5321772
+_stealHoldTime = 1.5
 _chips = 1000
 
 [node name="jack" parent="BlackJackTable/Players" instance=ExtResource("6_2ns80")]
@@ -71,6 +73,7 @@ _chips = 1000
 [node name="headphones" parent="BlackJackTable/Players" instance=ExtResource("7_5unt0")]
 position = Vector2(205.00002, 241.00002)
 rotation = -0.64692277
+_stealHoldTime = 1.5
 _chips = 1000
 
 [node name="CheatMeter" parent="." instance=ExtResource("15_xm0ii")]
@@ -93,8 +96,13 @@ offset_bottom = 363.0
 texture = SubResource("GradientTexture2D_bg4ew")
 
 [node name="GameOverUI" parent="TextureRect" instance=ExtResource("9_xm0ii")]
+visible = false
 z_index = 4096
 position = Vector2(72, 111)
+
+[node name="GameWinUI" parent="TextureRect" instance=ExtResource("12_bg4ew")]
+visible = false
+position = Vector2(162, 112)
 
 [node name="audio" type="Container" parent="."]
 offset_right = 40.0
@@ -102,10 +110,10 @@ offset_bottom = 40.0
 
 [node name="backgroundNoise" type="AudioStreamPlayer" parent="audio"]
 stream = SubResource("AudioStreamPlaylist_xm0ii")
-volume_db = -36.817
+volume_db = -20.995
 autoplay = true
 
 [node name="backgroundMusic" type="AudioStreamPlayer" parent="audio"]
 stream = SubResource("AudioStreamPlaylist_x4ubh")
-volume_db = -31.0
+volume_db = -10.791
 autoplay = true

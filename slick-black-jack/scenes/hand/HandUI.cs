@@ -49,9 +49,9 @@ public partial class HandUI : Control {
 		}
 	}
 
-	public void SetHandSelectable(bool selectable) {
+	public void SetHandSelectable(bool selectable, Control.CursorShape cursor = Control.CursorShape.PointingHand) {
 		foreach (var cardUi in _cardUIs) {
-			cardUi.SetCardSelectable(selectable);
+			cardUi.SetCardSelectable(selectable, cursor);
 		}
 	}
 	
